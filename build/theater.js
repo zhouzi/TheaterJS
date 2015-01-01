@@ -48,13 +48,20 @@
     },
 
 
-    isMistaking: function () {
+
+    getInvincibility: function () {
       var self = this;
-      return self.utils.randomFloat(0, .8) > self.current.experience;
+      return self.current.experience  * 10;
     },
 
 
-    utils:    {
+    isMistaking: function () {
+      var self = this;
+      return self.current.experience < self.utils.randomFloat(0, .8);
+    },
+
+
+    utils: {
       merge: function (dest, origin) {
         for (var key in origin) if (origin.hasOwnProperty(key)) dest[key] = origin[key];
         return dest;
@@ -97,7 +104,7 @@
 
 
     // When describing a new actor, train merges its attributes with the defaults
-    train:    function (actor) {
+    train: function (actor) {
       var self     = this,
           defaults = {
             experience: .6,
@@ -134,7 +141,7 @@
 
 
     // Add a scene to the scenario
-    write:    function () {
+    write: function () {
       var self   = this,
           scenes = Array.prototype.splice.apply(arguments, [0]), // the write function can have an infinite number of params
           scene;
@@ -256,20 +263,52 @@
 
 
     say: function (speech, append) {
-      var self   = this,
-          cursor = -1;
+      var self       = this,
+          mistaken   = false,
+          invincible = self.getInvincibility(),
+          cursor, model;
 
-      var model   = append ? self.current.model : self.current.model = "",
-          timeout = setTimeout(function nextChar () {
-            var prevChar = model.charAt(cursor) || null,
-                newChar  = speech.charAt(++cursor),
-                newValue = model += newChar;
+      if (append) {
+        // When appending instead of replacing, there's several things we need to do:
+        // 1: Keep current value and append
+        // 2: Set the cursor to the end of the current model's value
+        // 3: Speech becomes model's value + speech
+        model  = self.current.model;
+        cursor = self.current.model.length - 1;
+        speech = model + speech;
+      } else {
+        model  = self.current.model = "";
+        cursor = -1;
+      }
 
-            self.set(newValue, [newValue, newChar, prevChar, speech]);
+      var timeout = setTimeout(function nextChar () {
+        var prevChar = model.charAt(cursor),
+            newChar, newValue;
 
-            if (cursor < speech.length) timeout = setTimeout(nextChar, self.getSayingSpeed());
-            else self.next();
-          }, self.getSayingSpeed());
+        if (mistaken) {
+          // After a mistake, depending on the current actor's experience,
+          // there is 0% chance to make a mistake for the x next times.
+          invincible = self.getInvincibility();
+          mistaken   = false;
+          newChar    = null;
+          newValue   = model = model.substr(0, cursor);
+
+          // Last char erased
+          cursor--;
+        } else {
+          cursor++;
+
+          newChar = --invincible < 0 && self.isMistaking() ? self.utils.randomChar() : speech.charAt(cursor);
+
+          if (newChar !== speech.charAt(cursor)) mistaken = true;
+          newValue = model += newChar;
+        }
+
+        self.set(newValue, [newValue, newChar, prevChar, speech]);
+
+        if (mistaken || cursor < speech.length) timeout = setTimeout(nextChar, self.getSayingSpeed());
+        else self.next();
+      }, self.getSayingSpeed());
 
       return self;
     },
