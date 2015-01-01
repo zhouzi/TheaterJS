@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>TheaterJS</title>
+        <link rel='stylesheet' href="http://fonts.googleapis.com/css?family=Cutive">
+        <link rel="stylesheet" href="build/styles.css">
+    </head>
+    
+    <body>
+        <div>- <span id="vador"></span></div>
+        <div>- <span id="luke"></span></div>
+
+        <script src="/build/theater.min.js"></script>
+        <script>
+            (function () {
+                "use strict";
+
+                var theater = new TheaterJS();
+
+                theater
+                    .describe("Vador", .8, "#vador")
+                    .describe("Luke", .6, "#luke");
+
+                theater
+                    .on("say:start, erase:start", function () {
+                        var self    = this,
+                            current = self.current.voice;
+
+                        self.utils.addClass(current, "saying");
+                    })
+                    .on("say:end, erase:end", function () {
+                        var self    = this,
+                            current = self.current.voice;
+
+                        self.utils.removeClass(current, "saying");
+                    });
+
+                theater
+                    .write("Vador: Luke!!!", -3)
+                    .write({ name: "say", args: [ "...", true ] }, toggleClass)
+                    .write("Luke: What?", toggleClass)
+                    .write("Vador: I'm your father...", toggleClass)
+                    .write("Luke: Really?!", 200, ".", 200, ".", 200, ".", 1000)
+                    .write("Luke: Are u fucking kidding me?", toggleClass)
+                    .write("Vador: *cough*", 1000)
+                    .write("Vador: ahem...")
+                    .write("Vador: Yes!", 2000)
+                    .write("Vador: Well, I mean yes, I'm your father.", toggleClass)
+                    .write("Luke: Die motha fucka!", { name: "call", args: [kill, true] })
+                    .write("Vador: ...", toggleClass)
+                    .write("Luke: You dead?", "Luke: Seems like an end.");
+
+                var body = document.getElementsByTagName("BODY")[0];
+
+                function toggleClass (className) {
+                    if (typeof className !== "string") className = "light";
+
+                    if (theater.utils.hasClass(body, className)) theater.utils.removeClass(body, className);
+                    else theater.utils.addClass(body, className);
+                }
+
+                function kill () {
+                    var self    = this,
+                        delay   = 300,
+                        i       = 0,
+                        timeout = setTimeout(function blink () {
+                            toggleClass("blood");
+                            if (++i < 9) timeout = setTimeout(blink, delay);
+                            else self.next();
+                        }, delay);
+
+                    return self;
+                }
+            })();
+        </script>
+    </body>
+</html>

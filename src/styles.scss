@@ -1,0 +1,40 @@
+$black: #222;
+$white: #ededed;
+$red: #c92b2b;
+
+body {
+  font-family: 'Cutive', serif;
+  background-color: $black;
+  color: $white;
+  font-size: 240%;
+  font-weight: 400;
+  line-height: 1.6;
+  padding: 20px;
+  transition: background-color 200ms ease-out;
+
+  &.light {
+    background-color: $white;
+    color: $black;
+  }
+
+  &.blood {
+    color: $white;
+    background-color: $red;
+  }
+}
+
+@keyframes caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.saying:after {
+  content: "|";
+  font-family: Arial, sans-serif;
+  font-size: 1.2em;
+  line-height: 0;
+  display: inline-block;
+  vertical-align: baseline;
+  opacity: 1;
+  animation: caret 500ms infinite;
+}

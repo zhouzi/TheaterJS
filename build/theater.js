@@ -1,0 +1,307 @@
+(function (w, d) {
+  function TheaterJS (options) {
+    var self     = this,
+        defaults = { autoplay: true, erase: true };
+
+    self.events   = {};
+    self.scene    = -1; // iterator through the scenario list
+    self.scenario = []; // list of action to execute
+    self.options  = self.utils.merge(defaults, options || {}); // merge defaults with given options
+    self.casting  = {}; // list of described actors
+    self.current  = {}; // actor currently used as params
+    self.state    = "ready"; // theater's state (ready or playing)
+  }
+
+  TheaterJS.prototype = {
+    constructor: TheaterJS,
+
+
+    // Set actor's voice value depending on its type
+    set: function (value, args) {
+      var self = this;
+
+      self.current.model = value;
+
+      switch (self.current.type) {
+        case "title":
+          self.current.voice = value;
+          break;
+
+        case "function":
+          self.current.voice.apply(self, args);
+          break;
+
+        default:
+          self.current.voice.innerHTML = value;
+          break;
+      }
+
+      return self;
+    },
+
+
+    getSayingSpeed: function (constant) {
+      var self  = this,
+          skill = constant ? self.current.experience : self.utils.randomFloat(self.current.experience, 1);
+
+      return self.utils.getPercentageBetween(600, 50, skill);
+    },
+
+
+    isMistaking: function () {
+      var self = this;
+      return self.utils.randomFloat(0, .8) > self.current.experience;
+    },
+
+
+    utils:    {
+      merge: function (dest, origin) {
+        for (var key in origin) if (origin.hasOwnProperty(key)) dest[key] = origin[key];
+        return dest;
+      },
+
+      getPercentageBetween: function (min, max, perc) {
+        return (min - (min * perc)) + (max * perc);
+      },
+
+      randomChar: function () {
+        var utils = this,
+            chars = "abcdefghijklmnopqrstuvwxyz";
+
+        return chars.charAt(utils.randomNumber(0, chars.length - 1));
+      },
+
+      randomNumber: function (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      },
+
+      randomFloat: function (min, max) {
+        return Math.round((Math.random() * (max - min) + min) * 10) / 10;
+      },
+
+      hasClass: function (el, className) {
+        if (el.classList) return el.classList.contains(className);
+        else return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+      },
+
+      addClass: function (el, className) {
+        if (el.classList) el.classList.add(className);
+        else el.className += ' ' + className;
+      },
+
+      removeClass: function (el, className) {
+        if (el.classList) el.classList.remove(className);
+        else el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      }
+    },
+
+
+    // When describing a new actor, train merges its attributes with the defaults
+    train:    function (actor) {
+      var self     = this,
+          defaults = {
+            experience: .6,
+            voice:      function (newValue, newChar, prevChar, str) { console.log(this.model); },
+            type:       "function",
+            model:      ""
+          };
+
+      return self.utils.merge(defaults, actor);
+    },
+
+
+    // Add a new actor to the casting
+    describe: function (name, experience, voice) {
+      if (typeof name !== "string") throw("actor's name has wrong type: " + typeof name);
+
+      var self  = this,
+          actor = { name: name };
+
+      if (experience !== void 0) actor.experience = experience;
+
+      if (voice !== void 0) {
+        // voice's type can be of 3 types: title (document.title), function or DOM element
+        actor.type = voice === d.title ? "title" : typeof voice === "function" ? "function" : "DOM";
+
+        // If actor's voice is a DOM element and a string, assume it's a query selector
+        if (actor.type === "DOM") actor.voice = typeof voice === "string" ? d.querySelector(voice) : voice;
+        else actor.voice = voice;
+      }
+
+      self.casting[name] = self.train(actor);
+      return self;
+    },
+
+
+    // Add a scene to the scenario
+    write:    function () {
+      var self   = this,
+          scenes = Array.prototype.splice.apply(arguments, [0]), // the write function can have an infinite number of params
+          scene;
+
+      for (var i = 0, l = scenes.length; i < l; i++) {
+        scene = scenes[i];
+
+        if (typeof scene === "string") {
+          var params   = scene.split(":"),
+              hasActor = params.length > 1,
+              actor    = hasActor ? params[0].trim() : null,
+              speech   = hasActor ? params[1].trim() : params[0].trim();
+
+          if (hasActor) self.write({ name: "actor", args: [actor] });
+          if (self.options.erase && hasActor) self.write({ name: "erase" });
+          self.write({ name: "say", args: [speech, !hasActor] });
+        } else if (typeof scene === "number") {
+          if (scene < 0) self.write({ name: "erase", args: [scene] });
+          else self.write({ name: "wait", args: [scene] });
+        } else if (typeof scene === "function") {
+          self.write({ name: "call", args: [scene] });
+        } else if (scene instanceof Object) {
+          self.scenario.push(scene);
+        }
+      }
+
+      // autolaunch scenario everytime something is added to the scenario
+      if (self.options.autoplay) self.play();
+      return self;
+    },
+
+
+    // Play the scenario
+    play: function (restart) {
+      var self = this;
+
+      // if restart is passed as true, start from scratch
+      if (restart === true) self.scene = -1;
+
+      // if scenario is not yet playing, do it!
+      if (self.state === "ready") self.next();
+
+      return self;
+    },
+
+
+    // register event
+    on: function (events, fn) {
+      var self = this;
+
+      events = events.split(",");
+
+      for (var i = 0, l = events.length, event; i < l; i++) {
+        event = events[i] = events[i].trim();
+        (self.events[event] || (self.events[event] = [])).push(fn);
+      }
+
+      return self;
+    },
+
+
+    // emit event
+    emit: function (scope, event, args) {
+      if (typeof scope !== "string") throw("emit: scope missing");
+
+      if (typeof event !== "string") event = void 0;
+      else if (event !== void 0 && args === void 0) args = event;
+
+      var self      = this,
+          eventName = scope + (event ? ":" + event : ""),
+          events    = self.events[eventName] || [];
+
+      args instanceof Array || (args = [args]);
+      for (var i = 0, l = events.length; i < l; i++) events[i].apply(self, args);
+
+      return self;
+    },
+
+
+    // Call a function
+    call: function (fn, async) {
+      var self = this;
+
+      fn.apply(self);
+      return !async ? self.next() : self;
+    },
+
+
+    // Play the next scene
+    next: function () {
+      var self      = this,
+          prevScene = self.scenario[self.scene];
+
+      if (prevScene) self.emit(prevScene.name, "end", [prevScene.name].concat(prevScene.args));
+
+      if (self.scene + 1 >= self.scenario.length) {
+        // If there's no next scene, set state to ready
+        self.state = "ready";
+      } else {
+        // Otherwise, scenario is playing
+        self.state = "playing";
+
+        var nextScene = self.scenario[++self.scene];
+
+        self.emit(nextScene.name, "start", [nextScene.name].concat(nextScene.args));
+        self[nextScene.name].apply(self, nextScene.args);
+      }
+
+      return self;
+    },
+
+
+    actor: function (actor) {
+      var self = this;
+
+      self.current = self.casting[actor]; // set current actor from scene's actor name
+      return self.next();
+    },
+
+
+    say: function (speech, append) {
+      var self   = this,
+          cursor = -1;
+
+      var model   = append ? self.current.model : self.current.model = "",
+          timeout = setTimeout(function nextChar () {
+            var prevChar = model.charAt(cursor) || null,
+                newChar  = speech.charAt(++cursor),
+                newValue = model += newChar;
+
+            self.set(newValue, [newValue, newChar, prevChar, speech]);
+
+            if (cursor < speech.length) timeout = setTimeout(nextChar, self.getSayingSpeed());
+            else self.next();
+          }, self.getSayingSpeed());
+
+      return self;
+    },
+
+
+    erase: function (n) {
+      var self   = this,
+          cursor = typeof self.current.model === "string" ? self.current.model.length : -1,
+          min    = typeof n === "number" && n < 0 ? cursor + 1 + n : 0;
+
+      if (cursor < 0) return self.next();
+
+      var timeout = setTimeout(function eraseChar () {
+        var prevChar = self.current.model.charAt(cursor),
+            newValue = self.current.model.substr(0, --cursor);
+
+        self.set(newValue, [newValue, null, prevChar, newValue]);
+
+        if (cursor >= min) setTimeout(eraseChar, self.getSayingSpeed(true));
+        else self.next();
+      }, self.getSayingSpeed(true));
+
+      return self;
+    },
+
+
+    wait: function (delay) {
+      var self = this;
+      setTimeout(function () { self.next(); }, delay);
+      return self;
+    }
+  };
+
+  w.TheaterJS = TheaterJS;
+})(window, document);
