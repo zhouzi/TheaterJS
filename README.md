@@ -14,7 +14,7 @@ The purpose of this library is to mimic a human behavior. Core principles are:
 
 * [Editable demo on codepen](http://codepen.io/Zhouzi/pen/JoRazP?editors=001)
 * [Repo's demo](http://gabinaureche.com/TheaterJS) (same as the codepen)
-* Article **(coming soon)**
+* Article *(coming soon)*
 
 ## Quick look
 
@@ -40,3 +40,22 @@ Now, write the scenario:
     .write("Luke:What?", 400)
     .write("Vader:I am... ", 400, "Your father...");
 ```
+
+**Note:** the `write` method accepts an indefinite number of parameters so you could even write:
+
+```
+  theater.write("Vader:Luke", 400, "Luke:What?", 400, "Vader:I am... ", 400, "Your father...");
+```
+
+Or:
+
+```
+  theater
+    .write("Vader:Luke")
+    .write(400)
+    .write("Luke:What?")
+    .write(400)
+    .write("Vader:I am... ", 400, "Your father...");
+```
+
+They are all equivalent.
