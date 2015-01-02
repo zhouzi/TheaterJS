@@ -23,10 +23,6 @@
       self.current.model = value;
 
       switch (self.current.type) {
-        case "title":
-          self.current.voice = value;
-          break;
-
         case "function":
           self.current.voice.apply(self, args);
           break;
@@ -40,9 +36,15 @@
     },
 
 
-    getSayingSpeed: function (constant) {
-      var self  = this,
-          skill = constant ? self.current.experience : self.utils.randomFloat(self.current.experience, 1);
+    getSayingSpeed: function (filter, constant) {
+      if (typeof filter !== "number") {
+        constant = filter;
+        filter   = 0;
+      }
+
+      var self       = this,
+          experience = self.current.experience + filter,
+          skill      = constant ? experience : self.utils.randomFloat(experience, 1);
 
       return self.utils.getPercentageBetween(600, 50, skill);
     },
@@ -108,7 +110,7 @@
       var self     = this,
           defaults = {
             experience: .6,
-            voice:      function (newValue, newChar, prevChar, str) { console.log(this.model); },
+            voice:      function (newValue, newChar, prevChar, str) { console.log(newValue); },
             type:       "function",
             model:      ""
           };
@@ -127,8 +129,7 @@
       if (experience !== void 0) actor.experience = experience;
 
       if (voice !== void 0) {
-        // voice's type can be of 3 types: title (document.title), function or DOM element
-        actor.type = voice === d.title ? "title" : typeof voice === "function" ? "function" : "DOM";
+        actor.type = typeof voice === "function" ? "function" : "DOM";
 
         // If actor's voice is a DOM element and a string, assume it's a query selector
         if (actor.type === "DOM") actor.voice = typeof voice === "string" ? d.querySelector(voice) : voice;
@@ -153,7 +154,7 @@
           var params   = scene.split(":"),
               hasActor = params.length > 1,
               actor    = hasActor ? params[0].trim() : null,
-              speech   = hasActor ? params[1].trim() : params[0].trim();
+              speech   = hasActor ? params[1] : params[0];
 
           if (hasActor) self.write({ name: "actor", args: [actor] });
           if (self.options.erase && hasActor) self.write({ name: "erase" });
@@ -327,9 +328,9 @@
 
         self.set(newValue, [newValue, null, prevChar, newValue]);
 
-        if (cursor >= min) setTimeout(eraseChar, self.getSayingSpeed(true));
+        if (cursor >= min) setTimeout(eraseChar, self.getSayingSpeed(.2, true));
         else self.next();
-      }, self.getSayingSpeed(true));
+      }, self.getSayingSpeed(.2, true));
 
       return self;
     },
