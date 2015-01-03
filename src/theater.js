@@ -216,7 +216,7 @@
           events    = self.events[eventName] || [];
 
       args instanceof Array || (args = [args]);
-      for (var i = 0, l = events.length; i < l; i++) events[i].apply(self, args);
+      for (var i = 0, l = events.length; i < l; i++) events[i].apply(self, [eventName].concat(args));
 
       return self;
     },

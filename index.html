@@ -25,13 +25,13 @@
                     .describe("Luke", .6, "#luke");
 
                 theater
-                    .on("say:start, erase:start", function () {
+                    .on("say:start, erase:start", function (eventName) {
                         var self    = this,
                             current = self.current.voice;
 
                         self.utils.addClass(current, "saying");
                     })
-                    .on("say:end, erase:end", function () {
+                    .on("say:end, erase:end", function (eventName) {
                         var self    = this,
                             current = self.current.voice;
 
