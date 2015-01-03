@@ -212,11 +212,22 @@
       else if (event !== void 0 && args === void 0) args = event;
 
       var self      = this,
-          eventName = scope + (event ? ":" + event : ""),
-          events    = self.events[eventName] || [];
+          eventName = scope + (event ? ":" + event : "");
 
-      args instanceof Array || (args = [args]);
-      for (var i = 0, l = events.length; i < l; i++) events[i].apply(self, args);
+      self
+        .trigger(eventName, args)
+        .trigger("*", [eventName].concat(args));
+
+      return self;
+    },
+
+
+    trigger: function (eventName, args) {
+      var self   = this,
+          events = self.events[eventName] || [];
+
+      (args instanceof Array || (args = [args]));
+      for (var i = 0, l = events.length; i < l; i++) events[i].apply(self, [eventName].concat(args));
 
       return self;
     },

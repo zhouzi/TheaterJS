@@ -25,6 +25,9 @@
                     .describe("Luke", .6, "#luke");
 
                 theater
+                    .on("*", function () {
+                        console.log(arguments);
+                    })
                     .on("say:start, erase:start", function (eventName) {
                         var self    = this,
                             current = self.current.voice;
