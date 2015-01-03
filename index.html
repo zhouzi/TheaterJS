@@ -10,14 +10,21 @@
     </head>
     
     <body>
-        <div>- <span id="vador"></span></div>
-        <div>- <span id="luke"></span></div>
+        <div class="scene">
+            <div>- <span id="vador"></span></div>
+            <div>- <span id="luke"></span></div>
+        </div>
+
+        <pre id="nodebug"><code>theater.write(<span id="log"></span>);</code></pre>
+        <a id="hidelink" href="#nodebug">hide details</a>
+        <a id="showlink" href="#">show details</a>
 
         <script src="build/theater.js"></script>
         <script>
             (function () {
                 "use strict";
 
+                var $log    = document.querySelector("#log");
                 var theater = new TheaterJS();
 
                 theater
@@ -25,8 +32,14 @@
                     .describe("Luke", .6, "#luke");
 
                 theater
-                    .on("*", function () {
-                        console.log(arguments);
+                    .on("*", function (eventName, originalEvent, sceneName, arg) {
+                        var args  = Array.prototype.splice.apply(arguments, [3]),
+                            log   = '{ name: "' + sceneName + '"';
+
+                        if (args.length > 0) log += ", args: " + JSON.stringify(args).split(",").join(", ");
+                        log += " }";
+
+                        $log.innerHTML = log;
                     })
                     .on("say:start, erase:start", function (eventName) {
                         var self    = this,

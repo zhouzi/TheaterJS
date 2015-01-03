@@ -2,13 +2,13 @@ $black: #222;
 $white: #ededed;
 $red: #c92b2b;
 
+*, *:before, *:after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
 body {
   font-family: 'Cutive', serif;
   background-color: $black;
   color: $white;
-  font-size: 240%;
-  font-weight: 400;
-  line-height: 1.6;
   padding: 20px;
   transition: background-color 200ms ease-out;
 
@@ -23,9 +23,23 @@ body {
   }
 }
 
+a {
+  font-size: 14px;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid;
+  display: inline-block;
+}
+
 @keyframes caret {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+.scene {
+  font-size: 240%;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
 .saying:after {
@@ -37,4 +51,25 @@ body {
   vertical-align: baseline;
   opacity: 1;
   animation: caret 500ms infinite;
+}
+
+pre {
+  font-size: 18px;
+  line-height: 1;
+  overflow: auto;
+  font-family: monospace;
+  background-color: $white;
+  color: $black;
+  margin: 20px 0 10px 0;
+  padding: 10px;
+
+  & ~ #showlink { display: none; }
+  & ~ #hidelink { display: inline-block; }
+
+  &:target {
+    opacity: 0;
+
+    & ~ #hidelink { display: none; }
+    & ~ #showlink { display: inline-block; }
+  }
 }
