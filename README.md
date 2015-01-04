@@ -15,7 +15,12 @@ TheaterJS is also built on top of:
 * Chainable methods.
 * Event handling.
 
-Have a look at the commented and editable demo on [codepen](http://codepen.io/Zhouzi/pen/JoRazP?editors=001) or the [TheaterJS page](http://gabinaureche.com/TheaterJS). I also plan to write an article soon so stay tuned!
+
+
+## Links
+
+* Everything you need to know is demonstrated and explained in this [codepen](http://codepen.io/Zhouzi/pen/JoRazP?editors=001).
+* The demo is also available on the [TheaterJS page](http://gabinaureche.com/TheaterJS).
 
 
 
