@@ -26,7 +26,7 @@ TheaterJS is also built on top of:
 
 ## Example
 
-```
+```javascript
   var theater = new TheaterJS();
   
   theater
@@ -81,7 +81,7 @@ Accepts an indefinite number of parameters. There's 5 *"types"* accepted:
 
 TheaterJS has a built-in event handler. To register an event:
 
-```
+```javascript
   theater
     .on("say:start", function (eventName, args...) { console.log("a say scene started"); })
     .on("say:end", function (eventName, args...) { console.log("a say scene ended); });
@@ -93,7 +93,7 @@ The value before `:` is the scene's name (scope) while the other part of the str
 
 The `emit` method accepts up to three arguments. The first being the "scope", the second the event and the third the arguments.
 
-```
+```javascript
   theater
     .emit("myevent", "start", ["your", "arguments", "go", "here"])
     .emit("myevent", ["you might not need the event part"]);
