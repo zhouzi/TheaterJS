@@ -71,7 +71,7 @@
           experience = self.current.experience + filter,
           skill      = constant ? experience : self.utils.randomFloat(experience, 1);
 
-      return self.utils.getPercentageBetween(600, 50, skill);
+      return self.utils.getPercentageBetween(1000, 50, skill);
     },
 
 
@@ -84,7 +84,7 @@
 
     isMistaking: function () {
       var self = this;
-      return self.current.experience < self.utils.randomFloat(0, .8);
+      return self.current.experience < self.utils.randomFloat(0, 1.4);
     },
 
 
