@@ -84,7 +84,7 @@ TheaterJS has a built-in event handler. To register an event:
 ```javascript
   theater
     .on("say:start", function (eventName, args...) { console.log("a say scene started"); })
-    .on("say:end", function (eventName, args...) { console.log("a say scene ended); });
+    .on("say:end", function (eventName, args...) { console.log("a say scene ended"); });
 ```
 
 The value before `:` is the scene's name (scope) while the other part of the string is the event itself.
