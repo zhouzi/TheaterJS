@@ -72,7 +72,7 @@ If actor's `voice` is a function, it'd be called with 4 arguments:
 Accepts an indefinite number of parameters. There's 5 *"types"* accepted:
 
 * string: a speech to type. If the string contains an actor's name (e.g.: `"Vader:I am your father."`), it also add a scene to update the current actor. When omitting the actor's name, the value will be appended instead of replaced.
-* positive integer: create a break scene lasting for the amout of the argument (ms).
+* positive integer: create a break scene lasting for the amount of the argument (ms).
 * negative integer: e.g.: `-3` erase `3` characters.
 * function: a function to call when the scene is executed (context is set to the current TheaterJS instance). If the function has some asynchrone tasks, you'll need to pass true as second argument. To do so, build a scene: `theater.write({ name: "call", args: [function () { return this.next(); }, true] });`. Don't forget to call `this.next()` when you are ready to get the next scene.
 * object: a scene object with two keys: `name` and `args`. e.g.: `theater.write({ name: "say", args: ["Hello!"] });`
