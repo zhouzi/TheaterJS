@@ -144,24 +144,18 @@
 
         charPosition = chars[ch];
 
-        for(c in chars) {
+        for (c in chars) {
           if (!chars.hasOwnProperty(c)) continue;
 
           p = chars[c];
 
-          if (Math.abs(charPosition[0] - p[0]) <= threshold && Math.abs(charPosition[1] - p[1]) <= threshold) {
+          if (Math.abs(charPosition[0] - p[0]) <= threshold &&
+              Math.abs(charPosition[1] - p[1]) <= threshold) {
             nearbyChars.push(c);
           }
         }
 
         return nearbyChars[utils.randomNumber(0, nearbyChars.length - 1)];
-      },
-
-      randomChar: function () {
-        var utils = this,
-            chars = 'abcdefghijklmnopqrstuvwxyz';
-
-        return chars.charAt(utils.randomNumber(0, chars.length - 1));
       },
 
       randomNumber: function (min, max) {
