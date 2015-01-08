@@ -98,9 +98,68 @@
         return (min - (min * perc)) + (max * perc);
       },
 
+      randomCharNear: function (ch) {
+        var utils = this,
+            chars = {
+              'z': [0,0],
+              'x': [1,0],
+              'c': [2,0],
+              'v': [3,0],
+              'b': [4,0],
+              'n': [5,0],
+              'm': [6,0],
+              ',': [7,0],
+              '.': [8,0],
+              '/': [9,0],
+              'a': [0,1],
+              's': [1,1],
+              'd': [2,1],
+              'f': [3,1],
+              'g': [4,1],
+              'h': [5,1],
+              'j': [6,1],
+              'k': [7,1],
+              'l': [8,1],
+              ';': [9,1],
+              '\'': [10,1],
+              'q': [0,2],
+              'w': [1,2],
+              'e': [2,2],
+              'r': [3,2],
+              't': [4,2],
+              'y': [5,2],
+              'u': [6,2],
+              'i': [7,2],
+              'o': [8,2],
+              'p': [9,2],
+              '[': [10,2],
+              ']': [11,2],
+              '\\': [12,2]
+            },
+            threshold = 1,
+            nearbyChars = [],
+            charPosition,
+            c,
+            p;
+
+        charPosition = chars[ch];
+
+        for(c in chars) {
+          if (!chars.hasOwnProperty(c)) continue;
+
+          p = chars[c];
+
+          if (Math.abs(charPosition[0] - p[0]) <= threshold && Math.abs(charPosition[1] - p[1]) <= threshold) {
+            nearbyChars.push(c);
+          }
+        }
+
+        return nearbyChars[utils.randomNumber(0, nearbyChars.length - 1)];
+      },
+
       randomChar: function () {
         var utils = this,
-            chars = "abcdefghijklmnopqrstuvwxyz";
+            chars = 'abcdefghijklmnopqrstuvwxyz';
 
         return chars.charAt(utils.randomNumber(0, chars.length - 1));
       },
@@ -335,7 +394,7 @@
         } else {
           cursor++;
 
-          newChar = --invincible < 0 && self.isMistaking() ? self.utils.randomChar() : speech.charAt(cursor);
+          newChar = --invincible < 0 && self.isMistaking() ? self.utils.randomCharNear(prevChar) : speech.charAt(cursor);
 
           if (newChar !== speech.charAt(cursor)) mistaken = true;
           newValue = model += newChar;
