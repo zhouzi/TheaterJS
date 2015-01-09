@@ -112,14 +112,19 @@
 
         var threshold    = 1,
             nearbyChars  = [],
-            charPosition = chars[ch];
+            charPosition = chars[ch],
+            c, p;
 
-        for (var i = 0, l = chars.length, p; i < l; i++) {
-          p = chars[i];
+        if (charPosition instanceof Array) {
+          for (c in chars) {
+            if (!chars.hasOwnProperty(c)) continue;
 
-          if (Math.abs(charPosition[0] - p[0]) <= threshold &&
-              Math.abs(charPosition[1] - p[1]) <= threshold) {
-            nearbyChars.push(p);
+            p = chars[c];
+
+            if (Math.abs(charPosition[0] - p[0]) <= threshold &&
+                Math.abs(charPosition[1] - p[1]) <= threshold) {
+              nearbyChars.push(c);
+            }
           }
         }
 
