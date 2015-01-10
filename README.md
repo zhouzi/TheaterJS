@@ -306,5 +306,5 @@ The `gulpfile.js` comes with 5 tasks:
 * `gulp scripts` compiles `src/theater.js`
 * `gulp styles` compiles `src/styles.scss`
 * `gulp serve` opens a server
-* `gulp watch` runs the appropriate tasks when the js or scss file changes.
+* `gulp watch` runs the appropriate tasks when the js or scss file change
 * `gulp` runs `scripts` and `styles`
