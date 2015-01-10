@@ -5,15 +5,7 @@
 * Everything you need to know is demonstrated and explained in this [codepen](http://codepen.io/Zhouzi/pen/JoRazP?editors=001).
 * The demo is also available on the [TheaterJS page](http://gabinaureche.com/TheaterJS).
 
-
-
-# Features
-
-* Multiple actors
-* Mistakes
-* Variable speed
-* Scenario creation
-* Events
+Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS/issues) and [contribute](#contributing) to TheaterJS.
 
 
 
@@ -33,15 +25,25 @@
     
   theater
     .on("say:start, erase:start", function () {
-      /* do something when say or erase starts */
+      // add blinking caret
     })
     .on("say:end, erase:end", function () {
-      /* do something when say or erase ends */
+      // remove blinking caret
     })
     .on("*", function () {
-      /* called whenever an event is triggered */
+      // do something
     });
 ```
+
+
+
+# Features
+
+* [Multiple actors](#multiple-actors)
+* [Mistakes](#mistakes)
+* [Variable speed](#variable-speed)
+* [Scenario creation](#scenario-creation)
+* [Events](#events)
 
 
 
@@ -283,3 +285,26 @@ theater
 ```
 
 The `emit` method accepts up to three arguments. The first being the "scope", the second the event and the third the arguments. If you don't need to specify an event, simply skip it.
+
+
+
+# Contributing
+
+TheaterJS' workflow is pretty simple and you're probably already set.
+
+1. Install Node: http://nodejs.org/
+2. Install Ruby **if needed**: https://www.ruby-lang.org/en/documentation/installation/
+3. Install SASS: http://sass-lang.com/install
+4. Install Gulp globally: `npm install --global gulp`
+
+Then, in the forked repository folder, install dependencies `npm install` and you're done!
+
+## Gulp
+
+The `gulpfile.js` comes with 5 tasks:
+
+* `gulp scripts` compiles `src/theater.js`
+* `gulp styles` compiles `src/styles.scss`
+* `gulp serve` opens a server
+* `gulp watch` runs the appropriate tasks when the js or scss file changes.
+* `gulp` runs `scripts` and `styles`
