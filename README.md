@@ -68,7 +68,7 @@ theater.describe("Vader", .8, "#vader");
 
 In this example we described a new actor named `"Vader"`, with an experience of `.8` (must be comprised between 0 and 1) and a voice `"#vader"`. Its voice is actually what will be used to print out the speech, for Vader it's an HTML element (through a css selector).
 
-A voice can be of two type: an HTML element (or a css selector string which is transformed into an HTML element)
+A voice can be of two type: an HTML element (or a css selector string which is transformed into an HTML element) or a function that will be invoked with four arguments
 
 * An HTML element (or a css selector string which will result in an HTML element). The element's `innerHTML` is used to set its value.
 * A function that will be invoked with four arguments:
@@ -146,7 +146,7 @@ scene name|description
 `erase`|Erase the current speech value.
 `say`|Type the speech.
 
-What if you don't a new speech to replace the current one but to be appended then?
+What if you don't set a new speech to replace the current one but want to append a speech instead?
 
 ### Append speech value
 
@@ -175,7 +175,7 @@ In this example, it would erase `1` character and Vader's speech would become "F
 theater.write(600);
 ```
 
-Positive numbers creates a `wait` scene which makes a break/pause lasting for the amount of the argument (ms).
+Positive numbers create a `wait` scene which makes a break/pause lasting for the amount of the argument (ms).
 
 ### Callback
 
@@ -214,9 +214,9 @@ theater
 ```
 
 Using the shorthands are clearly funnier but also limiting.
-For example, what if your callback does some asynchrone task?
+For example, what if your callback does some asynchronous task?
 
-### Asynchrone callback
+### Asynchronous callback
 
 Let's say you want to make the screen blink for 2 seconds before calling the next scene.
 In this case you'll have to pass `true` as a second argument to the `call` scene.
@@ -225,7 +225,7 @@ In this case you'll have to pass `true` as a second argument to the `call` scene
 theater.write({ name: "call", [blink, true] });
 ```
 
-When this is scene will be played, the execution of the scenario will be "paused".
+When this scene is played, the execution of the scenario will be "paused".
 To play the next scene and continue the scenario, you will need to call `this.next()`.
 
 ```javascript
