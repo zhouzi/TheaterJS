@@ -68,7 +68,7 @@ theater.describe("Vader", .8, "#vader");
 
 In this example we described a new actor named `"Vader"`, with an experience of `.8` (must be comprised between 0 and 1) and a voice `"#vader"`. Its voice is actually what will be used to print out the speech, for Vader it's an HTML element (through a css selector).
 
-A voice can be of two type: an HTML element (or a css selector string which is transformed into an HTML element) or a function that will be invoked with four arguments
+A voice can be of two type: 
 
 * An HTML element (or a css selector string which will result in an HTML element). The element's `innerHTML` is used to set its value.
 * A function that will be invoked with four arguments:
