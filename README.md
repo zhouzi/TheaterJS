@@ -308,3 +308,8 @@ The `gulpfile.js` comes with 5 tasks:
 * `gulp serve` opens a server
 * `gulp watch` runs the appropriate tasks when the js or scss file change
 * `gulp` runs `scripts` and `styles`
+
+## TODO
+
+- [ ] Add support for both azerty and qwerty keyboard with language detection `window.navigator.languages || window.navigator.language || window.navigator.userLanguage`
+- [ ] Since the `:` character is used as a delimiter, `" I am your father."` in `"Vader:Listen: I am your father."` is ignored. Need to make some test to see if it's worth implementing a way to escape it `\:`. Otherwise, simply build the scene like `{ name: "say", ["Listen: I am your father."] }`
