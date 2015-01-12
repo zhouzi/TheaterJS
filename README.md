@@ -7,6 +7,8 @@
 
 Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS/issues) and [contribute](#contributing) to TheaterJS.
 
+**Note:** Please make sure you are not confusing this project with [TheatreJS](http://theatrejs.org/).
+
 
 
 # Example
@@ -311,5 +313,6 @@ The `gulpfile.js` comes with 5 tasks:
 
 ## TODO
 
-- [ ] Add support for both azerty and qwerty keyboard with language detection `window.navigator.languages || window.navigator.language || window.navigator.userLanguage`
+- [ ] Add support for both azerty and qwerty keyboard in `randomCharNear`, with language detection (`window.navigator.languages || window.navigator.language || window.navigator.userLanguage`)
+- [ ] Add support for html in the speeches `theater.write('Vader: I am your <a href="/father">father</a>.')`
 - [ ] Since the `:` character is used as a delimiter, `" I am your father."` in `"Vader:Listen: I am your father."` is ignored. Need to make some test to see if it's worth implementing a way to escape it `\:`. Otherwise, simply build the scene like `{ name: "say", ["Listen: I am your father."] }`
