@@ -215,6 +215,11 @@ theater
   .write({ name: "call", args: [function () { /* do something */ }] });
 ```
 
+The scene object has two keys:
+
+* `name` (string): the scene's name is used to call the appropriate method when the scene is played.
+* `args` (array): an array of arguments passed to the method.
+
 Using the shorthands are clearly funnier but also limiting.
 For example, what if your callback does some asynchronous task?
 
