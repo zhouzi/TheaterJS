@@ -206,13 +206,13 @@ Is exactly the same as:
 
 ```javascript
 theater
-  .write({ name: "actor", ["Vader"] })
-  .write({ name: "erase", [] })
-  .write({ name: "say", ["I am your father."] })
-  .write({ name: "say", [" For real...."] })
-  .write({ name: "erase", [-1] })
-  .write({ name: "wait", [600] })
-  .write({ name: "call", [function () { /* do something */ }] });
+  .write({ name: "actor", args: ["Vader"] })
+  .write({ name: "erase", args: [] })
+  .write({ name: "say", args: ["I am your father."] })
+  .write({ name: "say", args: [" For real...."] })
+  .write({ name: "erase", args: [-1] })
+  .write({ name: "wait", args: [600] })
+  .write({ name: "call", args: [function () { /* do something */ }] });
 ```
 
 Using the shorthands are clearly funnier but also limiting.
@@ -224,7 +224,7 @@ Let's say you want to make the screen blink for 2 seconds before calling the nex
 In this case you'll have to pass `true` as a second argument to the `call` scene.
 
 ```javascript
-theater.write({ name: "call", [blink, true] });
+theater.write({ name: "call", args: [blink, true] });
 ```
 
 When this scene is played, the execution of the scenario will be "paused".
@@ -315,4 +315,4 @@ The `gulpfile.js` comes with 5 tasks:
 
 - [ ] Add support for both azerty and qwerty keyboard in `randomCharNear`, with language detection (`window.navigator.languages || window.navigator.language || window.navigator.userLanguage`)
 - [ ] Add support for html in the speeches `theater.write('Vader: I am your <a href="/father">father</a>.')`
-- [ ] Since the `:` character is used as a delimiter, `" I am your father."` in `"Vader:Listen: I am your father."` is ignored. Need to make some test to see if it's worth implementing a way to escape it `\:`. Otherwise, simply build the scene like `{ name: "say", ["Listen: I am your father."] }`
+- [ ] Since the `:` character is used as a delimiter, `" I am your father."` in `"Vader:Listen: I am your father."` is ignored. Need to make some test to see if it's worth implementing a way to escape it `\:`. Otherwise, simply build the scene like `{ name: "say", args: ["Listen: I am your father."] }`
