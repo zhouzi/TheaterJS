@@ -24,6 +24,23 @@
  */
 
 (function (w, d) {
+  var qwerty = {
+      q: [0,0], w: [0,1], e: [0,2], r: [0,3], t: [0,4], y: [0,5], u: [0,6], i: [0,7], o: [0,8], p: [0,9],
+      a: [1,0], s: [1,1], d: [1,2], f: [1,3], g: [1,4], h: [1,5], j: [1,6], k: [1,7], l: [1,8],
+      z: [2,0], x: [2,1], c: [2,2], v: [2,3], b: [2,4], n: [2,5], m: [2,6]
+  };
+
+  var azerty = {
+    a: [0,0], z: [0,1], e: [0,2], r: [0,3], t: [0,4], y: [0,5], u: [0,6], i: [0,7], o: [0,8], p: [0,9],
+    q: [1,0], s: [1,1], d: [1,2], f: [1,3], g: [1,4], h: [1,5], j: [1,6], k: [1,7], l: [1,8], m: [1,9],
+    w: [2,0], x: [2,1], c: [2,2], v: [2,3], b: [2,4], n: [2,5]
+  };
+
+  var lang     = (window.navigator.languages || window.navigator.language || window.navigator.userLanguage)[0],
+      keyboard = lang.indexOf("fr") > -1 ? azerty : qwerty;
+
+
+
   function TheaterJS (options) {
     var self     = this,
         defaults = { autoplay: true, erase: true };
@@ -99,38 +116,32 @@
       },
 
       randomCharNear: function (ch) {
-        var utils = this,
-            chars = {
-              'z': [0,0], 'x': [1,0], 'c': [2,0], 'v': [3,0], 'b': [4,0],
-              'n': [5,0], 'm': [6,0], ',': [7,0], '.': [8,0], '/': [9,0],
-              'a': [0,1], 's': [1,1], 'd': [2,1], 'f': [3,1], 'g': [4,1],
-              'h': [5,1], 'j': [6,1], 'k': [7,1], 'l': [8,1], ';': [9,1],
-              '\'': [10,1], 'q': [0,2], 'w': [1,2], 'e': [2,2], 'r': [3,2],
-              't': [4,2], 'y': [5,2], 'u': [6,2], 'i': [7,2], 'o': [8,2],
-              'p': [9,2], '[': [10,2], ']': [11,2], '\\': [12,2]
-            };
-
-        var threshold    = 1,
+        var utils        = this,
+            threshold    = 1,
             nearbyChars  = [],
-            charPosition = chars[ch],
+            uppercase    = !!ch.match(/[A-Z]/);
+
+        ch = ch.toLowerCase();
+
+        var charPosition = keyboard[ch] || [],
             c, p;
 
-        if (charPosition instanceof Array) {
-          for (c in chars) {
-            if (!chars.hasOwnProperty(c)) continue;
+        for (c in keyboard) {
+          if (!keyboard.hasOwnProperty(c) || c === ch) continue;
 
-            p = chars[c];
+          p = keyboard[c];
 
-            if (Math.abs(charPosition[0] - p[0]) <= threshold &&
-                Math.abs(charPosition[1] - p[1]) <= threshold) {
-              nearbyChars.push(c);
-            }
+          if (Math.abs(charPosition[0] - p[0]) <= threshold &&
+              Math.abs(charPosition[1] - p[1]) <= threshold) {
+            nearbyChars.push(c);
           }
         }
 
-        return nearbyChars.length > 0 ?
-               nearbyChars[utils.randomNumber(0, nearbyChars.length - 1)] :
-               utils.randomChar();
+        var randomChar = nearbyChars.length > 0 ?
+                         nearbyChars[utils.randomNumber(0, nearbyChars.length - 1)] :
+                         utils.randomChar();
+
+        return uppercase ? randomChar.toUpperCase() : randomChar;
       },
 
       randomChar: function () {
@@ -370,7 +381,8 @@
         } else {
           cursor++;
 
-          newChar = --invincible < 0 && self.isMistaking() ? self.utils.randomCharNear(prevChar) : speech.charAt(cursor);
+          newChar = speech.charAt(cursor);
+          if (--invincible < 0 && self.isMistaking()) newChar = self.utils.randomCharNear(newChar);
 
           if (newChar !== speech.charAt(cursor)) mistaken = true;
           newValue = model += newChar;
