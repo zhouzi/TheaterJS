@@ -382,7 +382,10 @@
           cursor++;
 
           newChar = speech.charAt(cursor);
-          if (--invincible < 0 && self.isMistaking()) newChar = self.utils.randomCharNear(newChar);
+
+          if (--invincible < 0 && (prevChar !== newChar || self.current.experience <= .3) && self.isMistaking()) {
+            newChar = self.utils.randomCharNear(newChar);
+          }
 
           if (newChar !== speech.charAt(cursor)) mistaken = true;
           newValue = model += newChar;
