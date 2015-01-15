@@ -223,10 +223,9 @@
 
         if (typeof scene === "string") {
           var params   = scene.split(":"),
-              hasActor = params.length > 1,
+              hasActor = (params.length > 1 & params[0][params[0].length-1] !== '#'),
               actor    = hasActor ? params[0].trim() : null,
-              speech   = hasActor ? params[1] : params[0];
-
+              speech   = hasActor ? (params.shift(), params.join(":")) : (params[0] = params[0].replace(/#+$/, ""), params.join(":"));
           if (hasActor) self.write({ name: "actor", args: [actor] });
           if (self.options.erase && hasActor) self.write({ name: "erase" });
           self.write({ name: "say", args: [speech, !hasActor] });
@@ -383,7 +382,7 @@
 
           newChar = speech.charAt(cursor);
 
-          if (--invincible < 0 && (prevChar !== newChar || self.current.experience < .3) && self.isMistaking()) {
+          if (--invincible < 0 && (prevChar !== newChar || self.current.experience <= .3) && self.isMistaking()) {
             newChar = self.utils.randomCharNear(newChar);
           }
 
