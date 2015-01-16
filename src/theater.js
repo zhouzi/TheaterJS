@@ -24,31 +24,28 @@
  */
 
 (function (w, d) {
-  var qwerty = {
-      q: [0,0], w: [0,1], e: [0,2], r: [0,3], t: [0,4], y: [0,5], u: [0,6], i: [0,7], o: [0,8], p: [0,9],
-      a: [1,0], s: [1,1], d: [1,2], f: [1,3], g: [1,4], h: [1,5], j: [1,6], k: [1,7], l: [1,8],
-      z: [2,0], x: [2,1], c: [2,2], v: [2,3], b: [2,4], n: [2,5], m: [2,6]
-  };
-
-  var azerty = {
-    a: [0,0], z: [0,1], e: [0,2], r: [0,3], t: [0,4], y: [0,5], u: [0,6], i: [0,7], o: [0,8], p: [0,9],
-    q: [1,0], s: [1,1], d: [1,2], f: [1,3], g: [1,4], h: [1,5], j: [1,6], k: [1,7], l: [1,8], m: [1,9],
-    w: [2,0], x: [2,1], c: [2,2], v: [2,3], b: [2,4], n: [2,5]
-  };
-
-  var lang     = (window.navigator.languages || window.navigator.language || window.navigator.userLanguage)[0],
-      keyboard = lang.indexOf("fr") > -1 ? azerty : qwerty;
-
-
-
   function TheaterJS (options) {
     var self     = this,
-        defaults = { autoplay: true, erase: true };
+        defaults = { autoplay: true, erase: true, locale: "detect" };
+
+    self.options = self.utils.merge(defaults, options || {}); // merge defaults with given options
+
+    if (self.options.locale === "detect") {
+      // Detect language with fallback to "en"
+      self.options.locale = (window.navigator.languages || ["en"])[0].split("-")[0];
+    }
+
+    // If no keyboard is available for the given locale, fallback to "en".
+    // This is especially usefull when using "detect" as we could not cover user's locale.
+    if (!self.keyboards[self.options.locale]) {
+      self.options.locale = "en";
+    }
+
+    self.utils.keyboard = self.keyboards[self.options.locale];
 
     self.events   = {};
     self.scene    = -1; // iterator through the scenario list
     self.scenario = []; // list of action to execute
-    self.options  = self.utils.merge(defaults, options || {}); // merge defaults with given options
     self.casting  = {}; // list of described actors
     self.current  = {}; // actor currently used as params
     self.state    = "ready"; // theater's state (ready or playing)
@@ -56,6 +53,9 @@
 
   TheaterJS.prototype = {
     constructor: TheaterJS,
+
+
+    keyboards: {},
 
 
     // Set actor's voice value depending on its type
@@ -106,6 +106,22 @@
 
 
     utils: {
+      keyboard: {},
+
+      mapKeyboard: function (alphabet) {
+        var keyboard = {};
+
+        for (var y = 0, lines = alphabet.length, chars; y < lines; y++) {
+          chars = alphabet[y];
+
+          for (var x = 0, charsLength = chars.length; x < charsLength; x++) {
+            keyboard[chars[x]] = { x: x, y: y };
+          }
+        }
+
+        return keyboard;
+      },
+
       merge: function (dest, origin) {
         for (var key in origin) if (origin.hasOwnProperty(key)) dest[key] = origin[key];
         return dest;
@@ -117,6 +133,7 @@
 
       randomCharNear: function (ch) {
         var utils        = this,
+            keyboard     = utils.mapKeyboard(utils.keyboard),
             threshold    = 1,
             nearbyChars  = [],
             uppercase    = !!ch.match(/[A-Z]/);
@@ -131,8 +148,8 @@
 
           p = keyboard[c];
 
-          if (Math.abs(charPosition[0] - p[0]) <= threshold &&
-              Math.abs(charPosition[1] - p[1]) <= threshold) {
+          if (Math.abs(charPosition.x - p.x) <= threshold &&
+              Math.abs(charPosition.y - p.y) <= threshold) {
             nearbyChars.push(c);
           }
         }
@@ -146,7 +163,7 @@
 
       randomChar: function () {
         var utils = this,
-            chars = 'abcdefghijklmnopqrstuvwxyz';
+            chars = utils.keyboard.join("");
 
         return chars.charAt(utils.randomNumber(0, chars.length - 1));
       },
@@ -428,6 +445,10 @@
       return self;
     }
   };
+
+  TheaterJS.prototype.keyboards.en = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
+  TheaterJS.prototype.keyboards.fr = ["azertyuiop", "qsdfghjklm", "wxcvbn"];
+  TheaterJS.prototype.keyboards.ru = ["йцукенгшщзх", "фывапролджэ", "ячсмитьбюъ"];
 
   w.TheaterJS = TheaterJS;
 })(window, document);
