@@ -11,7 +11,7 @@ Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS
 
 
 
-# Example
+# Usage
 
 ```javascript
   var theater = new TheaterJS();
@@ -43,6 +43,7 @@ Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS
 
 * [Multiple actors](#multiple-actors)
 * [Mistakes](#mistakes)
+* [Keyboards & Localization](#keyboardslocalization)
 * [Variable speed](#variable-speed)
 * [Scenario creation](#scenario-creation)
 * [Events](#events)
@@ -92,8 +93,64 @@ The wrong character is then erased and the correct one typed.
 When an actor fixes a mistake, he'll then type x characters without any chance to make a mistake.
 For example, if Vader makes a mistake he will fix it and type the 8 next characters perfectly (since he has an experience of `.8`).
 
-Also note that, thanks to **@palmerj3**, the mistaken character will be taken nearby the correct one.
-For example, if an actor makes a mistake on the character "w", he'll probably type "q" or "e" instead.
+
+
+## Keyboards & Localization
+
+When making a mistake, a random character near the mistyped one is used instead.
+Assuming you are using a `qwerty` keyboard, mistyping a `q` would result in a `a`, `s` or `w`.
+If the mistyped character is not mapped in TheaterJS (e.g. `%`), it'll use a random one.
+
+By default, TheaterJS' locale is set to "detect" which means it'll try to get user's language.
+Note that if there's no support for user's language, it will fallback to "en".
+If you do not want to use the detect feature, you can configure the locale as follows:
+
+```
+var theater = new TheaterJS({ locale: "fr" });
+```
+
+The main version of TheaterJS includes support for `qwerty` (en) and `azerty` (fr) keyboards.
+However, adding support for Russian would be as simple as:
+
+```javascript
+TheaterJS.prototype.keyboards.ru = ["йцукенгшщзх", "фывапролджэ", "ячсмитьбюъ"];
+```
+
+Available locales can be found in [build/locales](https://github.com/Zhouzi/TheaterJS/tree/gh-pages/build/locales).
+If you want to use russian locale, make sure to include the `theater.run.js` or `theater.ru.min.js` file.
+
+```html
+<script src="path/to/theater.js"></script>
+<script src="path/to/theater.ru.js"></script>
+<script>var theater = new TheaterJS({ locale: "ru" });</script>
+```
+
+If you are interested in adding support for another language, feel free to [submit an issue](https://github.com/Zhouzi/TheaterJS/issues/new) or a pull request.
+
+### Mapping a new keyboard
+
+A keyboard is mapped based on its physical representation.
+For example, below are the implementations of `qwerty` and `azerty`.
+
+```javascript
+/*
+  [q][w][e][r][t][y][u][i][o][p] // qwertyuiop
+  [a][s][d][f][g][h][j][k][l]    // asdfghjkl
+  [z][x][c][v][b][n][m]          // zxcvbnm
+*/
+
+TheaterJS.prototype.keyboards.en = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
+
+
+
+/*
+  [a][z][e][r][t][y][u][i][o][p] // azertyuiop
+  [q][s][d][f][g][h][j][k][l][m] // qsdfghjklm
+  [w][x][c][v][b][n]             // wxcvbn
+*/
+
+TheaterJS.prototype.keyboards.fr = ["azertyuiop", "qsdfghjklm", "wxcvbn"];
+```
 
 
 
