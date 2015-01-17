@@ -43,7 +43,7 @@ Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS
 
 * [Multiple actors](#multiple-actors)
 * [Mistakes](#mistakes)
-* [Keyboards & Localization](#keyboardslocalization)
+* [Keyboards & Localization](#keyboards--localization)
 * [Variable speed](#variable-speed)
 * [Scenario creation](#scenario-creation)
 * [Events](#events)
