@@ -375,7 +375,6 @@ The `gulpfile.js` comes with 5 tasks:
 
 ## TODO
 
+- [ ] Add support for "speed" an "accuracy". By default, specifying "experience" increases speed and decreases mistakes but we should add a way to specify speed an accuracy independently. e.g: `new TheaterJS({ speed: .9, accuracy: .4 })`
 - [ ] Add support for html in the speeches `theater.write('Vader: I am your <a href="/father">father</a>.')`
 - [ ] Since the `:` character is used as a delimiter, `" I am your father."` in `"Vader:Listen: I am your father."` is ignored. Need to make some test to see if it's worth implementing a way to escape it `\:`. Otherwise, simply build the scene like `{ name: "say", args: ["Listen: I am your father."] }`
-- [x] Add support for both azerty and qwerty keyboard in `randomCharNear`, with language detection (`window.navigator.languages || window.navigator.language || window.navigator.userLanguage`)
-- [x] The chances to make a mistake on repeated character should be really low.
