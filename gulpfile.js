@@ -8,6 +8,13 @@ gulp.task("scripts", function () {
         .pipe(plugins.uglify())
         .pipe(plugins.rename({ suffix: ".min" }))
         .pipe(gulp.dest("build"));
+
+    gulp
+        .src("src/locales/*.js")
+        .pipe(gulp.dest("build/locales"))
+        .pipe(plugins.uglify())
+        .pipe(plugins.rename({ suffix: ".min" }))
+        .pipe(gulp.dest("build/locales"));
 });
 
 gulp.task("styles", function () {

@@ -448,7 +448,7 @@
 
   TheaterJS.prototype.keyboards.en = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
   TheaterJS.prototype.keyboards.fr = ["azertyuiop", "qsdfghjklm", "wxcvbn"];
-  TheaterJS.prototype.keyboards.ru = ["йцукенгшщзх", "фывапролджэ", "ячсмитьбюъ"];
+
 
   w.TheaterJS = TheaterJS;
 })(window, document);

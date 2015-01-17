@@ -1,0 +1,1 @@
+(function (w) { w.TheaterJS.prototype.keyboards.ru = ["йцукенгшщзх", "фывапролджэ", "ячсмитьбюъ"]; })(window);
