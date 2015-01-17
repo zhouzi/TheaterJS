@@ -55,6 +55,9 @@
     constructor: TheaterJS,
 
 
+    version: "1.0.0",
+
+
     keyboards: {},
 
 
