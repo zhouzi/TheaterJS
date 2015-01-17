@@ -55,7 +55,7 @@
     constructor: TheaterJS,
 
 
-    version: "1.0.0",
+    version: "1.1.0",
 
 
     keyboards: {},
@@ -87,29 +87,33 @@
         filter   = 0;
       }
 
-      var self       = this,
-          experience = self.current.experience + filter,
-          skill      = constant ? experience : self.utils.randomFloat(experience, 1);
+      var self  = this,
+          speed = self.current.speed + filter;
+
+      if (speed > 1) speed = 1;
+
+      var skill = constant ? speed : self.utils.randomFloat(speed, 1);
 
       return self.utils.getPercentageBetween(1000, 50, skill);
     },
 
 
-
-    getInvincibility: function () {
-      var self = this;
-      return self.current.experience  * 10;
-    },
-
-
     isMistaking: function () {
       var self = this;
-      return self.current.experience < self.utils.randomFloat(0, 1.4);
+      return self.current.accuracy < self.utils.randomFloat(0, 1);
     },
 
 
     utils: {
       keyboard: {},
+
+      isNumber: function (n) {
+        return typeof n === "number";
+      },
+
+      isObject: function (o) {
+        return o instanceof Object;
+      },
 
       mapKeyboard: function (alphabet) {
         var keyboard = {};
@@ -206,7 +210,13 @@
             model:      ""
           };
 
-      return self.utils.merge(defaults, actor);
+      actor = self.utils.merge(defaults, actor);
+
+      if (!self.utils.isNumber(actor.speed)) actor.speed = actor.experience;
+      if (!self.utils.isNumber(actor.accuracy)) actor.accuracy = actor.experience;
+      if (!self.utils.isNumber(actor.invincibility)) actor.invincibility = actor.accuracy * 10;
+
+      return actor;
     },
 
 
@@ -217,7 +227,11 @@
       var self  = this,
           actor = { name: name };
 
-      if (experience !== void 0) actor.experience = experience;
+      if (self.utils.isNumber(experience)) {
+        actor.experience = experience;
+      } else if (self.utils.isObject(experience)) {
+        actor = self.utils.merge(actor, experience);
+      }
 
       if (voice !== void 0) {
         actor.type = typeof voice === "function" ? "function" : "DOM";
@@ -368,7 +382,7 @@
     say: function (speech, append) {
       var self       = this,
           mistaken   = false,
-          invincible = self.getInvincibility(),
+          invincible = self.current.invincibility,
           cursor, model;
 
       if (append) {
@@ -389,9 +403,9 @@
             newChar, newValue;
 
         if (mistaken) {
-          // After a mistake, depending on the current actor's experience,
+          // After a mistake, depending on the current actor's accuracy,
           // there is 0% chance to make a mistake for the x next times.
-          invincible = self.getInvincibility();
+          invincible = self.current.invincibility;
           mistaken   = false;
           newChar    = null;
           newValue   = model = model.substr(0, cursor);
@@ -403,7 +417,7 @@
 
           newChar = speech.charAt(cursor);
 
-          if (--invincible < 0 && (prevChar !== newChar || self.current.experience <= .3) && self.isMistaking()) {
+          if (--invincible < 0 && (prevChar !== newChar || self.current.accuracy <= .3) && self.isMistaking()) {
             newChar = self.utils.randomCharNear(newChar);
           }
 
