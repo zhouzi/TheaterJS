@@ -352,6 +352,12 @@ The `emit` method accepts up to three arguments. The first being the "scope", th
 
 
 
+# Changelog
+
+* *1.0.0 First release.*
+
+
+
 # Contributing
 
 TheaterJS' workflow is pretty simple and you're probably already set.
