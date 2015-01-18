@@ -100,7 +100,7 @@
 
     isMistaking: function () {
       var self = this;
-      return self.current.accuracy < self.utils.randomFloat(0, 1);
+      return self.utils.randomFloat(0, 1) > self.current.accuracy;
     },
 
 
