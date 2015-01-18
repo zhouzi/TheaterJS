@@ -541,11 +541,9 @@
 
 
     erase: function (n) {
-      var self   = this,
-          cursor = typeof self.current.model === "string" ? self.current.model.length : -1,
-          min    = typeof n === "number" && n < 0 ? cursor + 1 + n : 0;
+      var self = this;
 
-      if (cursor < 0) return self.next();
+      if (typeof self.current.model !== "string") return self.next();
 
       // If erase is called before say (this seems to happen right at the 
       // beginning) we call parseHTML just to set up the arrays even though
@@ -554,9 +552,9 @@
         self.parseHTML(self.current.model);
 
       // Reset cursor and min based on stripped string
-      var speech = self.stripHTML(self.current.model);
-      cursor = speech.length;
-      min = cursor + 1 + n;
+      var speech = self.stripHTML(self.current.model),
+          cursor = speech.length,
+          min = n < 0 ? cursor + 1 + n : 0;
 
       var timeout = setTimeout(function eraseChar () {
         var prevChar = speech.charAt(cursor),
@@ -565,6 +563,7 @@
         // Inject the HTML up to the current cursor position
         newValue = self.injectHTML(newValue, cursor);
         self.set(newValue, [newValue, null, prevChar, newValue]);
+        speech = self.stripHTML(newValue);
 
         if (cursor >= min) setTimeout(eraseChar, self.getSayingSpeed(.2, true));
         else self.next();
