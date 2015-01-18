@@ -69,9 +69,10 @@ Their `experience` is what defines their ability to talk and play (to type actua
 theater.describe("Vader", .8, "#vader");
 ```
 
-In this example we described a new actor named `"Vader"`, with an experience of `.8` (must be comprised between 0 and 1) and a voice `"#vader"`. Its voice is actually what will be used to print out the speech, for Vader it's an HTML element (through a css selector).
+In this example we described a new actor named `"Vader"`, with an experience of `.8` (must be comprised between 0 and 1) and a voice `"#vader"`.
+Its voice is actually what will be used to print out the speech, for Vader it's an HTML element (through a css selector).
 
-A voice can be of two type: 
+A voice can be of two type:
 
 * An HTML element (or a css selector string which will result in an HTML element). The element's `innerHTML` is used to set its value.
 * A function that will be invoked with four arguments:
@@ -81,6 +82,22 @@ A voice can be of two type:
   * `speech` the whole speech
 
 **Note:** as for all functions called by TheaterJS, the context (`this`) is set to the current instance.
+
+An actor's experience is used to calculate its speed, accuracy and invincibility.
+
+property|description
+--------|-----------
+speed|Defines how fast the actor types.
+accuracy|How often he makes mistakes.
+invincibility|How much characters he'll type without making any error after fixing a mistake.
+
+Those properties can be configured independently:
+
+```javascript
+theater.describe("Vader", { speed: .8, accuracy: .4, invincibility: 2 }, "#vader");
+```
+
+Here Vader is pretty fast but makes a lot of mistakes.
 
 
 
@@ -354,6 +371,7 @@ The `emit` method accepts up to three arguments. The first being the "scope", th
 
 # Changelog
 
+* 1.1.0 Actor's speed, accuracy and invincibility can be configured independently.
 * *1.0.0 First release.*
 
 
@@ -382,6 +400,5 @@ The `gulpfile.js` comes with 5 tasks:
 ## TODO
 
 - [ ] Improve mistakes by adding other types, see [#16](https://github.com/Zhouzi/TheaterJS/issues/16)
-- [ ] Add support for "speed" an "accuracy". By default, specifying "experience" increases speed and decreases mistakes but we should add a way to specify speed an accuracy independently. e.g: `new TheaterJS({ speed: .9, accuracy: .4 })`
 - [ ] Add support for html in the speeches `theater.write('Vader: I am your <a href="/father">father</a>.')`
 - [ ] Since the `:` character is used as a delimiter, `" I am your father."` in `"Vader:Listen: I am your father."` is ignored. Need to make some test to see if it's worth implementing a way to escape it `\:`. Otherwise, simply build the scene like `{ name: "say", args: ["Listen: I am your father."] }`
