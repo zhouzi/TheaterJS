@@ -257,7 +257,7 @@
 
         if (typeof scene === "string") {
           var params   = scene.split(":"),
-              hasActor = (params.length > 1 & params[0].charAt(params[0].length - 1) !== '\\'),
+              hasActor = (params.length > 1 && params[0].charAt(params[0].length - 1) !== '\\'),
               actor    = hasActor ? params.shift().trim() : null,
               speech   = params.join(":").replace(/\\:/g, ":");
               
