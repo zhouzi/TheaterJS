@@ -52,10 +52,16 @@ Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS
 
 # Documentation
 
-The first step is to create a new theater *instance*.
+The first step is to create a new theater instance. Available options are:
+
+name|default|description
+----|-------|-----------
+erase|`true`|Whether or not to play the erase animation before writing the following speech.
+autoplay|`true`|If true, plays the scenario automatically. Otherwise, you'll have to call `theater.play()`
+locale|`"detect"`|Customize keyboards, see [Keyboards & Localization](#keyboards--localization).
 
 ```javascript
-var theater = new TheaterJS();
+var theater = new TheaterJS({ erase: true, autoplay: true, locale: "detect" });
 ```
 
 
@@ -408,4 +414,4 @@ The `gulpfile.js` comes with 5 tasks:
 
 - [ ] Improve mistakes by adding other types, see [#16](https://github.com/Zhouzi/TheaterJS/issues/16)
 - [ ] Add support for html in the speeches `theater.write('Vader: I am your <a href="/father">father</a>.')`
-- [ ] Since the `:` character is used as a delimiter, `" I am your father."` in `"Vader:Listen: I am your father."` is ignored. Need to make some test to see if it's worth implementing a way to escape it `\:`. Otherwise, simply build the scene like `{ name: "say", args: ["Listen: I am your father."] }`
+- [ ] Find a way to avoid duplicating the index file for each locale's demo `locales/`
