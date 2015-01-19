@@ -144,6 +144,13 @@ If you want to use russian locale, make sure to include the `theater.run.js` or 
 
 If you are interested in adding support for another language, feel free to [submit an issue](https://github.com/Zhouzi/TheaterJS/issues/new) or a pull request.
 
+Available locales:
+
+* [en: qwerty](http://gabinaureche.com/TheaterJS/)
+* [fr: azerty](http://gabinaureche.com/TheaterJS/)
+* [ru: cyrillic](http://gabinaureche.com/TheaterJS/locales/ru)
+* [de: qwertz](http://gabinaureche.com/TheaterJS/locales/de)
+
 ### Mapping a new keyboard
 
 A keyboard is mapped based on its physical representation.
