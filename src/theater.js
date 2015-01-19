@@ -260,7 +260,7 @@
               hasActor = (params.length > 1 & params[0].charAt(params[0].length - 1) !== '\\'),
               actor    = hasActor ? params.shift().trim() : null,
               speech   = params.join(":").replace(/\\:/g, ":");
-              
+
           if (hasActor) self.write({ name: "actor", args: [actor] });
           if (self.options.erase && hasActor) self.write({ name: "erase" });
 
@@ -466,6 +466,7 @@
 
   TheaterJS.prototype.keyboards.en = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
   TheaterJS.prototype.keyboards.fr = ["azertyuiop", "qsdfghjklm", "wxcvbn"];
+  TheaterJS.prototype.keyboards.da = ["qwertyuiopå", "asdfghjklæø", "zxcvbnm"];
 
 
   w.TheaterJS = TheaterJS;
