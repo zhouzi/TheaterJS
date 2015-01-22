@@ -103,6 +103,100 @@
       return self.utils.randomFloat(0, 1) > self.current.accuracy;
     },
 
+    parseHTML: function (string) {
+      var self = this;
+      self.current.htmlStartTags = [];
+      self.current.htmlEndTags = [];
+
+      // Do a quick scan and find out if there's any HTML in the speech
+      // If there is, we need to save the positions, lengths, and contents.
+      var htmlTag = {
+        pos: -1,
+        length: -1,
+        string: ""
+      };
+
+      for(var c = 0; c < string.length; c++) {
+        var character = string.charAt(c);
+
+        if(character === '<')
+            htmlTag.pos = c;
+
+        if(htmlTag.pos >= 0)
+            htmlTag.string += character;
+
+        if(character === '>') {
+            htmlTag.length = c - htmlTag.pos + 1;
+
+            var tagCopy = {
+              pos: htmlTag.pos,
+              length: htmlTag.length,
+              string: htmlTag.string
+            };
+
+            if(htmlTag.string.charAt(1) === '/')
+              self.current.htmlEndTags.push(tagCopy);
+            else
+              self.current.htmlStartTags.push(tagCopy);
+
+            // Reset htmlTag
+            htmlTag.pos = -1;
+            htmlTag.length = -1;
+            htmlTag.string = "";
+        }
+      }
+    },
+
+    stripHTML: function (string) {
+      var self = this;
+      for(var h = 0; h < self.current.htmlStartTags.length; h++) {
+        string = string.replace(self.current.htmlStartTags[h].string, "");
+        string = string.replace(self.current.htmlEndTags[h].string, "");
+      }
+
+      return string;
+    },
+
+    injectHTML: function (string, cursor) {
+      var self = this,
+          numTags = self.current.htmlStartTags.length,
+          amountInserted = 0,
+          startIndex = 0,
+          endIndex = 0;
+
+      while(startIndex < numTags) {
+        var start = self.current.htmlStartTags[startIndex];
+        var end = self.current.htmlEndTags[endIndex];
+
+        if(start.pos < end.pos) {
+          // Next start tag comes before next end tag
+          if(start.pos <= cursor + amountInserted) {
+            // Start tag is included in portion that is being typed
+            string = string.substr(0, start.pos) + start.string + string.substr(start.pos);
+            amountInserted += start.length;
+            startIndex++;
+          } else {
+            // Start tag is off the screen. We need to close any end tags that
+            // correspond to start tags we've already typed
+            for(var i = startIndex - 1; i >= endIndex; i--)
+                string += self.current.htmlEndTags[i].string;
+
+            // We can return early in this case
+            return string;
+          }
+        } else {
+          // Next end tag comes before next start tag
+          if(end.pos <= cursor + amountInserted) {
+            // End tag is included in portion that is being typed
+            string = string.substr(0, end.pos) + end.string + string.substr(end.pos);
+            amountInserted += end.length;
+            endIndex++;
+          } else return string;
+        }
+      }
+
+      return string;
+    },
 
     utils: {
       keyboard: {},
@@ -196,7 +290,9 @@
       removeClass: function (el, className) {
         if (el.classList) el.classList.remove(className);
         else el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-      }
+      },
+
+
     },
 
 
@@ -399,6 +495,12 @@
         cursor = -1;
       }
 
+      // Save HTML tag info from current speech
+      self.parseHTML(speech);
+
+      // Strip all html from the speech
+      speech = self.stripHTML(speech);
+
       var timeout = setTimeout(function nextChar () {
         var prevChar = model.charAt(cursor),
             newChar, newValue;
@@ -426,6 +528,9 @@
           newValue = model += newChar;
         }
 
+        // Inject the HTML up to the current cursor position
+        newValue = self.injectHTML(newValue, cursor);
+
         self.set(newValue, [newValue, newChar, prevChar, speech]);
 
         if (mistaken || cursor < speech.length) timeout = setTimeout(nextChar, self.getSayingSpeed());
@@ -437,17 +542,29 @@
 
 
     erase: function (n) {
-      var self   = this,
-          cursor = typeof self.current.model === "string" ? self.current.model.length : -1,
-          min    = typeof n === "number" && n < 0 ? cursor + 1 + n : 0;
+      var self = this;
 
-      if (cursor < 0) return self.next();
+      if (typeof self.current.model !== "string") return self.next();
+
+      // If erase is called before say (this seems to happen right at the 
+      // beginning) we call parseHTML just to set up the arrays even though
+      // they'll probably be empty
+      if (self.current.htmlStartTags === undefined)
+        self.parseHTML(self.current.model);
+
+      // Reset cursor and min based on stripped string
+      var speech = self.stripHTML(self.current.model),
+          cursor = speech.length,
+          min = n < 0 ? cursor + 1 + n : 0;
 
       var timeout = setTimeout(function eraseChar () {
-        var prevChar = self.current.model.charAt(cursor),
-            newValue = self.current.model.substr(0, --cursor);
+        var prevChar = speech.charAt(cursor),
+            newValue = speech.substr(0, --cursor);
 
+        // Inject the HTML up to the current cursor position
+        newValue = self.injectHTML(newValue, cursor);
         self.set(newValue, [newValue, null, prevChar, newValue]);
+        speech = self.stripHTML(newValue);
 
         if (cursor >= min) setTimeout(eraseChar, self.getSayingSpeed(.2, true));
         else self.next();
