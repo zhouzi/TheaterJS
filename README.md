@@ -5,7 +5,7 @@
 * Everything you need to know is demonstrated and explained in this [codepen](http://codepen.io/Zhouzi/pen/JoRazP?editors=001).
 * The demo is also available on the [TheaterJS page](http://gabinaureche.com/TheaterJS).
 
-Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS/issues) and [contribute](#contributing) to TheaterJS.
+Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS/issues) and [contribute](https://github.com/Zhouzi/TheaterJS/blob/gh-pages/CONTRIBUTING.md) to TheaterJS.
 
 **Note:** Please make sure you are not confusing this project with [TheatreJS](http://theatrejs.org/).
 
@@ -148,14 +148,14 @@ If you want to use russian locale, make sure to include the `theater.run.js` or 
 <script>var theater = new TheaterJS({ locale: "ru" });</script>
 ```
 
-If you are interested in adding support for another language, feel free to [submit an issue](https://github.com/Zhouzi/TheaterJS/issues/new) or a pull request.
-
 Available locales:
 
 * [en: qwerty](http://gabinaureche.com/TheaterJS/)
 * [fr: azerty](http://gabinaureche.com/TheaterJS/)
 * [ru: cyrillic](http://gabinaureche.com/TheaterJS/locales/ru)
 * [de: qwertz](http://gabinaureche.com/TheaterJS/locales/de)
+
+If you are interested in adding support for another language, take a look at the [contributing file](https://github.com/Zhouzi/TheaterJS/blob/gh-pages/CONTRIBUTING.md).
 
 ### Mapping a new keyboard
 
@@ -386,32 +386,3 @@ The `emit` method accepts up to three arguments. The first being the "scope", th
 
 * 1.1.0 Actor's speed, accuracy and invincibility can be configured independently.
 * *1.0.0 First release.*
-
-
-
-# Contributing
-
-TheaterJS' workflow is pretty simple and you're probably already set.
-
-1. Install Node: http://nodejs.org/
-2. Install Ruby **if needed**: https://www.ruby-lang.org/en/documentation/installation/
-3. Install SASS: http://sass-lang.com/install
-4. Install Gulp globally: `npm install --global gulp`
-
-Then, in the forked repository folder, install dependencies `npm install` and you're done!
-
-## Gulp
-
-The `gulpfile.js` comes with 5 tasks:
-
-* `gulp scripts` compiles `src/theater.js`
-* `gulp styles` compiles `src/styles.scss`
-* `gulp serve` opens a server
-* `gulp watch` runs the appropriate tasks when the js or scss file change
-* `gulp` runs `scripts` and `styles`
-
-## TODO
-
-- [ ] Improve mistakes by adding other types, see [#16](https://github.com/Zhouzi/TheaterJS/issues/16)
-- [ ] Add support for html in the speeches `theater.write('Vader: I am your <a href="/father">father</a>.')`
-- [ ] Find a way to avoid duplicating the index file for each locale's demo `locales/`
