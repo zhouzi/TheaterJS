@@ -336,7 +336,7 @@
             for (var i = 0, l = scenes.length; i < l; i++) {
                 scene = scenes[i];
 
-                if (typeof scene === "string") {
+                if (self.utils.isString(scene)) {
                     var params   = scene.split(":"),
                         hasActor = (params.length > 1 && params[0].charAt(params[0].length - 1) !== '\\'),
                         actor    = hasActor ? params.shift().trim() : null,
@@ -393,11 +393,12 @@
 
         // emit event
         emit: function (scope, event, args) {
-            if (typeof event !== "string") event = void 0;
+            var self = this;
+
+            if (!self.utils.isString(event)) event = void 0;
             else if (event !== void 0 && args === void 0) args = event;
 
-            var self      = this,
-                eventName = scope + (event ? ":" + event : "");
+            var eventName = scope + (event ? ":" + event : "");
 
             self
                 .trigger(eventName, args)
@@ -527,7 +528,7 @@
         erase: function (n) {
             var self = this;
 
-            if (typeof self.current.model !== "string") return self.next();
+            if (!self.utils.isString(self.current.model)) return self.next();
 
             // Reset cursor and min based on stripped string
             var speech = self.stripHTML(self.current.model),
