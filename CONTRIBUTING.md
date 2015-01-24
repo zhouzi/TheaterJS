@@ -39,8 +39,9 @@ Let's say we want to implement the locale for german keyboards, `"de"`.
 4. In this file, include `<script src="../../build/locales/theater.de.min.js"></script>` and update TheaterJS instantiation: `var theater = new TheaterJS({ locale: "de" });`
 6. Submit a pull request
 
+Note: It'd be much appreciated if you could translate the demo dialogue also.
+
 ## TODO
 
 - [ ] Improve mistakes by adding other types, see [#16](https://github.com/Zhouzi/TheaterJS/issues/16)
-- [ ] Add support for html in the speeches `theater.write('Vader: I am your <a href="/father">father</a>.')`
 - [ ] Find a way to avoid duplicating the index file for each locale's demo `locales/`
