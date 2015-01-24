@@ -384,5 +384,6 @@ The `emit` method accepts up to three arguments. The first being the "scope", th
 
 # Changelog
 
+* 1.2.0 Adding support for html within the speeches
 * 1.1.0 Actor's speed, accuracy and invincibility can be configured independently.
 * *1.0.0 First release.*
