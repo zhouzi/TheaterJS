@@ -59,19 +59,13 @@
 
         // Set actor's voice value depending on its type
         set: function (value, args) {
-            var self = this;
+            var self  = this,
+                voice = self.current.voice;
 
             self.current.model = value;
 
-            switch (self.current.type) {
-                case "function":
-                    self.current.voice.apply(self, args);
-                    break;
-
-                default:
-                    self.current.voice.innerHTML = value;
-                    break;
-            }
+            if (self.utils.isFunction(voice)) voice.apply(self, args);
+            else voice.innerHTML = value;
 
             return self;
         },
@@ -83,7 +77,7 @@
                 filter = 0;
             }
 
-            var self = this,
+            var self  = this,
                 speed = self.current.speed + filter;
 
             if (speed > 1) speed = 1;
@@ -204,13 +198,10 @@
                 return copy;
             },
 
-            isNumber: function (n) {
-                return typeof n === "number";
-            },
-
-            isObject: function (o) {
-                return o instanceof Object;
-            },
+            isFunction: function (f) { return typeof f === "function"; },
+            isString: function (s) { return typeof s === "string"; },
+            isNumber: function (n) { return typeof n === "number"; },
+            isObject: function (o) { return o instanceof Object; },
 
             mapKeyboard: function (alphabet) {
                 var keyboard = {};
@@ -303,7 +294,6 @@
                 defaults = {
                     experience:    .6,
                     voice:         function (newValue, newChar, prevChar, str) { console.log(newValue); },
-                    type:          "function",
                     model:         "",
                     htmlStartTags: [],
                     htmlEndTags:   []
@@ -328,11 +318,8 @@
             else if (self.utils.isObject(experience)) actor = self.utils.merge(actor, experience);
 
             if (voice !== void 0) {
-                actor.type = typeof voice === "function" ? "function" : "DOM";
-
-                // If actor's voice is a DOM element and a string, assume it's a query selector
-                if (actor.type === "DOM") actor.voice = typeof voice === "string" ? d.querySelector(voice) : voice;
-                else actor.voice = voice;
+                // If actor's voice is a string, assume it's a query selector
+                actor.voice = self.utils.isString(voice) ? d.querySelector(voice) : voice;
             }
 
             self.casting[name] = self.train(actor);
