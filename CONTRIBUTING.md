@@ -43,5 +43,6 @@ Note: It'd be much appreciated if you could translate the demo dialogue also.
 
 ## TODO
 
+- [ ] Make some browser tests, support table
 - [ ] Improve mistakes by adding other types, see [#16](https://github.com/Zhouzi/TheaterJS/issues/16)
 - [ ] Find a way to avoid duplicating the index file for each locale's demo `locales/`
