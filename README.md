@@ -154,6 +154,7 @@ Available locales:
 * [fr: azerty](http://gabinaureche.com/TheaterJS/)
 * [ru: cyrillic](http://gabinaureche.com/TheaterJS/locales/ru)
 * [de: qwertz](http://gabinaureche.com/TheaterJS/locales/de)
+* [pl: qwerty](http://gabinaureche.com/TheaterJS/locales/pl)
 
 If you are interested in adding support for another language, take a look at the [contributing file](https://github.com/Zhouzi/TheaterJS/blob/gh-pages/CONTRIBUTING.md).
 

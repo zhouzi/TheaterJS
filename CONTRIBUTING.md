@@ -22,8 +22,8 @@ The `gulpfile.js` comes with 5 tasks:
 ## Add a new locale to TheaterJS
 
 To add support for a new locale/keyboard, fork this repository.
-Then create a new folder named from the locale's short name in `src/locales`.
-Your implementation goes in a file named `theater.locale.js`.
+Then create a new file named from the locale's short name in `src/locales`.
+Your implementation goes in a file named `theater.<locale>.js`.
 Call `gulp` so it create the proper files in the `/build` folder.
 
 Copy an existing demo in the `/locales` folder and paste it in a new one.
