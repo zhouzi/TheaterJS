@@ -97,8 +97,8 @@
         parseHTML: function (speech) {
             var self = this,
 
-                // Do a quick scan and find out if there's any HTML in the speech
-                // If there is, we need to save the positions, lengths, and contents.
+            // Do a quick scan and find out if there's any HTML in the speech
+            // If there is, we need to save the positions, lengths, and contents.
                 baseTag = { tag: "", startAt: -1 },
                 htmlTag = self.utils.copy(baseTag);
 
@@ -138,7 +138,7 @@
 
             for (var i = 0, l = self.current.htmlStartTags.length; i < l; i++) {
                 str = str.replace(self.current.htmlStartTags[i].tag, "")
-                         .replace(self.current.htmlEndTags[i].tag, "");
+                    .replace(self.current.htmlEndTags[i].tag, "");
             }
 
             return str;
