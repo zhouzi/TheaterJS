@@ -45,7 +45,7 @@ Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS
 * [Mistakes](#mistakes)
 * [Keyboards & Localization](#keyboards--localization)
 * [Variable speed](#variable-speed)
-* [Scenario creation](#scenario-creation)
+* [Scenario creation](#scenario-creation) with [HTML support](#html-support)
 * [Events](#events)
 
 
@@ -250,6 +250,14 @@ Here the string is not prefixed by an actor's name and creates only one scene:
 scene name|description
 ----------|-----------
 `say`|Type the speech.
+
+### HTML support
+
+As of TheaterJS 1.2, HTML is supported in the speeches.
+
+```javascript
+theater.write('Vader:<a href="http://google.com?q=feelings">Search</a> your feelings...');
+```
 
 ### Erase x characters
 
