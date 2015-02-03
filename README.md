@@ -156,6 +156,7 @@ Available locales:
 * [fr: azerty](http://gabinaureche.com/TheaterJS/)
 * [ru: cyrillic](http://gabinaureche.com/TheaterJS/locales/ru)
 * [de: qwertz](http://gabinaureche.com/TheaterJS/locales/de)
+* [da: qwerty](http://gabinaureche.com/TheaterJS/locales/da)
 
 ### Mapping a new keyboard
 
