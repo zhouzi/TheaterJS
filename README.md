@@ -148,6 +148,8 @@ If you want to use russian locale, make sure to include the `theater.run.js` or 
 <script>var theater = new TheaterJS({ locale: "ru" });</script>
 ```
 
+If you are interested in adding support for another language, take a look at the [contributing file](https://github.com/Zhouzi/TheaterJS/blob/gh-pages/CONTRIBUTING.md).
+
 Available locales:
 
 * [en: qwerty](http://gabinaureche.com/TheaterJS/)
@@ -155,8 +157,7 @@ Available locales:
 * [ru: cyrillic](http://gabinaureche.com/TheaterJS/locales/ru)
 * [de: qwertz](http://gabinaureche.com/TheaterJS/locales/de)
 * [pl: qwerty](http://gabinaureche.com/TheaterJS/locales/pl)
-
-If you are interested in adding support for another language, take a look at the [contributing file](https://github.com/Zhouzi/TheaterJS/blob/gh-pages/CONTRIBUTING.md).
+* [da: qwerty](http://gabinaureche.com/TheaterJS/locales/da)
 
 ### Mapping a new keyboard
 
