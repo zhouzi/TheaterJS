@@ -93,100 +93,6 @@
             return self.utils.randomFloat(0, .8) > self.current.accuracy;
         },
 
-        // parseHTML is called everytime a "say" scene plays
-        parseHTML: function (speech) {
-            var self = this,
-
-            // Do a quick scan and find out if there's any HTML in the speech
-            // If there is, we need to save the positions, lengths, and contents.
-                baseTag = { tag: "", startAt: -1 },
-                htmlTag = self.utils.copy(baseTag);
-
-            self.current.htmlStartTags = [];
-            self.current.htmlEndTags   = [];
-
-            for (var c = 0, l = speech.length, character, tagCopy; c < l; c++) {
-                character = speech.charAt(c);
-
-                // tag starts
-                if (character === '<') htmlTag.startAt = c;
-
-                // tag's name
-                if (htmlTag.startAt >= 0) htmlTag.tag += character;
-
-                // tag ends
-                if (character === '>') {
-                    //htmlTag.length = c - htmlTag.pos + 1;
-                    //htmlTag.length = htmlTag.string.length;
-
-                    tagCopy = self.utils.copy(htmlTag);
-
-                    if (htmlTag.tag.charAt(1) === '/') self.current.htmlEndTags.push(tagCopy); // closing tag
-                    else self.current.htmlStartTags.push(tagCopy);
-
-                    // Reset htmlTag
-                    htmlTag = self.utils.copy(baseTag);
-                }
-            }
-
-            return self;
-        },
-
-        // Remove the tags registered for current actor while str is the speech
-        stripHTML: function (str) {
-            var self = this;
-
-            for (var i = 0, l = self.current.htmlStartTags.length; i < l; i++) {
-                str = str.replace(self.current.htmlStartTags[i].tag, "")
-                    .replace(self.current.htmlEndTags[i].tag, "");
-            }
-
-            return str;
-        },
-
-        injectHTML: function (speech, cursor) {
-            var self           = this,
-                numTags        = self.current.htmlStartTags.length,
-                amountInserted = 0,
-                startIndex     = 0,
-                endIndex       = 0,
-                opener, closer;
-
-            while (startIndex < numTags) {
-                opener = self.current.htmlStartTags[startIndex];
-                closer = self.current.htmlEndTags[endIndex];
-
-                if (opener.startAt < closer.startAt) {
-                    // Next start tag comes before next end tag
-                    if (opener.startAt <= cursor + amountInserted) {
-                        // Start tag is included in portion that is being typed
-                        speech = speech.substr(0, opener.startAt) + opener.tag + speech.substr(opener.startAt);
-                        amountInserted += opener.tag.length;
-                        startIndex++;
-                    } else {
-                        // Start tag is off the screen. We need to close any end tags that
-                        // correspond to start tags we've already typed
-                        for (var i = startIndex - 1; i >= endIndex; i--) speech += self.current.htmlEndTags[i].tag;
-
-                        // We can return early in this case
-                        return speech;
-                    }
-                } else {
-                    // Next end tag comes before next start tag
-                    if (closer.startAt <= cursor + amountInserted) {
-                        // End tag is included in portion that is being typed
-                        speech = speech.substr(0, closer.startAt) + closer.tag + speech.substr(closer.startAt);
-                        amountInserted += closer.tag.length;
-                        endIndex++;
-                    } else {
-                        return speech;
-                    }
-                }
-            }
-
-            return speech;
-        },
-
         utils:    {
             keyboard: {},
 
@@ -294,9 +200,7 @@
                 defaults = {
                     experience:    .6,
                     voice:         function (newValue, newChar, prevChar, str) { console.log(newValue); },
-                    model:         "",
-                    htmlStartTags: [],
-                    htmlEndTags:   []
+                    model:         ""
                 };
 
             actor = self.utils.merge(defaults, actor);
@@ -479,12 +383,6 @@
                 cursor = -1;
             }
 
-            // Save HTML tag info from current speech
-            self.parseHTML(speech);
-
-            // Strip all html from the speech
-            speech = self.stripHTML(speech);
-
             var timeout = setTimeout(function nextChar () {
                 var prevChar = model.charAt(cursor),
                     newChar, newValue;
@@ -512,9 +410,6 @@
                     newValue = model += newChar;
                 }
 
-                // Inject the HTML up to the current cursor position
-                newValue = self.injectHTML(newValue, cursor);
-
                 self.set(newValue, [newValue, newChar, prevChar, speech]);
 
                 if (mistaken || cursor < speech.length) timeout = setTimeout(nextChar, self.getSayingSpeed());
@@ -531,7 +426,7 @@
             if (!self.utils.isString(self.current.model)) return self.next();
 
             // Reset cursor and min based on stripped string
-            var speech = self.stripHTML(self.current.model),
+            var speech = self.current.model,
                 cursor = speech.length,
                 min    = n < 0 ? cursor + 1 + n : 0;
 
@@ -539,10 +434,8 @@
                 var prevChar = speech.charAt(cursor),
                     newValue = speech.substr(0, --cursor);
 
-                // Inject the HTML up to the current cursor position
-                newValue = self.injectHTML(newValue, cursor);
                 self.set(newValue, [newValue, null, prevChar, newValue]);
-                speech = self.stripHTML(newValue);
+                speech = newValue;
 
                 if (cursor >= min) setTimeout(eraseChar, self.getSayingSpeed(.2, true));
                 else self.next();
