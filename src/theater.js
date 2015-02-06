@@ -108,6 +108,35 @@
             isString: function (s) { return typeof s === "string"; },
             isNumber: function (n) { return typeof n === "number"; },
             isObject: function (o) { return o instanceof Object; },
+            stripHTML: function (str) { return str.replace(/(<([^>]+)>)/ig,""); },
+
+            mapHTML: function (str) {
+                var utils   = this,
+                    openers = [],
+                    closers = [],
+                    baseTag = { position: -1, tagName: "" },
+                    tag     = utils.copy(baseTag),
+                    tagCopy;
+
+                for (var i = 0, l = str.length, ch; i < l; i++) {
+                    ch = str.charAt(i);
+
+                    if (ch === "<") tag.position = i;
+
+                    if (tag.position >= 0) tag.tagName += ch;
+
+                    if (ch === ">") {
+                        tagCopy = utils.copy(tag);
+
+                        if (tag.tagName.charAt(1) === "/") closers.push(tagCopy);
+                        else openers.push(tagCopy);
+
+                        tag = utils.copy(baseTag);
+                    }
+                }
+
+                return { openers: openers, closers: closers };
+            },
 
             mapKeyboard: function (alphabet) {
                 var keyboard = {};
@@ -369,6 +398,9 @@
                 mistaken   = false,
                 invincible = self.current.invincibility,
                 cursor, model;
+
+            self.current.raw = speech;
+            speech           = self.utils.stripHTML(speech);
 
             if (append) {
                 // When appending instead of replacing, there's several things we need to do:
