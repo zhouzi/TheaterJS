@@ -138,6 +138,33 @@
                 return { openers: openers, closers: closers };
             },
 
+            injectHTML: function (str, html) {
+                var i, l, opener, closer;
+
+                for (i = 0, l = html.openers.length; i < l; i++) {
+                    opener = html.openers[i];
+
+                    if (opener.position < str.length) {
+                        str = str.substr(0, opener.position) + opener.tagName + str.substr(opener.position);
+                    } else {
+                        break;
+                    }
+                }
+
+                for (i = 0, l = html.closers.length; i < l; i++) {
+                    opener = html.openers[i];
+                    closer = html.closers[i];
+
+                    if (closer.position <= str.length) {
+                        str = str.substr(0, closer.position) + closer.tagName + str.substr(closer.position);
+                    } else if (opener.position <= str.length) {
+                        str += closer.tagName;
+                    }
+                }
+
+                return str;
+            },
+
             mapKeyboard: function (alphabet) {
                 var keyboard = {};
 
