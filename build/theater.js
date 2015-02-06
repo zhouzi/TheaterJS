@@ -74,7 +74,7 @@
         getSayingSpeed: function (filter, constant) {
             if (typeof filter !== "number") {
                 constant = filter;
-                filter = 0;
+                filter   = 0;
             }
 
             var self  = this,
@@ -90,7 +90,7 @@
 
         isMistaking: function () {
             var self = this;
-            return self.utils.randomFloat(0, 1) > self.current.accuracy;
+            return self.utils.randomFloat(0, .8) > self.current.accuracy;
         },
 
         // parseHTML is called everytime a "say" scene plays
