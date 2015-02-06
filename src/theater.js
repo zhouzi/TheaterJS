@@ -60,12 +60,14 @@
         // Set actor's voice value depending on its type
         set: function (value, args) {
             var self  = this,
-                voice = self.current.voice;
+                voice = self.current.voice,
+                html  = self.current.html || [];
 
-            self.current.model = value;
+            args[0]            = self.utils.injectHTML(args[0], html);
+            self.current.model = self.utils.injectHTML(value, html);
 
             if (self.utils.isFunction(voice)) voice.apply(self, args);
-            else voice.innerHTML = value;
+            else voice.innerHTML = self.current.model;
 
             return self;
         },
@@ -108,57 +110,33 @@
             isString: function (s) { return typeof s === "string"; },
             isNumber: function (n) { return typeof n === "number"; },
             isObject: function (o) { return o instanceof Object; },
-            stripHTML: function (str) { return str.replace(/(<([^>]+)>)/ig,""); },
+            stripHTML: function (str) { return str.replace(/(<([^>]+)>)/gi,""); },
 
             mapHTML: function (str) {
-                var utils   = this,
+                var tags    = [],
                     openers = [],
-                    closers = [],
-                    baseTag = { position: -1, tagName: "" },
-                    tag     = utils.copy(baseTag),
-                    tagCopy;
+                    tag;
 
-                for (var i = 0, l = str.length, ch; i < l; i++) {
-                    ch = str.charAt(i);
+                str.replace(/<[^>]+>/gi, function (tagName, position) {
+                    tag = { tagName: tagName, position: position };
 
-                    if (ch === "<") tag.position = i;
+                    if (tagName.charAt(1) === "/") tag.opener = openers.pop();
+                    else if (tagName.charAt(tagName.length - 2) !== "/") openers.push(tag); // don't add autoclosing tags as openers
 
-                    if (tag.position >= 0) tag.tagName += ch;
+                    tags.push(tag);
+                });
 
-                    if (ch === ">") {
-                        tagCopy = utils.copy(tag);
-
-                        if (tag.tagName.charAt(1) === "/") closers.push(tagCopy);
-                        else openers.push(tagCopy);
-
-                        tag = utils.copy(baseTag);
-                    }
-                }
-
-                return { openers: openers, closers: closers };
+                return tags;
             },
 
             injectHTML: function (str, html) {
-                var i, l, opener, closer;
+                for (var i = 0, l = html.length, tag; i < l; i++) {
+                    tag = html[i];
 
-                for (i = 0, l = html.openers.length; i < l; i++) {
-                    opener = html.openers[i];
-
-                    if (opener.position < str.length) {
-                        str = str.substr(0, opener.position) + opener.tagName + str.substr(opener.position);
-                    } else {
-                        break;
-                    }
-                }
-
-                for (i = 0, l = html.closers.length; i < l; i++) {
-                    opener = html.openers[i];
-                    closer = html.closers[i];
-
-                    if (closer.position <= str.length) {
-                        str = str.substr(0, closer.position) + closer.tagName + str.substr(closer.position);
-                    } else if (opener.position <= str.length) {
-                        str += closer.tagName;
+                    if (tag.position < str.length) {
+                        str = str.substr(0, tag.position) + tag.tagName + str.substr(tag.position);
+                    } else if (tag.opener && tag.opener.position < str.length) {
+                        str += tag.tagName;
                     }
                 }
 
@@ -426,8 +404,8 @@
                 invincible = self.current.invincibility,
                 cursor, model;
 
-            self.current.raw = speech;
-            speech           = self.utils.stripHTML(speech);
+            self.current.html = self.utils.mapHTML(speech);
+            speech            = self.utils.stripHTML(speech);
 
             if (append) {
                 // When appending instead of replacing, there's several things we need to do:
@@ -485,7 +463,7 @@
             if (!self.utils.isString(self.current.model)) return self.next();
 
             // Reset cursor and min based on stripped string
-            var speech = self.current.model,
+            var speech = self.utils.stripHTML(self.current.model),
                 cursor = speech.length,
                 min    = n < 0 ? cursor + 1 + n : 0;
 
