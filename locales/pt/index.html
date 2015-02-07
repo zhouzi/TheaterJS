@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>TheaterJS, a typing effect mimicking human behavior.</title>
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Cutive">
+        <link rel="stylesheet" href="../../build/styles.css">
+    </head>
+
+    <body>
+        <div class="outer">
+            <div class="inner">
+                <div class="wrapper">
+                    <div class="scene">
+                        <div>- <span id="vader"></span></div>
+                        <div>- <span id="luke"></span></div>
+                    </div>
+
+                    <pre id="nodebug"><code>
+  theater.write(
+    <span id="log"></span>
+  );
+                    </code></pre>
+                    <p>
+                        <a id="hidelink" href="#nodebug">hide code</a>
+                        <a id="showlink" href="#">show code</a>
+                    </p>
+
+                    <p>
+                        <a href="https://github.com/Zhouzi/TheaterJS">Github repository</a>,
+                        demo on the <a href="http://gabinaureche.com/TheaterJS/">TheaterJS page</a>
+                        and commented on <a href="http://codepen.io/Zhouzi/pen/JoRazP?editors=001">Codepen</a>.
+                    </p>
+
+                    <p>
+                        Share the &hearts; on <a href="https://twitter.com/home?status=TheaterJS,%20a%20typing%20effect%20mimicking%20human%20behavior.%20https://github.com/Zhouzi/TheaterJS%20%23TheaterJS%20%23typing%20%23javascript">Twitter</a> or <a href="https://www.facebook.com/sharer/sharer.php?u=https://github.com/Zhouzi/TheaterJS">Facebook</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script src="../../build/theater.js"></script>
+        <script src="../../build/locales/theater.pt.js"></script>
+        <script>
+            (function () {
+                "use strict";
+
+                var $log    = document.querySelector("#log");
+                var theater = new TheaterJS({ locale: "pt" });
+
+                theater
+                    .describe("Vader", { speed: .8, accuracy: .6, invincibility: 4 }, "#vader")
+                    .describe("Luke", .6, "#luke");
+
+                theater
+                    .on("*", function (eventName, originalEvent, sceneName, arg) {
+                        var args  = Array.prototype.splice.apply(arguments, [3]),
+                            log   = '{\n      name: "' + sceneName + '"';
+
+                        if (args.length > 0) log += ",\n      args: " + JSON.stringify(args).split(",").join(", ").replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        log += "\n    }";
+
+                        $log.innerHTML = log;
+                    })
+                    .on("say:start, erase:start", function (eventName) {
+                        var self    = this,
+                            current = self.current.voice;
+
+                        self.utils.addClass(current, "saying");
+                    })
+                    .on("say:end, erase:end", function (eventName) {
+                        var self    = this,
+                            current = self.current.voice;
+
+                        self.utils.removeClass(current, "saying");
+                    });
+
+                theater
+                    .write("Vader:Luke.", 400, toggleClass)
+                    .write("Luke:Sim?", toggleClass)
+                    .write("Vader:Eu sou o seu pai.", toggleClass)
+                    .write({ name: "call", args: [kill, true] })
+                    .write("Luke:Nããooo...", -3, "!!! ", 400, "Não! ", 400)
+                    .write("Luke:Isso não é verdade!", 400)
+                    .write("Luke:Isso é impossível!", toggleClass)
+                    .write("Vader:Procure no seu interior.", 1600)
+                    .write("Vader:Você saberá que é verdade.", 1000, toggleClass)
+                    .write("Luke:Nããããoooo! ", 400, "Não!", toggleClass)
+                    .write("Vader:Luke.", 800)
+                    .write("Vader:Você pode destruir o Imperador.", 1600)
+                    .write("Vader:Ele previu isso.", 800)
+                    .write("Vader:É o seu destino.", 1600)
+                    .write("Vader:Junte-se a mim.", 800)
+                    .write("Vader:Juntos podemos governar a galáxia.", 800)
+                    .write("Vader:Como pai e filho.", 1600)
+                    .write("Vader:Venha comigo.", 800)
+                    .write("Vader:É o único caminho.", 2000)
+                    .write(function () { theater.play(true); });
+
+                var body = document.getElementsByTagName("BODY")[0];
+
+                function toggleClass (className) {
+                    if (typeof className !== "string") className = "light";
+
+                    if (theater.utils.hasClass(body, className)) theater.utils.removeClass(body, className);
+                    else theater.utils.addClass(body, className);
+                }
+
+                function kill () {
+                    var self    = this,
+                        delay   = 300,
+                        i       = 0,
+                        timeout = setTimeout(function blink () {
+                            toggleClass("blood");
+                            if (++i < 6) timeout = setTimeout(blink, delay);
+                            else self.next();
+                        }, delay);
+
+                    return self;
+                }
+            })();
+        </script>
+    </body>
+</html>
