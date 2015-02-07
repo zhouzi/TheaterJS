@@ -2,6 +2,7 @@
   "name": "TheaterJS",
   "version": "1.2.1",
   "main": "build/theater.js",
+  "license": "MIT",
   "ignore": [
     "src",
     "locales",
@@ -9,7 +10,8 @@
     "gulpfile.js",
     "index.html",
     "package.json",
-    "build/locales"
+    "build/locales",
+    "build/styles.css"
   ],
   "devDependencies": {
     "gulp": "^3.8.10",
@@ -20,5 +22,12 @@
     "gulp-uglify": "^1.0.2",
     "gulp-webserver": "^0.9.0"
   },
+  "keywords": [
+    "theaterjs",
+    "typing",
+    "javascript",
+    "human",
+    "behavior"
+  ],
   "homepage": "https://github.com/Zhouzi/TheaterJS"
 }
