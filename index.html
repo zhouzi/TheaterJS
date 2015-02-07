@@ -77,8 +77,7 @@
                     });
 
                 theater
-                    .write('Vader:Luke <strong>what</strong> the <a href="#">hell</a> are u doing?')
-                    .write(function () { theater.play(true); });/*
+                    .write("Vader:Luke", 400, toggleClass)
                     .write("Luke:What?", toggleClass)
                     .write("Vader:I am your father.", toggleClass)
                     .write({ name: "call", args: [kill, true] })
@@ -97,7 +96,7 @@
                     .write("Vader:As father and son.", 1600)
                     .write("Vader:Come with me. ", 800)
                     .write("Vader:It is the only way.", 2000)
-                    .write(function () { theater.play(true); });*/
+                    .write(function () { theater.play(true); });
 
                 var body = document.getElementsByTagName("BODY")[0];
 
