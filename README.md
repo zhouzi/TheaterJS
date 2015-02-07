@@ -42,6 +42,7 @@ Feel free to submit any [suggestions/issues](https://github.com/Zhouzi/TheaterJS
 # Features
 
 * [Multiple actors](#multiple-actors)
+* [Environment agnostic](#environment-agnostic) (works with angular, `document.title`, ...)
 * [Mistakes](#mistakes)
 * [Keyboards & Localization](#keyboards--localization)
 * [Variable speed](#variable-speed)
@@ -104,6 +105,48 @@ theater.describe("Vader", { speed: .8, accuracy: .4, invincibility: 2 }, "#vader
 ```
 
 Here Vader is pretty fast but makes a lot of mistakes.
+
+
+
+## Environment agnostic
+
+TheaterJS' purpose is not just about dealing with HTML elements but with any environment.
+For example, if you want to use it with angular you could do:
+
+```javascript
+angular
+  .module("app", [])
+  .controller("theaterDemoCtrl", [
+    "$scope",
+    function ($scope) {
+      $scope.vader = "";
+      
+      var theater = new TheaterJS();
+      
+      theater.describe("Vader", .8, function (newValue) {
+        $scope.$apply(function () { $scope.vader = newValue; });
+      });
+      
+      theater
+        .write("Vader:Luke.", 500)
+        .write("I am your father.");
+    }
+  ]);
+```
+
+Or with a page's title:
+
+```javascript
+var theater = new TheaterJS();
+
+theater.describe("Vader", .8, function (newValue) {
+  document.title = newValue;
+});
+
+theater
+  .write("Vader:Luke.", 500)
+  .write("I am your father.");
+```
 
 
 
