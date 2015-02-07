@@ -260,6 +260,8 @@ As of TheaterJS 1.2, HTML is supported in the speeches.
 theater.write('Vader:<a href="http://google.com?q=feelings">Search</a> your feelings...');
 ```
 
+Have a look at this [fiddle](http://jsfiddle.net/6y5uqydw/).
+
 ### Erase x characters
 
 ```javascript
