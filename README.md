@@ -158,6 +158,7 @@ Available locales:
 * [de: qwertz](http://gabinaureche.com/TheaterJS/locales/de)
 * [pl: qwerty](http://gabinaureche.com/TheaterJS/locales/pl)
 * [da: qwerty](http://gabinaureche.com/TheaterJS/locales/da)
+* [pt: qwerty](http://gabinaureche.com/TheaterJS/locales/pt)
 
 ### Mapping a new keyboard
 
