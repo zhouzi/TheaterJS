@@ -18,7 +18,7 @@
     "url": "https://github.com/Zhouzi/TheaterJS/issues"
   },
   "homepage": "https://github.com/Zhouzi/TheaterJS",
-  "dependencies": {
+  "devDependencies": {
     "gulp": "^3.8.10",
     "gulp-autoprefixer": "^2.0.0",
     "gulp-load-plugins": "^0.8.0",
