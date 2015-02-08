@@ -113,18 +113,19 @@
             stripHTML: function (str) { return str.replace(/(<([^>]+)>)/gi,""); },
 
             mapHTML: function (str) {
-                var tags    = [],
+                var regexp  = /<[^>]+>/gi,
+                    tags    = [],
                     openers = [],
-                    tag;
+                    result, tag;
 
-                str.replace(/<[^>]+>/gi, function (tagName, position) {
-                    tag = { tagName: tagName, position: position };
+                while (result = regexp.exec(str)) {
+                    tag = { tagName: result[0], position: result.index };
 
-                    if (tagName.charAt(1) === "/") tag.opener = openers.pop();
-                    else if (tagName.charAt(tagName.length - 2) !== "/") openers.push(tag); // don't add autoclosing tags as openers
+                    if (tag.tagName.charAt(1) === "/") tag.opener = openers.pop();
+                    else if (tag.tagName.charAt(tag.tagName.length - 2) !== "/") openers.push(tag); // don't add autoclosing tags as openers
 
                     tags.push(tag);
-                });
+                }
 
                 return tags;
             },
