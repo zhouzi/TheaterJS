@@ -112,7 +112,10 @@
                 var copy = {},
                     prop;
 
-                for (prop in obj) if (obj.hasOwnProperty(prop)) copy[prop] = obj[prop];
+                for (prop in obj) {
+                    if (obj.hasOwnProperty(prop)) copy[prop] = obj[prop];
+                }
+
                 return copy;
             },
 
@@ -169,7 +172,12 @@
             },
 
             merge: function (dest, origin) {
-                for (var key in origin) if (origin.hasOwnProperty(key)) dest[key] = origin[key];
+                for (var key in origin) {
+                    if (origin.hasOwnProperty(key)) {
+                        dest[key] = origin[key];
+                    }
+                }
+
                 return dest;
             },
 
@@ -178,11 +186,11 @@
             },
 
             randomCharNear: function (ch) {
-                var utils = this,
-                    keyboard = utils.mapKeyboard(utils.keyboard),
-                    threshold = 1,
+                var utils       = this,
+                    keyboard    = utils.mapKeyboard(utils.keyboard),
+                    threshold   = 1,
                     nearbyChars = [],
-                    uppercase = !!ch.match(/[A-Z]/);
+                    uppercase   = !!ch.match(/[A-Z]/);
 
                 ch = ch.toLowerCase();
 
@@ -201,8 +209,8 @@
                 }
 
                 var randomChar = nearbyChars.length > 0 ?
-                    nearbyChars[utils.randomNumber(0, nearbyChars.length - 1)] :
-                    utils.randomChar();
+                                 nearbyChars[utils.randomNumber(0, nearbyChars.length - 1)] :
+                                 utils.randomChar();
 
                 return uppercase ? randomChar.toUpperCase() : randomChar;
             },
