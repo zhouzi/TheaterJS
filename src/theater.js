@@ -26,7 +26,7 @@
 (function (w, d) {
     function TheaterJS (options) {
         var self     = this,
-            defaults = { autoplay: true, erase: true, locale: "detect" };
+            defaults = { autoplay: true, erase: true, locale: "detect", minSpeed: 50, maxSpeed: 1000 };
 
         self.options = self.utils.merge(defaults, options || {}); // merge defaults with given options
 
@@ -86,7 +86,7 @@
 
             var skill = constant ? speed : self.utils.randomFloat(speed, 1);
 
-            return self.utils.getPercentageBetween(1000, 50, skill);
+            return self.utils.getPercentageBetween(self.options.maxSpeed, self.options.minSpeed, skill);
         },
 
 
