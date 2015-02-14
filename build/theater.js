@@ -26,7 +26,7 @@
 (function (w, d) {
     function TheaterJS (options) {
         var self     = this,
-            defaults = { autoplay: true, erase: true, locale: "detect", minSpeed: 50, maxSpeed: 1000 };
+            defaults = { autoplay: true, erase: true, locale: "detect", minSpeed: 50, maxSpeed: 600 };
 
         self.options = self.utils.merge(defaults, options || {}); // merge defaults with given options
 
@@ -73,20 +73,30 @@
         },
 
 
-        getSayingSpeed: function (filter, constant) {
-            if (typeof filter !== "number") {
-                constant = filter;
-                filter   = 0;
-            }
+        getSayingSpeed: function (filter) {
+            var self  = this;
 
-            var self  = this,
-                speed = self.current.speed + filter;
+            if (!self.utils.isNumber(filter)) filter = 0;
 
+            var speed = self.current.speed + filter;
             if (speed > 1) speed = 1;
 
-            var skill = constant ? speed : self.utils.randomFloat(speed, 1);
-
+            var skill = self.utils.randomFloat(speed, 1);
             return self.utils.getPercentageBetween(self.options.maxSpeed, self.options.minSpeed, skill);
+        },
+
+        recover: function (mistakes) {
+            var self = this,
+                max  = self.maxMistakes();
+
+            return mistakes >= max || self.utils.randomFloat(0, 1) <= self.current.accuracy;
+        },
+
+        maxMistakes: function () {
+            var self = this,
+                max  = .8 - self.current.accuracy;
+
+            return max <= 0 ? 1 : max * 10;
         },
 
 
@@ -401,7 +411,8 @@
 
         say: function (speech, append) {
             var self       = this,
-                mistaken   = false,
+                mistakes   = 0,
+                recovered  = false,
                 invincible = self.current.invincibility,
                 cursor, model;
 
@@ -425,32 +436,51 @@
                 var prevChar = model.charAt(cursor),
                     newChar, newValue;
 
-                if (mistaken) {
+                // If there's mistakes AND ((cursor is greater or equal to speech's length) OR (actor has recovered OR is recovering))
+                if (mistakes > 0 && (cursor >= speech.length || (recovered || self.recover(mistakes)))) {
                     // After a mistake, depending on the current actor's accuracy,
                     // there is 0% chance to make a mistake for the x next times.
                     invincible = self.current.invincibility;
-                    mistaken   = false;
+
+                    recovered  = true;
                     newChar    = null;
                     newValue   = model = model.substr(0, cursor);
+
+                    mistakes--;
 
                     // Last char erased
                     cursor--;
                 } else {
+                    recovered = false;
                     cursor++;
 
                     newChar = speech.charAt(cursor);
 
-                    if (--invincible < 0 && (prevChar !== newChar || self.current.accuracy <= .3) && self.isMistaking()) {
+                    /**
+                     * cursor < speech.length
+                     * It doesn't make sense to be mistaking when actor should be done "typing".
+                     *
+                     * --invincible < 0
+                     * If actor's invincibility doesn't protect him anymore.
+                     *
+                     * (prevChar !== newChar || self.current.accuracy <= .3)
+                     * If the new character is not a repetition of the previous
+                     * Unless the actor has an accuracy below or equal to .3
+                     *
+                     * self.isMistaking()
+                     * If the mistaking algorithm says actor should make a mistake
+                     */
+                    if (cursor < speech.length && --invincible < 0 && (prevChar !== newChar || self.current.accuracy <= .3) && self.isMistaking()) {
                         newChar = self.utils.randomCharNear(newChar);
                     }
 
-                    if (newChar !== speech.charAt(cursor)) mistaken = true;
+                    if (newChar !== speech.charAt(cursor) || mistakes > 0) mistakes++;
                     newValue = model += newChar;
                 }
 
                 self.set(newValue, [newValue, newChar, prevChar, speech]);
 
-                if (mistaken || cursor < speech.length) timeout = setTimeout(nextChar, self.getSayingSpeed());
+                if (mistakes > 0 || cursor < speech.length) timeout = setTimeout(nextChar, self.getSayingSpeed());
                 else self.next();
             }, self.getSayingSpeed());
 
@@ -477,7 +507,7 @@
 
                 if (cursor >= min) setTimeout(eraseChar, self.getSayingSpeed(.2, true));
                 else self.next();
-            }, self.getSayingSpeed(.2, true));
+            }, self.getSayingSpeed(.2));
 
             return self;
         },
