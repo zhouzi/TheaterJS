@@ -57,12 +57,14 @@ The first step is to create a new theater instance. Available options are:
 
 name|default|description
 ----|-------|-----------
-erase|`true`|Whether or not to play the erase animation before writing the following speech.
+erase|`true`|Whether or not to play the erase animation before writing the next speech.
 autoplay|`true`|If true, plays the scenario automatically. Otherwise, you'll have to call `theater.play()`
 locale|`"detect"`|Customize keyboards, see [Keyboards & Localization](#keyboards--localization).
+minSpeed|50|Minimum delay between each characters (the lower, the faster)
+maxSpeed|600|Maximum delay between each characters (the greater, the slower)
 
 ```javascript
-var theater = new TheaterJS({ erase: true, autoplay: true, locale: "detect" });
+var theater = new TheaterJS({ erase: true, autoplay: true, locale: "detect", minSpeed: 50, maxSpeed: 600 });
 ```
 
 
@@ -440,6 +442,11 @@ The `emit` method accepts up to three arguments. The first being the "scope", th
 
 # Changelog
 
+* 1.3.0
+  * minSpeed and maxSpeed are now configurable
+  * default maxSpeed decreased to 600 (instead of 1000)
+  * mistakes are repeatable
+  * erase's speed varies just as "say" scenes
 * 1.2.2 Registration as a bower component `bower install theaterjs`
 * 1.2.1 Fix html support
 * 1.2.0 Adding support for html within the speeches
