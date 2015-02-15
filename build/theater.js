@@ -63,8 +63,9 @@
                 voice = self.current.voice,
                 html  = self.current.html || [];
 
-            args[0]            = self.utils.injectHTML(args[0], html);
-            self.current.model = self.utils.injectHTML(value, html);
+            if (!self.utils.isArray(args)) args = [];
+
+            self.current.model = args[0] = self.utils.injectHTML(value, html);
 
             if (self.utils.isFunction(voice)) voice.apply(self, args);
             else voice.innerHTML = self.current.model;
@@ -119,6 +120,7 @@
                 return copy;
             },
 
+            isArray: function (a) { return a instanceof Array; },
             isFunction: function (f) { return typeof f === "function"; },
             isString: function (s) { return typeof s === "string"; },
             isNumber: function (n) { return typeof n === "number"; },
