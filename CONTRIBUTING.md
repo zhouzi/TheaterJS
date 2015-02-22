@@ -1,4 +1,4 @@
-# Contributing
+# Setup
 
 TheaterJS' workflow is pretty simple and you're probably already set.
 
@@ -21,28 +21,25 @@ The `gulpfile.js` comes with 5 tasks:
 
 ## Add a new locale to TheaterJS
 
-To add support for a new locale/keyboard, fork this repository.
-Then create a new file named from the locale's short name in `src/locales`.
-Your implementation goes in a file named `theater.<locale>.js`.
-Call `gulp` so it create the proper files in the `/build` folder.
+1. Fork this repository
+2. Create the file `src/locales/theater.<locale>.js` (e.g `/src/locales/theater.de.js` for the `"de"` locale)
+3. Use `gulp` to create the proper files in the `/build` folder
+4. Submit a pull request
 
-Copy an existing demo in the `/locales` folder and paste it in a new one.
-Include the new locale, modify the `new TheaterJS({ locale: '...' })` to be configured properly.
+### How it works
 
-### Example
+Mapping a keyboard is quite easy, for example here is the pysical representation of an `azerty` keyboard:
 
-Let's say we want to implement the locale for german keyboards, `"de"`.
+```
+[a][z][e][r][t][y][u][i][o][p]
+[q][s][d][f][g][h][j][k][l][m]
+[w][x][c][v][b][n]
+```
 
-1. Create `/src/locales/theater.de.js` with the new keyboard implementation
-2. Call `gulp`
-3. Create `/locales/de/index.html`
-4. In this file, include `<script src="../../build/locales/theater.de.min.js"></script>` and update TheaterJS instantiation: `var theater = new TheaterJS({ locale: "de" });`
-6. Submit a pull request
+So adding support for the `fr` locale (`azerty` keyboard) would be as simple as creating the following file in `src/locales/theater.fr.js`.
 
-Note: It'd be much appreciated if you could translate the demo dialogue also.
-
-## TODO
-
-- [ ] Make some browser tests, support table
-- [ ] Improve mistakes by adding other types, see [#16](https://github.com/Zhouzi/TheaterJS/issues/16)
-- [ ] Find a way to avoid duplicating the index file for each locale's demo `locales/`
+```javascript
+(function (w) {
+    w.TheaterJS.prototype.keyboards.fr = ["azertyuiop", "qsdfghjklm", "wxcvbn"];
+})(window);
+```
