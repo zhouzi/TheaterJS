@@ -48,7 +48,7 @@
         self.scenario = []; // list of action to execute
         self.casting  = {}; // list of described actors
         self.current  = {}; // actor currently used as params
-        self.state    = "ready"; // theater's state (ready or playing)
+        self.state    = "ready"; // theater's state (ready, playing or stopped)
     }
 
     TheaterJS.prototype = {
@@ -334,6 +334,13 @@
             return self;
         },
 
+        stop: function () {
+            var self = this;
+
+            self.state = "stopped";
+            return self;
+        },
+
 
         // register event
         on: function (events, fn) {
@@ -394,7 +401,7 @@
 
             if (prevScene) self.emit(prevScene.name, "end", [prevScene.name].concat(prevScene.args));
 
-            if (self.scene + 1 >= self.scenario.length) {
+            if (self.state === "stopped" || self.scene + 1 >= self.scenario.length) {
                 // If there's no next scene, set state to ready
                 self.state = "ready";
             } else {
