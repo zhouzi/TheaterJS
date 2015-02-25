@@ -325,11 +325,14 @@
         play: function (restart) {
             var self = this;
 
-            // if restart is passed as true, start from scratch
-            if (restart === true) self.scene = -1;
+            if (self.state !== "playing") {
+                // if restart is passed as true, start from scratch
+                if (restart === true) self.scene = -1;
 
-            // if scenario is not yet playing, do it!
-            if (self.state === "ready") self.next();
+                // if scenario is not yet playing, do it!
+                self.state = "ready";
+                self.next();
+            }
 
             return self;
         },
