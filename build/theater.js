@@ -53,7 +53,7 @@
 
     TheaterJS.prototype = {
         constructor: TheaterJS,
-        version:     "1.3.2",
+        version:     "1.4.0",
         keyboards:   {},
 
 
@@ -109,22 +109,11 @@
         utils:    {
             keyboard: {},
 
-            copy: function (obj) {
-                var copy = {},
-                    prop;
-
-                for (prop in obj) {
-                    if (obj.hasOwnProperty(prop)) copy[prop] = obj[prop];
-                }
-
-                return copy;
-            },
-
             isArray: function (a) { return a instanceof Array; },
             isFunction: function (f) { return typeof f === "function"; },
             isString: function (s) { return typeof s === "string"; },
             isNumber: function (n) { return typeof n === "number"; },
-            isObject: function (o) { return o instanceof Object; },
+            isObject: function (o) { return !this.isArray(o) && !this.isFunction(o) && o instanceof Object; },
             stripHTML: function (str) { return str.replace(/(<([^>]+)>)/gi,""); },
 
             mapHTML: function (str) {
@@ -233,16 +222,19 @@
             },
 
             hasClass: function (el, className) {
+                /* istanbul ignore next: http://youmightnotneedjquery.com/ */
                 if (el.classList) return el.classList.contains(className);
                 else return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
             },
 
             addClass: function (el, className) {
+                /* istanbul ignore next: http://youmightnotneedjquery.com/ */
                 if (el.classList) el.classList.add(className);
                 else el.className += ' ' + className;
             },
 
             removeClass: function (el, className) {
+                /* istanbul ignore next: http://youmightnotneedjquery.com/ */
                 if (el.classList) el.classList.remove(className);
                 else el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
             }
@@ -251,6 +243,7 @@
 
         // When describing a new actor, train merges its attributes with the defaults
         train: function (actor) {
+            /* istanbul ignore next */
             var self     = this,
                 defaults = {
                     experience:    .6,
@@ -287,9 +280,9 @@
 
 
         // Add a scene to the scenario
-        write: function () {
+        write: function (args) {
             var self   = this,
-                scenes = Array.prototype.splice.apply(arguments, [0]), // the write function can have an infinite number of params
+                scenes = self.utils.isArray(args) ? args : Array.prototype.splice.apply(arguments, [0]), // the write function can have an infinite number of params
                 scene;
 
             for (var i = 0, l = scenes.length; i < l; i++) {
@@ -302,15 +295,15 @@
                         speech   = params.join(":").replace(/\\:/g, ":");
 
                     if (hasActor) self.write({ name: "actor", args: [actor] });
-                    if (self.options.erase && hasActor) self.write({ name: "erase" });
+                    if (self.options.erase && hasActor) self.write({ name: "erase", args: [] });
 
                     self.write({ name: "say", args: [speech, !hasActor] });
-                } else if (typeof scene === "number") {
+                } else if (self.utils.isNumber(scene)) {
                     if (scene < 0) self.write({ name: "erase", args: [scene] });
                     else self.write({ name: "wait", args: [scene] });
-                } else if (typeof scene === "function") {
+                } else if (self.utils.isFunction(scene)) {
                     self.write({ name: "call", args: [scene] });
-                } else if (scene instanceof Object) {
+                } else if (self.utils.isObject(scene)) {
                     self.scenario.push(scene);
                 }
             }
@@ -325,10 +318,10 @@
         play: function (restart) {
             var self = this;
 
-            if (self.state !== "playing") {
-                // if restart is passed as true, start from scratch
-                if (restart === true) self.scene = -1;
+            // if restart is passed as true, start from scratch
+            if (restart === true) self.scene = -1;
 
+            if (self.state !== "playing") {
                 // if scenario is not yet playing, do it!
                 self.state = "ready";
                 self.next();
@@ -362,12 +355,15 @@
 
         // emit event
         emit: function (scope, event, args) {
-            var self = this;
+            var self      = this,
+                eventName = scope;
 
-            if (!self.utils.isString(event)) event = void 0;
-            else if (event !== void 0 && args === void 0) args = event;
-
-            var eventName = scope + (event ? ":" + event : "");
+            if (!self.utils.isString(event)) {
+                if (args == void 0) args = event;
+                event = null;
+            } else {
+                eventName += ":" + event;
+            }
 
             self
                 .trigger(eventName, args)

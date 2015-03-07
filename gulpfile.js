@@ -25,6 +25,7 @@ gulp.task("styles", function () {
       .pipe(gulp.dest("build"));
 });
 
+gulp.task("coverage", function () { return gulp.src("test/coverage/*/index.html").pipe(plugins.open('<%file.path%>')); });
 gulp.task("serve", ["default"], function () { gulp.src("").pipe(plugins.webserver()); });
 gulp.task("watch", ["default"], function () { gulp.watch("src/**/*.js", ["scripts"]); gulp.watch("src/styles.scss", ["styles"]) });
 gulp.task("default", ["scripts", "styles"]);

@@ -58,7 +58,7 @@
                         var args  = Array.prototype.splice.apply(arguments, [3]),
                             log   = '{\n      name: "' + sceneName + '"';
 
-                        if (args.length > 0) log += ",\n      args: " + JSON.stringify(args).split(",").join(", ").replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        log += ",\n      args: " + JSON.stringify(args).split(",").join(", ").replace(/</g, '&lt;').replace(/>/g, '&gt;');
                         log += "\n    }";
 
                         $log.innerHTML = log;
