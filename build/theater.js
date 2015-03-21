@@ -23,7 +23,17 @@
  *
  */
 
-(function (w, d) {
+(function (root, factory) {
+    if (typeof define === "function" && define.amd) {
+        define(factory);
+    } else if (typeof exports === "object") {
+        module.exports = factory();
+    } else {
+        root.TheaterJS = factory();
+    }
+})(this, function () {
+    var root = this;
+
     function TheaterJS (options) {
         var self     = this,
             defaults = { autoplay: true, erase: true, locale: "detect", minSpeed: 50, maxSpeed: 600 };
@@ -32,7 +42,7 @@
 
         if (self.options.locale === "detect") {
             // Detect language with fallback to "en"
-            self.options.locale = (window.navigator.languages || ["en"])[0].split("-")[0];
+            self.options.locale = (root.navigator && root.navigator.languages || ["en"])[0].split("-")[0];
         }
 
         // If no keyboard is available for the given locale, fallback to "en".
@@ -200,8 +210,8 @@
                 }
 
                 var randomChar = nearbyChars.length > 0 ?
-                                 nearbyChars[utils.randomNumber(0, nearbyChars.length - 1)] :
-                                 utils.randomChar();
+                    nearbyChars[utils.randomNumber(0, nearbyChars.length - 1)] :
+                    utils.randomChar();
 
                 return uppercase ? randomChar.toUpperCase() : randomChar;
             },
@@ -271,7 +281,7 @@
 
             if (voice !== void 0) {
                 // If actor's voice is a string, assume it's a query selector
-                actor.voice = self.utils.isString(voice) ? d.querySelector(voice) : voice;
+                actor.voice = self.utils.isString(voice) && document && document.querySelector ? document.querySelector(voice) : voice;
             }
 
             self.casting[name] = self.train(actor);
@@ -539,5 +549,5 @@
     TheaterJS.prototype.keyboards.en = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
     TheaterJS.prototype.keyboards.fr = ["azertyuiop", "qsdfghjklm", "wxcvbn"];
 
-    w.TheaterJS = TheaterJS;
-})(window, document);
+    return TheaterJS;
+});
