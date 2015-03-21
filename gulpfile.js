@@ -2,23 +2,16 @@ var gulp    = require("gulp"),
     plugins = require("gulp-load-plugins")();
 
 gulp.task("scripts", function () {
-    gulp
-        .src("src/theater.js")
+    return gulp
+        .src("src/**/*.js")
         .pipe(gulp.dest("build"))
         .pipe(plugins.uglify())
         .pipe(plugins.rename({ suffix: ".min" }))
         .pipe(gulp.dest("build"));
-
-    gulp
-        .src("src/locales/*.js")
-        .pipe(gulp.dest("build/locales"))
-        .pipe(plugins.uglify())
-        .pipe(plugins.rename({ suffix: ".min" }))
-        .pipe(gulp.dest("build/locales"));
 });
 
 gulp.task("styles", function () {
-    gulp
+    return gulp
       .src("src/styles.scss")
       .pipe(plugins.rubySass({ style: "compressed", "sourcemap=none": true }))
       .pipe(plugins.autoprefixer("last 3 version"))
