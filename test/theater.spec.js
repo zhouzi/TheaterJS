@@ -103,6 +103,24 @@
             expect(theater.casting["Boba"]).toBeDefined();
         });
 
+        it("should erase with a given speed", function () {
+            var theater = new TheaterJS({ erase: false });
+            spyOn(theater, "erase").and.callThrough();
+
+            theater
+                .describe("Luke")
+                .actor("Luke")
+                .set("Hello!")
+                .write({ name: "erase", args: [null, 100] })
+                .play();
+
+            jasmine.clock().tick(99);
+            expect(theater.current.model).toBe("Hello!");
+
+            jasmine.clock().tick(1);
+            expect(theater.current.model).toBe("Hello");
+        });
+
         describe("should add the proper scenes", function () {
             beforeEach(function () {
                 theater.scenario = [];

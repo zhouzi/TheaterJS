@@ -514,7 +514,7 @@
         },
 
 
-        erase: function (n) {
+        erase: function (n, speed) {
             var self = this;
 
             if (!self.utils.isString(self.current.model)) return self.next();
@@ -522,7 +522,7 @@
             // Reset cursor and min based on stripped string
             var speech = self.utils.stripHTML(self.current.model),
                 cursor = speech.length,
-                min    = n < 0 ? cursor + 1 + n : 0;
+                min    = n < 0 ? cursor + 1 + n : 0;console.log(speed);
 
             var timeout = setTimeout(function eraseChar () {
                 var prevChar = speech.charAt(cursor),
@@ -533,7 +533,7 @@
 
                 if (cursor >= min) setTimeout(eraseChar, self.getSayingSpeed(.2, true));
                 else self.next();
-            }, self.getSayingSpeed(.2));
+            }, (speed || self.getSayingSpeed(.2)));
 
             return self;
         },
