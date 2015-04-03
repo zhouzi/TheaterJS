@@ -522,7 +522,7 @@
             // Reset cursor and min based on stripped string
             var speech = self.utils.stripHTML(self.current.model),
                 cursor = speech.length,
-                min    = n < 0 ? cursor + 1 + n : 0;console.log(speed);
+                min    = n < 0 ? cursor + 1 + n : 0;
 
             var timeout = setTimeout(function eraseChar () {
                 var prevChar = speech.charAt(cursor),
