@@ -1,6 +1,6 @@
 {
   "name": "TheaterJS",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "main": "build/theater.js",
   "license": "MIT",
   "ignore": [
@@ -11,7 +11,10 @@
     "index.html",
     "package.json",
     "build/locales",
-    "build/styles.css"
+    "build/styles.css",
+    "test",
+    "karma.conf.js",
+    "CONTRIBUTING.md"
   ],
   "devDependencies": {
     "gulp": "^3.8.10",
