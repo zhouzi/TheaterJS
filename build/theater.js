@@ -42,7 +42,11 @@
 
         if (self.options.locale === "detect") {
             // Detect language with fallback to "en"
-            self.options.locale = (root.navigator && root.navigator.languages || ["en"])[0].split("-")[0];
+            if (root.navigator && self.utils.isArray(root.navigator.languages) && self.utils.isString(root.navigator.languages[0])) {
+                self.options.locale = root.navigator.languages[0].split("-")[0]; // locale comes in the form of "en-EN"
+            } else {
+                self.options.locale = "en";
+            }
         }
 
         // If no keyboard is available for the given locale, fallback to "en".
