@@ -1,6 +1,5 @@
 {
   "name": "TheaterJS",
-  "version": "1.4.2",
   "main": "build/theater.js",
   "license": "MIT",
   "ignore": [
