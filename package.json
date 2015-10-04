@@ -1,6 +1,6 @@
 {
   "name": "TheaterJS",
-  "version": "1.4.2",
+  "version": "2.0.0",
   "description": "Typing effect mimicking human behavior.",
   "repository": {
     "type": "git",
@@ -18,20 +18,5 @@
     "url": "https://github.com/Zhouzi/TheaterJS/issues"
   },
   "homepage": "https://github.com/Zhouzi/TheaterJS",
-  "devDependencies": {
-    "gulp": "^3.8.10",
-    "gulp-autoprefixer": "^2.0.0",
-    "gulp-load-plugins": "^0.8.0",
-    "gulp-open": "^0.3.2",
-    "gulp-rename": "^1.2.0",
-    "gulp-ruby-sass": "^0.7.1",
-    "gulp-uglify": "^1.0.2",
-    "gulp-webserver": "^0.9.0",
-    "jasmine-core": "^2.2.0",
-    "karma": "^0.12.31",
-    "karma-chrome-launcher": "^0.1.7",
-    "karma-coverage": "^0.2.7",
-    "karma-firefox-launcher": "^0.1.4",
-    "karma-jasmine": "^0.3.5"
-  }
+  "devDependencies": {}
 }

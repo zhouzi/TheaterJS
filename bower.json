@@ -3,33 +3,14 @@
   "main": "build/theater.js",
   "license": "MIT",
   "ignore": [
-    "src",
-    "locales",
-    ".gitignore",
-    "gulpfile.js",
-    "index.html",
-    "package.json",
-    "build/locales",
-    "build/styles.css",
-    "test",
-    "karma.conf.js",
-    "CONTRIBUTING.md"
+    ".gitignore"
   ],
-  "devDependencies": {
-    "gulp": "^3.8.10",
-    "gulp-autoprefixer": "^2.0.0",
-    "gulp-load-plugins": "^0.8.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-ruby-sass": "^0.7.1",
-    "gulp-uglify": "^1.0.2",
-    "gulp-webserver": "^0.9.0"
-  },
+  "devDependencies": {},
   "keywords": [
-    "theaterjs",
     "typing",
-    "javascript",
-    "human",
-    "behavior"
+    "animation",
+    "mimic",
+    "human"
   ],
   "homepage": "https://github.com/Zhouzi/TheaterJS"
 }
