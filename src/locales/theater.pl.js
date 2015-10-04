@@ -1,1 +1,0 @@
-(function (w) { w.TheaterJS.prototype.keyboards.pl = ["qwertyuiopęó", "asdfghjkląśł", "zxcvbnmżźćń"]; })(window);

@@ -2,6 +2,10 @@
   "name": "TheaterJS",
   "version": "2.0.0",
   "description": "Typing effect mimicking human behavior.",
+  "scripts": {
+    "watch": "./node_modules/.bin/webpack --progress --colors --watch",
+    "build": "./node_modules/.bin/standard && ./node_modules/.bin/webpack"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Zhouzi/TheaterJS.git"
@@ -18,5 +22,10 @@
     "url": "https://github.com/Zhouzi/TheaterJS/issues"
   },
   "homepage": "https://github.com/Zhouzi/TheaterJS",
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-core": "^5.8.25",
+    "babel-loader": "^5.3.2",
+    "standard": "^5.3.1",
+    "webpack": "^1.12.2"
+  }
 }
