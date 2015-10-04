@@ -1,7 +1,9 @@
+/* global describe, beforeEach, it, expect */
+
 import TheaterJS from '../src/TheaterJS'
 
 describe('TheaterJS', function () {
-  let theater;
+  let theater
 
   beforeEach(() => {
     theater = new TheaterJS({ autoplay: false })

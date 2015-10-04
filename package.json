@@ -3,10 +3,13 @@
   "version": "2.0.0",
   "description": "Typing effect mimicking human behavior.",
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run",
-    "watch": "./node_modules/.bin/webpack --progress --colors --watch",
-    "build": "./node_modules/.bin/standard && ./node_modules/.bin/webpack"
+    "test": "./node_modules/.bin/standard && ./node_modules/.bin/karma start --single-run",
+    "dev": "./node_modules/.bin/webpack --progress --colors --watch",
+    "build": "npm run test && ./node_modules/.bin/webpack"
   },
+  "pre-commit": [
+    "build"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Zhouzi/TheaterJS.git"
