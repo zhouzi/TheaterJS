@@ -5,7 +5,10 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: [
+      'jasmine',
+      'jasmine-matchers'
+    ],
 
     // list of files / patterns to load in the browser
     files: [
@@ -73,6 +76,7 @@ module.exports = function (config) {
     plugins: [
       require('karma-webpack'),
       require('karma-jasmine'),
+      require('karma-jasmine-matchers'),
       require('karma-phantomjs-launcher')
     ]
   })
