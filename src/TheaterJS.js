@@ -138,19 +138,19 @@ export default class TheaterJS {
 
     let minSpeed = this.options.minSpeed
     let maxSpeed = this.options.maxSpeed
+    let initialValue = actor.displayValue
     let cursor = -1
     let isFixing = false
     let previousMistakeCursor = null
 
     ;(function type () {
-      let actual = actor.displayValue.substr(actor.displayValue.length - (cursor + 1))
+      let actual = value.substr(0, cursor + 1)
+      // let actual = actor.displayValue.substr(actor.displayValue.length - (cursor + 1))
 
       if (actual === value) {
         return done()
       }
 
-      // let prevChar = actor.displayValue.substr(-1)
-      // let currentChar = value.charAt(cursor)
       let expected = value.substr(0, cursor + 1)
 
       let isMistaking = actual !== expected
@@ -170,7 +170,8 @@ export default class TheaterJS {
           previousMistakeCursor = cursor
         }
 
-        actor.displayValue += nextChar
+        actor.displayValue = initialValue + value.substr(0, cursor) + nextChar
+        // actor.displayValue += nextChar
       }
 
       return setTimeout(type, actor.getTypingSpeed(minSpeed, maxSpeed))
