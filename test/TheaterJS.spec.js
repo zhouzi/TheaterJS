@@ -19,6 +19,17 @@ describe('TheaterJS', function () {
 
     it('and have an initial status of ready', function () {
       expect(theater.status).toBe('ready')
+      expect(theater.currentScene).toBe(-1)
+    })
+
+    it('and has an option to change the locale', function () {
+      theater = new TheaterJS({ locale: 'fr' })
+      expect(theater.options.locale).toBe('fr')
+    })
+
+    it('and able to fallback to en if the given locale is not supported', function () {
+      theater = new TheaterJS({ locale: 'whatever' })
+      expect(theater.options.locale).toBe('en')
     })
   })
 
@@ -54,6 +65,11 @@ describe('TheaterJS', function () {
     it('accepts an indefinite number of arguments', function () {
       theater.addScene('vader:Hey!', 'How u doing', 'guys?')
       expect(theater.scenario.length).toBe(4)
+    })
+
+    it('also works with arrays of arguments', function () {
+      theater.addScene(['vader:Hey!', 'How u doing?'], ['Time to cut some stuff!', 'Go on!'])
+      expect(theater.scenario.length).toBe(5)
     })
 
     it('creates a scene from an object and add a "done" callback to the arguments', function () {
@@ -333,6 +349,19 @@ describe('TheaterJS', function () {
       jasmine.clock().tick(Infinity)
       expect(theater.casting.vader.displayValue).toBe('')
     })
+
+    it('that speed can be configured', function () {
+      theater = new TheaterJS({ autoplay: false })
+      theater.describe('vader')
+      theater.casting.vader.displayValue = 'Hello!'
+      theater.addScene({ name: 'erase', args: [100] })
+
+      jasmine.clock().tick(99)
+      expect(theater.casting.vader.displayValue).toBe('Hello!')
+
+      jasmine.clock().tick(1)
+      expect(theater.casting.vader.displayValue).toBe('Hello')
+    })
   })
 
   describe('handle callback scenes', function () {
@@ -371,6 +400,39 @@ describe('TheaterJS', function () {
       expect(theater.currentScene).toBe(0)
       jasmine.clock().tick(1)
       expect(theater.currentScene).toBe(1)
+    })
+  })
+
+  describe('has a pub sub feature that', function () {
+    beforeEach(function () {
+      theater = new TheaterJS()
+    })
+
+    it('is able to register callbacks', function () {
+      expect(theater.events).toEqual({})
+
+      theater.subscribe('event', function () {})
+      theater.subscribe('e, evt', function () {})
+
+      expect(theater.events.event.length).toBe(1)
+      expect(theater.events.e.length).toBe(1)
+      expect(theater.events.evt.length).toBe(1)
+
+      theater.subscribe('event', function () {})
+
+      expect(theater.events.event.length).toBe(2)
+    })
+
+    it('is able to publish events', function () {
+      let spy = jasmine.createSpy()
+
+      theater.subscribe('event', spy)
+      theater.emit('event', ['some', 'args'])
+
+      expect(spy).toHaveBeenCalledWith('some', 'args')
+
+      theater.emit('event', 'other', 'stuff')
+      expect(spy).toHaveBeenCalledWith('other', 'stuff')
     })
   })
 })
