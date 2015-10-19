@@ -70,6 +70,9 @@ describe('TheaterJS', function () {
     it('also works with arrays of arguments', function () {
       theater.addScene(['vader:Hey!', 'How u doing?'], ['Time to cut some stuff!', 'Go on!'])
       expect(theater.scenario.length).toBe(5)
+
+      theater.addScene(['vader:Hey!', 'How u doing?', ['Time to cut some stuff!', ['Go on!']]])
+      expect(theater.scenario.length).toBe(10)
     })
 
     it('creates a scene from an object and add a "done" callback to the arguments', function () {

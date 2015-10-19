@@ -25,9 +25,7 @@ export default class TheaterJS {
   addScene () {
     let scenes = utils.toArray(arguments)
 
-    while (scenes.length) {
-      let scene = scenes.shift()
-
+    scenes.forEach(scene => {
       if (type.isString(scene)) {
         let partials = scene.split(':')
 
@@ -56,6 +54,8 @@ export default class TheaterJS {
         } else {
           this.addScene({ name: 'erase', args: [scene] })
         }
+      } else if (type.isArray(scene)) {
+        scene.forEach(s => { this.addScene(s) })
       } else if (type.isObject(scene)) {
         if (!type.isArray(scene.args)) {
           scene.args = []
@@ -64,7 +64,7 @@ export default class TheaterJS {
         scene.args.unshift(this.playNextScene.bind(this))
         this.scenario.push(scene)
       }
-    }
+    })
 
     if (this.options.autoplay) {
       this.play()
