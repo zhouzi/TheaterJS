@@ -356,14 +356,18 @@ describe('TheaterJS', function () {
     it('that speed can be configured', function () {
       theater = new TheaterJS({ autoplay: false })
       theater.describe('vader')
+      theater.onStage = 'vader'
       theater.casting.vader.displayValue = 'Hello!'
       theater.addScene({ name: 'erase', args: [100] })
+      theater.play()
+
+      expect(theater.casting.vader.displayValue).toBe('Hello')
 
       jasmine.clock().tick(99)
-      expect(theater.casting.vader.displayValue).toBe('Hello!')
+      expect(theater.casting.vader.displayValue).toBe('Hello')
 
       jasmine.clock().tick(1)
-      expect(theater.casting.vader.displayValue).toBe('Hello')
+      expect(theater.casting.vader.displayValue).toBe('Hell')
     })
   })
 

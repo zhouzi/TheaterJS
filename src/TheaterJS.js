@@ -181,7 +181,7 @@ export default class TheaterJS {
     return this
   }
 
-  eraseAction (done) {
+  eraseAction (done, speed = null) {
     let actor = this.casting[this.onStage]
 
     let minSpeed = this.options.minSpeed
@@ -194,7 +194,7 @@ export default class TheaterJS {
       }
 
       actor.displayValue = actor.displayValue.substr(0, --cursor)
-      return setTimeout(erase, actor.getTypingSpeed(minSpeed, maxSpeed))
+      return setTimeout(erase, speed || actor.getTypingSpeed(minSpeed, maxSpeed))
     })()
 
     return this
