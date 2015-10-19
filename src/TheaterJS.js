@@ -5,8 +5,12 @@ import keyboard from './helpers/keyboard'
 
 export default class TheaterJS {
   constructor (options) {
-    let defaults = { autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 150 }
+    let defaults = { autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 150, locale: 'en' }
     this.options = utils.merge({}, defaults, options || {})
+
+    if (!keyboard.supports(this.options.locale)) {
+      this.options.locale = keyboard.defaultLocale
+    }
 
     this.casting = {}
     this.onStage = ''
