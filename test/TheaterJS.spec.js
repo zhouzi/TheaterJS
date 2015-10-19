@@ -427,15 +427,15 @@ describe('TheaterJS', function () {
     })
 
     it('is able to publish events', function () {
-      let spy = jasmine.createSpy()
+      let spy = jasmine.createSpy('callback')
 
       theater.subscribe('event', spy)
-      theater.emit('event', ['some', 'args'])
+      theater.publish('event', ['some', 'args'])
 
-      expect(spy).toHaveBeenCalledWith('some', 'args')
+      expect(spy).toHaveBeenCalledWith('event', ['some', 'args'])
 
-      theater.emit('event', 'other', 'stuff')
-      expect(spy).toHaveBeenCalledWith('other', 'stuff')
+      theater.publish('event', 'other', 'stuff')
+      expect(spy).toHaveBeenCalledWith('event', 'other', 'stuff')
     })
   })
 })

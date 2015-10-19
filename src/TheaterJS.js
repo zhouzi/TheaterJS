@@ -13,6 +13,7 @@ export default class TheaterJS {
     this.status = 'ready'
     this.currentScene = -1
     this.scenario = []
+    this.events = {}
   }
 
   describe (actorName, props, callback) {
@@ -206,6 +207,33 @@ export default class TheaterJS {
 
   waitAction (done, delay) {
     setTimeout(done.bind(this), delay)
+    return this
+  }
+
+  subscribe (events, callback) {
+    events.split(',').forEach(eventName => {
+      eventName = eventName.trim()
+
+      if (!type.isArray(this.events[eventName])) {
+        this.events[eventName] = []
+      }
+
+      this.events[eventName].push(callback)
+    })
+
+    return this
+  }
+
+  publish (eventName) {
+    if (type.isArray(this.events[eventName])) {
+      let args = [].slice.call(arguments, 1)
+      args.unshift(eventName)
+
+      this.events[eventName].forEach(function (callback) {
+        callback.apply(this, args)
+      })
+    }
+
     return this
   }
 }
