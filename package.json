@@ -36,6 +36,7 @@
     "babel-loader": "^5.3.2",
     "jasmine-core": "^2.3.4",
     "jasmine-expect": "^1.22.3",
+    "json-loader": "^0.5.3",
     "karma": "^0.13.10",
     "karma-jasmine": "^0.3.6",
     "karma-jasmine-matchers": "^0.1.3",

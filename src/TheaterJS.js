@@ -141,6 +141,7 @@ export default class TheaterJS {
   typeAction (done, value) {
     let actor = this.casting[this.onStage]
 
+    let locale = this.options.locale
     let minSpeed = this.options.minSpeed
     let maxSpeed = this.options.maxSpeed
     let initialValue = actor.displayValue
@@ -171,7 +172,7 @@ export default class TheaterJS {
         let nextChar = value.charAt(++cursor)
 
         if (shouldBeMistaken) {
-          nextChar = keyboard.randomCharNear(nextChar)
+          nextChar = keyboard.randomCharNear(nextChar, locale)
           previousMistakeCursor = cursor
         }
 
