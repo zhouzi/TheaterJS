@@ -7,6 +7,9 @@ import fr from '../keyboards/TheaterJS.fr.json'
 const DEFAULT_LOCALE = 'en'
 let keyboards = {}
 
+addKeyboard('en', en)
+addKeyboard('fr', fr)
+
 function mapKeyboard (alphabet) {
   let keyboard = {}
 
@@ -21,7 +24,11 @@ function mapKeyboard (alphabet) {
   return keyboard
 }
 
-const API = {
+function addKeyboard (locale, keyboard) {
+  keyboards[locale] = { list: keyboard, mapped: mapKeyboard(keyboard) }
+}
+
+export default {
   defaultLocale: DEFAULT_LOCALE,
 
   supports (locale) {
@@ -72,19 +79,5 @@ const API = {
 
     let chars = keyboards[locale].list.join('')
     return chars.charAt(utils.random(0, chars.length - 1))
-  },
-
-  addKeyboard: function (locale, keyboard) {
-    keyboards[locale] = {
-      list: keyboard,
-      mapped: mapKeyboard(keyboard)
-    }
-
-    return this
   }
 }
-
-API.addKeyboard('en', en)
-API.addKeyboard('fr', fr)
-
-export default API
