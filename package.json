@@ -5,7 +5,7 @@
   "scripts": {
     "test": "./node_modules/.bin/standard && ./node_modules/.bin/karma start --single-run",
     "dev": "./node_modules/.bin/webpack --progress --colors --watch",
-    "build": "npm run test && ./node_modules/.bin/webpack"
+    "build": "./node_modules/.bin/webpack"
   },
   "pre-commit": [
     "build"

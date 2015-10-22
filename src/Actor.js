@@ -82,9 +82,9 @@ export default class Actor {
 
     if (type.isNumber(previousMistakeCursor)) {
       let diff = actual.length - previousMistakeCursor
-      let minDiff = (this.accuracy * 10) - 1
+      let minDiff = (this.accuracy * 10) + 1
 
-      if (diff < minDiff) {
+      if (diff <= minDiff) {
         return false
       }
     }

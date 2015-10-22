@@ -5,9 +5,9 @@
   var theater = new TheaterJS()
 
   theater
-    .describe('vader', 0.6)
+    .describe('vader', 0.2)
     .describe('luke', 0.5)
-    .addScene('vader:Luke...', 500)
+    .addScene('vader:<strong>Luke</strong>...', 500)
     .addScene('luke:What?', 500)
     .addScene(function (done) { document.body.style.background = 'red'; done(); })
     .addScene('vader:I am... ', 800, 'Your father', 300, '.', 300, '.', 300, '.')

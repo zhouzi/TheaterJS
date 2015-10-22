@@ -63,7 +63,7 @@ export default {
     let randomChar =
       nearbyChars.length > 0
       ? nearbyChars[utils.random(0, nearbyChars.length - 1)]
-      : this.randomChar()
+      : this.randomChar(locale)
 
     if (uppercase) {
       randomChar = randomChar.toUpperCase()

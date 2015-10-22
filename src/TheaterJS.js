@@ -2,10 +2,11 @@ import Actor from './Actor'
 import utils from './helpers/utils'
 import type from './helpers/type'
 import keyboard from './helpers/keyboard'
+import html from './helpers/html'
 
 export default class TheaterJS {
   constructor (options) {
-    let defaults = { autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 150, locale: 'en' }
+    let defaults = { autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 350, locale: 'en' }
     this.options = utils.merge({}, defaults, options || {})
 
     if (!keyboard.supports(this.options.locale)) {
@@ -149,9 +150,11 @@ export default class TheaterJS {
     let isFixing = false
     let previousMistakeCursor = null
 
+    let htmlMap = html.map(value)
+    value = html.strip(value)
+
     ;(function type () {
-      let actual = value.substr(0, cursor + 1)
-      // let actual = actor.displayValue.substr(actor.displayValue.length - (cursor + 1))
+      let actual = html.strip(actor.displayValue.substr(initialValue.length))
 
       if (actual === value) {
         return done()
@@ -165,7 +168,7 @@ export default class TheaterJS {
 
       if (isMistaking && shouldFix) {
         isFixing = true
-        actor.displayValue = actor.displayValue.substr(0, actor.displayValue.length - 1)
+        actor.displayValue = initialValue + html.inject(actual.substr(0, actual.length - 1), htmlMap)
         cursor--
       } else {
         isFixing = false
@@ -176,8 +179,7 @@ export default class TheaterJS {
           previousMistakeCursor = cursor
         }
 
-        actor.displayValue = initialValue + value.substr(0, cursor) + nextChar
-        // actor.displayValue += nextChar
+        actor.displayValue = initialValue + html.inject(actual + nextChar, htmlMap)
       }
 
       return setTimeout(type, actor.getTypingSpeed(minSpeed, maxSpeed))
@@ -191,14 +193,20 @@ export default class TheaterJS {
 
     let minSpeed = this.options.minSpeed
     let maxSpeed = this.options.maxSpeed
-    let cursor = actor.displayValue.length
+
+    let value = actor.displayValue
+    let htmlMap = html.map(value)
+
+    value = html.strip(value)
+
+    let cursor = value.length
 
     ;(function erase () {
       if (cursor === 0) {
         return done()
       }
 
-      actor.displayValue = actor.displayValue.substr(0, --cursor)
+      actor.displayValue = html.inject(value.substr(0, --cursor), htmlMap)
       return setTimeout(erase, speed || actor.getTypingSpeed(minSpeed, maxSpeed))
     })()
 

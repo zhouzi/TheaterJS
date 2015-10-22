@@ -9,7 +9,7 @@ describe('TheaterJS', function () {
   describe('is instantiable', function () {
     it('without any configuration', function () {
       theater = new TheaterJS()
-      expect(theater.options).toEqual({ autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 150, locale: 'en' })
+      expect(theater.options).toEqual({ autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 350, locale: 'en' })
     })
 
     it('with some configuration', function () {
@@ -333,9 +333,31 @@ describe('TheaterJS', function () {
       jasmine.clock().tick(Infinity)
       expect(theater.casting.vader.displayValue).toBe('Hey!Hey!')
     })
+
+    it('has support for html', function () {
+      let candidate = '<h1 id="some-id" class="some-class">Hey<br/> <strong aria-attribute="some-attribute">there!</strong><img src="/whatever.png"></h1>'
+
+      for (let i = 0; i < 100; i++) {
+        theater = new TheaterJS()
+
+        theater
+          .describe('vader', 0.4, function () {})
+          .addScene('vader:' + candidate)
+
+        while (theater.status === 'playing') {
+          jasmine.clock().tick(300)
+
+          let lessThanSymbols = theater.casting.vader.displayValue.match(/</g)
+          let greaterThanSymbols = theater.casting.vader.displayValue.match(/>/g)
+          expect(lessThanSymbols && lessThanSymbols.length).toBe(greaterThanSymbols && greaterThanSymbols.length)
+        }
+
+        expect(theater.casting.vader.displayValue).toBe(candidate)
+      }
+    })
   })
 
-  describe('handle erase scenes', function () {
+  describe('handle erase scenes that', function () {
     beforeEach(function () {
       theater = new TheaterJS({ autoplay: false })
       theater.describe('vader').addScene('vader:Hey!', { name: 'erase' })
@@ -347,13 +369,13 @@ describe('TheaterJS', function () {
       jasmine.clock().uninstall()
     })
 
-    it('that erase an actor\'s displayValue', function () {
+    it('erase an actor\'s displayValue', function () {
       theater.play()
       jasmine.clock().tick(Infinity)
       expect(theater.casting.vader.displayValue).toBe('')
     })
 
-    it('that speed can be configured', function () {
+    it('speed can be configured', function () {
       theater = new TheaterJS({ autoplay: false })
       theater.describe('vader')
       theater.onStage = 'vader'
@@ -369,6 +391,32 @@ describe('TheaterJS', function () {
       jasmine.clock().tick(1)
       expect(theater.casting.vader.displayValue).toBe('Hell')
     })
+
+    //it('has support for html', function () {
+    //  let candidate = '<h1 id="some-id" class="some-class">Hey<br/> <strong aria-attribute="some-attribute">there!</strong><img src="/whatever.png"></h1>'
+    //
+    //  theater = new TheaterJS({ autoplay: false })
+    //  theater
+    //    .describe('vader')
+    //    .addScene('vader:' + candidate)
+    //    .play()
+    //
+    //  jasmine.clock().tick(Infinity)
+    //
+    //  theater
+    //    .addScene({ name: 'erase' })
+    //    .play()
+    //
+    //  while (theater.status === 'playing') {
+    //    jasmine.clock().tick(300)
+    //
+    //    let lessThanSymbols = theater.casting.vader.displayValue.match(/</g)
+    //    let greaterThanSymbols = theater.casting.vader.displayValue.match(/>/g)
+    //    expect(lessThanSymbols && lessThanSymbols.length).toBe(greaterThanSymbols && greaterThanSymbols.length)
+    //  }
+    //
+    //  expect(theater.casting.vader.displayValue).toBe('')
+    //})
   })
 
   describe('handle callback scenes', function () {
