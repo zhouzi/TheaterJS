@@ -6,8 +6,14 @@ import html from './helpers/html'
 
 export default class TheaterJS {
   constructor (options) {
-    let defaults = { autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 350, locale: 'en' }
+    let defaults = { autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 350, locale: 'detect' }
     this.options = utils.merge({}, defaults, options || {})
+
+    if (this.options.locale === 'detect' && window != null) {
+      if (window.navigator != null && type.isArray(window.navigator.languages) && type.isString(window.navigator.languages[0])) {
+        this.options.locale = window.navigator.languages[0].substr(0, 2)
+      }
+    }
 
     if (!keyboard.supports(this.options.locale)) {
       this.options.locale = keyboard.defaultLocale
