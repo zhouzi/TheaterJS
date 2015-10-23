@@ -50,6 +50,18 @@ describe('TheaterJS', function () {
     })
   })
 
+  it('has a setCurrentActor that sets the onStage actor', function () {
+    theater = new TheaterJS()
+    theater.setCurrentActor('vader')
+    expect(theater.onStage).toBe('vader')
+  })
+
+  it('has a getCurrentActor that returns the actor that is on stage', function () {
+    theater = new TheaterJS()
+    theater.describe('vader').setCurrentActor('vader')
+    expect(theater.getCurrentActor()).toBe(theater.casting.vader)
+  })
+
   describe('has a addScene method that', function () {
     beforeEach(function () {
       theater = new TheaterJS({ autoplay: false })
@@ -267,17 +279,27 @@ describe('TheaterJS', function () {
     })
 
     it('updates the actor that is on stage when the scene has an actor', function () {
-      theater.addScene({ name: 'test', actor: 'vader' }, { name: 'test' }, { name: 'test', actor: 'luke' })
-      expect(theater.onStage).toBe('')
+      theater
+        .describe('luke')
+        .addScene({ name: 'test', actor: 'vader' }, { name: 'test' }, { name: 'test', actor: 'luke' })
+
+      expect(theater.currentScene).toBe(-1)
+      expect(theater.getCurrentActor()).toBe(null)
 
       theater.playNextScene()
-      expect(theater.onStage).toBe('vader')
+
+      expect(theater.currentScene).toBe(0)
+      expect(theater.getCurrentActor()).toBe(theater.casting.vader)
 
       theater.playNextScene()
-      expect(theater.onStage).toBe('vader')
+
+      expect(theater.currentScene).toBe(1)
+      expect(theater.getCurrentActor()).toBe(theater.casting.vader)
 
       theater.playNextScene()
-      expect(theater.onStage).toBe('luke')
+
+      expect(theater.currentScene).toBe(2)
+      expect(theater.getCurrentActor()).toBe(theater.casting.luke)
     })
 
     it('emits an event when a scene starts and stops', function () {
@@ -434,7 +456,7 @@ describe('TheaterJS', function () {
     it('speed can be configured', function () {
       theater = new TheaterJS({ autoplay: false })
       theater.describe('vader')
-      theater.onStage = 'vader'
+      theater.setCurrentActor('vader')
       theater.casting.vader.displayValue = 'Hello!'
       theater.addScene({ name: 'erase', args: [100] })
       theater.play()

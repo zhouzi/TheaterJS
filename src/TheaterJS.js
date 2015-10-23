@@ -20,11 +20,12 @@ export default class TheaterJS {
     }
 
     this.casting = {}
-    this.onStage = ''
     this.status = 'ready'
     this.currentScene = -1
     this.scenario = []
     this.events = {}
+
+    this.setCurrentActor(null)
   }
 
   describe (actorName, props, callback) {
@@ -32,6 +33,15 @@ export default class TheaterJS {
     this.casting[actor.name] = actor
 
     return this
+  }
+
+  setCurrentActor (actorName) {
+    this.onStage = actorName
+    return this
+  }
+
+  getCurrentActor () {
+    return this.casting[this.onStage] || null
   }
 
   addScene () {
@@ -110,6 +120,7 @@ export default class TheaterJS {
 
   playNextScene () {
     let currentScene = this.scenario[this.currentScene]
+
     if (currentScene != null) {
       this.publish(`${currentScene.name}:end`, currentScene)
     }
@@ -120,11 +131,12 @@ export default class TheaterJS {
     }
 
     let nextScene = this.scenario[++this.currentScene]
-    this.publish(`${nextScene.name}:start`, nextScene)
 
     if (nextScene.actor) {
-      this.onStage = nextScene.actor
+      this.setCurrentActor(nextScene.actor)
     }
+
+    this.publish(`${nextScene.name}:start`, nextScene)
 
     switch (nextScene.name) {
       case 'type':
@@ -152,7 +164,7 @@ export default class TheaterJS {
   }
 
   typeAction (done, value) {
-    let actor = this.casting[this.onStage]
+    let actor = this.getCurrentActor()
 
     let locale = this.options.locale
     let minSpeed = this.options.minSpeed
@@ -201,7 +213,7 @@ export default class TheaterJS {
   }
 
   eraseAction (done, speed = null) {
-    let actor = this.casting[this.onStage]
+    let actor = this.getCurrentActor()
 
     let minSpeed = this.options.minSpeed
     let maxSpeed = this.options.maxSpeed

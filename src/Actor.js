@@ -15,13 +15,12 @@ export default class Actor {
       callback = `#${actorName}`
     }
 
-    if (type.isString(callback)) {
+    if (type.isString(callback) && document != null) {
       let $element = document.querySelector(callback)
 
       if ($element != null) {
-        callback = function (newValue) {
-          $element.innerHTML = newValue
-        }
+        this.$element = $element
+        callback = (newValue) => { this.$element.innerHTML = newValue }
       } else {
         console.debug(`selector for ${actorName} (#${actorName}) didn't match anything`)
       }
