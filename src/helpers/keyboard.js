@@ -1,14 +1,14 @@
 import type from './type'
 import utils from './utils'
-
-import en from '../keyboards/TheaterJS.en.json'
-import fr from '../keyboards/TheaterJS.fr.json'
-
+import keyboards from '../keyboards.json'
 const DEFAULT_LOCALE = 'en'
-let keyboards = {}
 
-addKeyboard('en', en)
-addKeyboard('fr', fr)
+for (let locale in keyboards) {
+  if (!keyboards.hasOwnProperty(locale)) continue
+
+  let keyboard = keyboards[locale]
+  keyboards[locale] = { list: keyboard, mapped: mapKeyboard(keyboard) }
+}
 
 function mapKeyboard (alphabet) {
   let keyboard = {}
@@ -22,10 +22,6 @@ function mapKeyboard (alphabet) {
   }
 
   return keyboard
-}
-
-function addKeyboard (locale, keyboard) {
-  keyboards[locale] = { list: keyboard, mapped: mapKeyboard(keyboard) }
 }
 
 export default {

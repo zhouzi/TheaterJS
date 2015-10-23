@@ -1,0 +1,43 @@
+{
+  "en": [
+    "qwertyuiop",
+    "asdfghjkl",
+    "zxcvbnm"
+  ],
+
+  "fr": [
+    "azertyuiop",
+    "qsdfghjklm",
+    "wxcvbn"
+  ],
+
+  "da": [
+    "qwertyuiopå",
+    "asdfghjklæø",
+    "zxcvbnm"
+  ],
+
+  "de": [
+    "qwertzuiopü",
+    "asdfghjklöä",
+    "yxcvbnm"
+  ],
+
+  "pl": [
+    "qwertyuiopęó",
+    "asdfghjkląśł",
+    "zxcvbnmżźćń"
+  ],
+
+  "pt": [
+    "qwertyuiop",
+    "asdfghjklç",
+    "zxcvbnm"
+  ],
+
+  "ru": [
+    "йцукенгшщзх",
+    "фывапролджэ",
+    "ячсмитьбюъ"
+  ]
+}
