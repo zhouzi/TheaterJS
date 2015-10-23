@@ -6,8 +6,8 @@ The version 2.0.0 is coming soon.
 
 * [x] Re-implement HTML mapping and injection
 * [x] Re-implement pub sub event manager
-* [ ] Add more tests to the pub sub mechanism
-  * [ ] Ensure the proper events are published (when playing/ending a scene, ...)
+* [x] Add more tests to the pub sub mechanism
+  * [x] Ensure the proper events are published (when playing/ending a scene, ...)
 * [ ] Re-implement locale detection
 * [x] Re-implement keyboards support/mapping
 * [x] Re-implement keyboards extendability

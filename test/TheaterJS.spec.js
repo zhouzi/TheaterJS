@@ -280,6 +280,62 @@ describe('TheaterJS', function () {
       expect(theater.onStage).toBe('luke')
     })
 
+    it('emits an event when a scene starts and stops', function () {
+      jasmine.clock().install()
+
+      let allSpy = jasmine.createSpy('* callback')
+
+      let eraseStartSpy = jasmine.createSpy('erase start callback')
+      let eraseEndSpy = jasmine.createSpy('erase end callback')
+
+      let typeStartSpy = jasmine.createSpy('type start callback')
+      let typeEndSpy = jasmine.createSpy('type end callback')
+
+      theater
+        .subscribe('*', allSpy)
+        .subscribe('erase:start', eraseStartSpy)
+        .subscribe('erase:end', eraseEndSpy)
+        .subscribe('type:start', typeStartSpy)
+        .subscribe('type:end', typeEndSpy)
+        .addScene('vader:Hey there!')
+
+      expect(allSpy).not.toHaveBeenCalled()
+      expect(eraseStartSpy).not.toHaveBeenCalled()
+      expect(eraseEndSpy).not.toHaveBeenCalled()
+      expect(typeStartSpy).not.toHaveBeenCalled()
+      expect(typeEndSpy).not.toHaveBeenCalled()
+
+      theater.play()
+
+      expect(allSpy.calls.count()).toBe(3)
+      expect(allSpy.calls.argsFor(0)).toEqual(['erase:start', theater.scenario[0]])
+      expect(allSpy.calls.argsFor(1)).toEqual(['erase:end', theater.scenario[0]])
+
+      expect(eraseStartSpy).toHaveBeenCalledWith('erase:start', theater.scenario[0])
+      expect(eraseEndSpy).toHaveBeenCalledWith('erase:end', theater.scenario[0])
+
+      expect(theater.currentScene).toBe(1)
+      expect(theater.status).toBe('playing')
+
+      expect(allSpy.calls.count()).toBe(3)
+      expect(allSpy.calls.argsFor(2)).toEqual(['type:start', theater.scenario[1]])
+
+      expect(typeStartSpy).toHaveBeenCalledWith('type:start', theater.scenario[1])
+      expect(typeEndSpy).not.toHaveBeenCalled()
+
+      jasmine.clock().tick(Infinity)
+
+      expect(allSpy.calls.count()).toBe(4)
+      expect(allSpy.calls.argsFor(3)).toEqual(['type:end', theater.scenario[1]])
+
+      expect(typeEndSpy).toHaveBeenCalledWith('type:end', theater.scenario[1])
+
+      expect(theater.currentScene).toBe(1)
+      expect(theater.status).toBe('ready')
+
+      jasmine.clock().uninstall()
+    })
+
     it('calls the relevant method when playing a type scene', function () {
       spyOn(theater, 'typeAction')
       theater.addScene({ name: 'type' })
@@ -476,6 +532,19 @@ describe('TheaterJS', function () {
       theater.subscribe('event', function () {})
 
       expect(theater.events.event.length).toBe(2)
+    })
+
+    it('has a way to subscribe to any published event', function () {
+      let allSpy = jasmine.createSpy('* callback')
+      let eventSpy = jasmine.createSpy('event callback')
+
+      theater
+        .subscribe('*', allSpy)
+        .subscribe('event', eventSpy)
+        .publish('event', 'some args')
+
+      expect(allSpy).toHaveBeenCalledWith('event', 'some args')
+      expect(eventSpy).toHaveBeenCalledWith('event', 'some args')
     })
 
     it('is able to publish events', function () {

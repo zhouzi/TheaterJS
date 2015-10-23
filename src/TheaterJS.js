@@ -103,36 +103,42 @@ export default class TheaterJS {
   }
 
   playNextScene () {
+    let currentScene = this.scenario[this.currentScene]
+    if (currentScene != null) {
+      this.publish(`${currentScene.name}:end`, currentScene)
+    }
+
     if (this.currentScene + 1 >= this.scenario.length) {
       this.status = 'ready'
       return this
     }
 
-    let scene = this.scenario[++this.currentScene]
+    let nextScene = this.scenario[++this.currentScene]
+    this.publish(`${nextScene.name}:start`, nextScene)
 
-    if (scene.actor) {
-      this.onStage = scene.actor
+    if (nextScene.actor) {
+      this.onStage = nextScene.actor
     }
 
-    switch (scene.name) {
+    switch (nextScene.name) {
       case 'type':
-        this.typeAction.apply(this, scene.args)
+        this.typeAction.apply(this, nextScene.args)
         break
 
       case 'erase':
-        this.eraseAction.apply(this, scene.args)
+        this.eraseAction.apply(this, nextScene.args)
         break
 
       case 'callback':
-        this.callbackAction.apply(this, scene.args)
+        this.callbackAction.apply(this, nextScene.args)
         break
 
       case 'wait':
-        this.waitAction.apply(this, scene.args)
+        this.waitAction.apply(this, nextScene.args)
         break
 
       default:
-        console.debug(`No scene handler for ${scene.name}`)
+        console.debug(`No scene handler for ${nextScene.name}`)
         break
     }
 
@@ -242,7 +248,8 @@ export default class TheaterJS {
       let args = [].slice.call(arguments, 1)
       args.unshift(eventName)
 
-      this.events[eventName].forEach(function (callback) {
+      let callbacks = (this.events[eventName] || []).concat(this.events['*'] || [])
+      callbacks.forEach(function (callback) {
         callback.apply(this, args)
       })
     }
