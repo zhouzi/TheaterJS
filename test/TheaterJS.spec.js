@@ -392,31 +392,31 @@ describe('TheaterJS', function () {
       expect(theater.casting.vader.displayValue).toBe('Hell')
     })
 
-    //it('has support for html', function () {
-    //  let candidate = '<h1 id="some-id" class="some-class">Hey<br/> <strong aria-attribute="some-attribute">there!</strong><img src="/whatever.png"></h1>'
-    //
-    //  theater = new TheaterJS({ autoplay: false })
-    //  theater
-    //    .describe('vader')
-    //    .addScene('vader:' + candidate)
-    //    .play()
-    //
-    //  jasmine.clock().tick(Infinity)
-    //
-    //  theater
-    //    .addScene({ name: 'erase' })
-    //    .play()
-    //
-    //  while (theater.status === 'playing') {
-    //    jasmine.clock().tick(300)
-    //
-    //    let lessThanSymbols = theater.casting.vader.displayValue.match(/</g)
-    //    let greaterThanSymbols = theater.casting.vader.displayValue.match(/>/g)
-    //    expect(lessThanSymbols && lessThanSymbols.length).toBe(greaterThanSymbols && greaterThanSymbols.length)
-    //  }
-    //
-    //  expect(theater.casting.vader.displayValue).toBe('')
-    //})
+    it('has support for html', function () {
+      let candidate = '<h1 id="some-id" class="some-class">Hey<br/> <strong aria-attribute="some-attribute">there!</strong><img src="/whatever.png"></h1>'
+
+      theater = new TheaterJS({ autoplay: false })
+      theater
+        .describe('vader')
+        .addScene('vader:' + candidate)
+        .play()
+
+      jasmine.clock().tick(Infinity)
+
+      theater
+        .addScene({ name: 'erase' })
+        .play()
+
+      while (theater.status === 'playing') {
+        jasmine.clock().tick(300)
+
+        let lessThanSymbols = theater.casting.vader.displayValue.match(/</g)
+        let greaterThanSymbols = theater.casting.vader.displayValue.match(/>/g)
+        expect(lessThanSymbols && lessThanSymbols.length).toBe(greaterThanSymbols && greaterThanSymbols.length)
+      }
+
+      expect(theater.casting.vader.displayValue).toBe('')
+    })
   })
 
   describe('handle callback scenes', function () {

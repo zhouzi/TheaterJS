@@ -12,5 +12,5 @@ The version 2.0.0 is coming soon.
 * [x] Re-implement keyboards support/mapping
 * [x] Re-implement keyboards extendability
 * [x] Add tests to the helpers/utils
-* [x] Add tests to the helpers/typex
+* [x] Add tests to the helpers/types
 * [x] Add tests to the helpers/keyboard
