@@ -453,6 +453,19 @@ describe('TheaterJS', function () {
       expect(theater.casting.vader.displayValue).toBe('')
     })
 
+    it('can erase a given number of characters', function () {
+      theater = new TheaterJS({ autoplay: false })
+      theater.describe('vader')
+      theater.setCurrentActor('vader')
+      theater.getCurrentActor().displayValue = 'Hello there!'
+
+      theater.addScene(-3)
+      theater.play()
+
+      jasmine.clock().tick(Infinity)
+      expect(theater.getCurrentActor().displayValue).toBe('Hello the')
+    })
+
     it('speed can be configured', function () {
       theater = new TheaterJS({ autoplay: false })
       theater.describe('vader')

@@ -212,7 +212,7 @@ export default class TheaterJS {
     return this
   }
 
-  eraseAction (done, speed = null) {
+  eraseAction (done, arg) {
     let actor = this.getCurrentActor()
 
     let minSpeed = this.options.minSpeed
@@ -225,8 +225,19 @@ export default class TheaterJS {
 
     let cursor = value.length
 
-    ;(function erase () {
-      if (cursor === 0) {
+    let speed
+    let nbCharactersToErase = 0
+
+    if (type.isNumber(arg)) {
+      if (arg > 0) {
+        speed = arg
+      } else {
+        nbCharactersToErase = value.length + arg
+      }
+    }
+
+    (function erase () {
+      if (cursor === nbCharactersToErase) {
         return done()
       }
 
