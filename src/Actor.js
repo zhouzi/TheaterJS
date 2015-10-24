@@ -1,6 +1,8 @@
 import type from './helpers/type'
 import utils from './helpers/utils'
 
+const DEFAULT_EXPERIENCE = 0.6
+
 export default class Actor {
   constructor (actorName, props, callback) {
     if (!type.isString(actorName)) {
@@ -37,7 +39,7 @@ export default class Actor {
     }
 
     if (!type.isNumber(props.experience)) {
-      props.experience = 0.6
+      props.experience = DEFAULT_EXPERIENCE
     }
 
     let defaults = {
@@ -61,17 +63,19 @@ export default class Actor {
     return this._displayValue
   }
 
-  getTypingSpeed (min, max) {
+  getTypingSpeed (fastest, slowest) {
     let speed = utils.randomFloat(this.speed, 1)
-    return utils.getPercentageOf(min, max, speed)
+    return utils.getPercentageOf(slowest, fastest, speed)
   }
 
-  shouldBeMistaken (actual, expected, endValue, previousMistakeCursor = null) {
-    if (actual.length <= this.accuracy * 10) {
+  shouldBeMistaken (actual, endValue, previousMistakeCursor = null, previousFixCursor = null) {
+    let accuracy = this.accuracy * 10
+
+    if (accuracy >= 8) {
       return false
     }
 
-    if (actual.substr(-3) !== expected.substr(-3)) {
+    if (actual.length <= accuracy) {
       return false
     }
 
@@ -80,10 +84,16 @@ export default class Actor {
     }
 
     if (type.isNumber(previousMistakeCursor)) {
-      let diff = actual.length - previousMistakeCursor
-      let minDiff = (this.accuracy * 10) + 1
+      let nbOfCharactersTyped = actual.length - previousMistakeCursor
+      let maxWrongCharactersAllowed = 10 - Math.max(accuracy, 6)
 
-      if (diff <= minDiff) {
+      if (nbOfCharactersTyped >= maxWrongCharactersAllowed) {
+        return false
+      }
+    }
+
+    if (type.isNumber(previousFixCursor)) {
+      if (actual.length - previousFixCursor <= Math.max(accuracy, 2) * 2) {
         return false
       }
     }

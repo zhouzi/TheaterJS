@@ -6,7 +6,7 @@ import html from './helpers/html'
 
 export default class TheaterJS {
   constructor (options) {
-    let defaults = { autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 350, locale: 'detect' }
+    let defaults = { autoplay: true, erase: true, loop: true, minSpeed: 80, maxSpeed: 450, locale: 'detect' }
     this.options = utils.merge({}, defaults, options || {})
 
     if (this.options.locale === 'detect' && window != null) {
@@ -173,6 +173,7 @@ export default class TheaterJS {
     let cursor = -1
     let isFixing = false
     let previousMistakeCursor = null
+    let previousFixCursor = null
 
     let htmlMap = html.map(value)
     value = html.strip(value)
@@ -187,20 +188,25 @@ export default class TheaterJS {
       let expected = value.substr(0, cursor + 1)
 
       let isMistaking = actual !== expected
-      let shouldBeMistaken = actor.shouldBeMistaken(actual, expected, value, previousMistakeCursor)
+      let shouldBeMistaken = actor.shouldBeMistaken(actual, value, previousMistakeCursor, previousFixCursor)
       let shouldFix = isFixing || !shouldBeMistaken
 
       if (isMistaking && shouldFix) {
         isFixing = true
+        previousMistakeCursor = null
         actor.displayValue = initialValue + html.inject(actual.substr(0, actual.length - 1), htmlMap)
         cursor--
+        previousFixCursor = cursor
       } else {
         isFixing = false
         let nextChar = value.charAt(++cursor)
 
         if (shouldBeMistaken) {
           nextChar = keyboard.randomCharNear(nextChar, locale)
-          previousMistakeCursor = cursor
+
+          if (previousMistakeCursor == null) {
+            previousMistakeCursor = cursor
+          }
         }
 
         actor.displayValue = initialValue + html.inject(actual + nextChar, htmlMap)

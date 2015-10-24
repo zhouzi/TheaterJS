@@ -8,8 +8,11 @@ describe('utils', function () {
   })
 
   it('has a method that return a random number between min and max', function () {
+    expect(utils.random(1, 1)).toBe(1)
+    expect(utils.random(0, 0)).toBe(0)
+
     for (let i = 0; i < 100; i++) {
-      expect(utils.random(0, 10)).toBeWithinRange(0, 10)
+      expect(utils.random(237, 478)).toBeWithinRange(237, 478)
     }
   })
 
@@ -20,10 +23,10 @@ describe('utils', function () {
   })
 
   it('has a method that returns a percentage between two numbers', function () {
-    expect(utils.getPercentageOf(0, 100, 0.1)).toBe(10)
-    expect(utils.getPercentageOf(0, 100, 0.5)).toBe(50)
-    expect(utils.getPercentageOf(0, 100, 0.87)).toBe(87)
-    expect(utils.getPercentageOf(0, 100, 1)).toBe(100)
-    expect(utils.getPercentageOf(0, 100, 0)).toBe(0)
+    expect(utils.getPercentageOf(250, 700, 0.1)).toBe(295)
+    expect(utils.getPercentageOf(120, 450, 0.5)).toBe(285)
+    expect(utils.getPercentageOf(80, 90, 0.8)).toBe(88)
+    expect(utils.getPercentageOf(220, 400, 1)).toBe(400)
+    expect(utils.getPercentageOf(150, 1500, 0)).toBe(150)
   })
 })

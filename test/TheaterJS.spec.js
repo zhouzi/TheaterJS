@@ -9,12 +9,12 @@ describe('TheaterJS', function () {
   describe('is instantiable', function () {
     it('without any configuration', function () {
       theater = new TheaterJS()
-      expect(theater.options).toEqual({ autoplay: true, erase: true, loop: true, minSpeed: 50, maxSpeed: 350, locale: 'en' })
+      expect(theater.options).toEqual({ autoplay: true, erase: true, loop: true, minSpeed: 80, maxSpeed: 450, locale: 'en' })
     })
 
     it('with some configuration', function () {
       theater = new TheaterJS({ autoplay: false, maxSpeed: 250 })
-      expect(theater.options).toEqual({ autoplay: false, erase: true, loop: true, minSpeed: 50, maxSpeed: 250, locale: 'en' })
+      expect(theater.options).toEqual({ autoplay: false, erase: true, loop: true, minSpeed: 80, maxSpeed: 250, locale: 'en' })
     })
 
     it('and have an initial status of ready', function () {

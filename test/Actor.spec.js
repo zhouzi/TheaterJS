@@ -47,7 +47,7 @@ describe('Actor Class', function () {
       let actor = new Actor('vader', { accuracy: 0.8 })
 
       for (let i = 0; i < 100; i++) {
-        expect(actor.shouldBeMistaken('aaaaa', 'aaaaa', 'aaaaaaaaaa')).toBe(false)
+        expect(actor.shouldBeMistaken('aaaaa', 'aaaaaaaaaa')).toBe(false)
       }
     })
 
@@ -56,7 +56,7 @@ describe('Actor Class', function () {
       let results = {}
 
       for (let i = 0; i < 100; i++) {
-        let returnValue = actor.shouldBeMistaken('aaaa', 'aaaaaaa', 'aaaaaaaaaa')
+        let returnValue = actor.shouldBeMistaken('aaaa', 'aaaaaaaaaa')
         if (results[returnValue] == null) {
           results[returnValue] = 0
         }
@@ -76,17 +76,9 @@ describe('Actor Class', function () {
       let actor = new Actor('vader', { accuracy: 0.3 })
 
       for (let i = 0; i < 10; i++) {
-        expect(actor.shouldBeMistaken('a', 'aaa', 'aaaaaaaaaa')).toBe(false)
-        expect(actor.shouldBeMistaken('aa', 'aaa', 'aaaaaaaaaa')).toBe(false)
-        expect(actor.shouldBeMistaken('aaa', 'aaa', 'aaaaaaaaaa')).toBe(false)
-      }
-    })
-
-    it('return false when there\'s already more than two mistakes', function () {
-      let actor = new Actor('vader')
-
-      for (let i = 0; i < 10; i++) {
-        expect(actor.shouldBeMistaken('abbb', 'aaaa', 'aaaaaaaaaa')).toBe(false)
+        expect(actor.shouldBeMistaken('a', 'aaaaaaaaaa')).toBe(false)
+        expect(actor.shouldBeMistaken('aa', 'aaaaaaaaaa')).toBe(false)
+        expect(actor.shouldBeMistaken('aaa', 'aaaaaaaaaa')).toBe(false)
       }
     })
 
@@ -94,7 +86,7 @@ describe('Actor Class', function () {
       let actor = new Actor('vader')
 
       for (let i = 0; i < 100; i++) {
-        expect(actor.shouldBeMistaken('azeqwe', 'azerty', 'azerty')).toBe(false)
+        expect(actor.shouldBeMistaken('azeqwe', 'azerty')).toBe(false)
       }
     })
 
@@ -102,17 +94,37 @@ describe('Actor Class', function () {
       let actor = new Actor('vader', { accuracy: 0.4 })
 
       for (let i = 0; i < 100; i++) {
-        expect(actor.shouldBeMistaken('azerty', 'azerty', 'azertyuiop', 5)).toBe(false)
+        expect(actor.shouldBeMistaken('awwww', 'azertyuiop', 1)).toBe(false)
       }
+    })
+
+    it('return false if actor just fixed a mistake', function () {
+      let actor = new Actor('vader', { accuracy: 0 })
+      let i
+
+      for (i = 0; i < 100; i++) {
+        expect(actor.shouldBeMistaken('hello th', 'hello there!', null, 4)).toBe(false)
+      }
+
+      for (i = 0; i < 100; i++) {
+        if (actor.shouldBeMistaken('hello th', 'hello there!', null, 2) === true) {
+          break
+        }
+      }
+
+      expect(i).toBeLessThan(100)
     })
   })
 
   describe('has a getTypingSpeed method that', function () {
     it('return a random value depending on its characteristics', function () {
-      let actor = new Actor('vader', { speed: 0.5 })
+      let actor = new Actor('vader', { speed: 1 })
+      expect(actor.getTypingSpeed(50, 200)).toBe(50)
+
+      actor = new Actor('vader', { speed: 0.5 })
 
       for (let i = 0; i < 100; i++) {
-        expect(actor.getTypingSpeed(0, 100)).toBeWithinRange(50, 100)
+        expect(actor.getTypingSpeed(300, 600)).toBeWithinRange(300, 450)
       }
     })
   })
