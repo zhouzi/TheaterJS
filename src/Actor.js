@@ -44,8 +44,7 @@ export default class Actor {
 
     let defaults = {
       speed: props.experience,
-      accuracy: props.experience,
-      invincibility: props.experience * 10
+      accuracy: props.experience
     }
 
     utils.merge(this, defaults, props)

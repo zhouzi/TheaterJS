@@ -14,21 +14,18 @@ describe('Actor Class', function () {
       actor = new Actor('vader')
       expect(actor.experience).toBe(0.6)
       expect(actor.accuracy).toBe(0.6)
-      expect(actor.invincibility).toBe(6)
     })
 
     it('merges options with the defaults', function () {
       actor = new Actor('vader', { experience: 0.9, accuracy: 0.2 })
       expect(actor.experience).toBe(0.9)
       expect(actor.accuracy).toBe(0.2)
-      expect(actor.invincibility).toBe(9)
     })
 
     it('accepts a number to build its props', function () {
       actor = new Actor('vader', 0.8)
       expect(actor.experience).toBe(0.8)
       expect(actor.accuracy).toBe(0.8)
-      expect(actor.invincibility).toBe(8)
     })
   })
 
