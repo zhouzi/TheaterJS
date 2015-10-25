@@ -1,39 +1,41 @@
-/* global describe, it, expect, jasmine */
+/* global describe, it, expect, jasmine, beforeEach, spyOn */
 
 import Actor from '../src/Actor'
 
 describe('Actor Class', function () {
+  beforeEach(function () {
+    spyOn(document, 'querySelector').and.returnValue({})
+  })
+
   describe('instantiation', function () {
     let actor
 
-    it('requires a name', function () {
-      expect(function () { return new Actor() }).toThrowError('actor must have a name')
-    })
-
     it('is able to build some default props', function () {
       actor = new Actor('vader')
-      expect(actor.experience).toBe(0.6)
+      expect(actor.speed).toBe(0.6)
       expect(actor.accuracy).toBe(0.6)
     })
 
     it('merges options with the defaults', function () {
-      actor = new Actor('vader', { experience: 0.9, accuracy: 0.2 })
-      expect(actor.experience).toBe(0.9)
+      actor = new Actor('vader', { accuracy: 0.2 })
+      expect(actor.speed).toBe(0.6)
       expect(actor.accuracy).toBe(0.2)
     })
 
     it('accepts a number to build its props', function () {
       actor = new Actor('vader', 0.8)
-      expect(actor.experience).toBe(0.8)
+      expect(actor.speed).toBe(0.8)
       expect(actor.accuracy).toBe(0.8)
     })
   })
 
   describe('has a displayValue property', function () {
     it('that calls a callback when it\'s changed', function () {
-      let spy = jasmine.createSpy()
+      let spy = jasmine.createSpy('displayValue callback')
       let actor = new Actor('vader', 0.8, spy)
+
       actor.displayValue = 'Hey!'
+
       expect(actor.displayValue).toBe('Hey!')
       expect(spy).toHaveBeenCalledWith('Hey!')
     })

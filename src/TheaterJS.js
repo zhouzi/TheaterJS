@@ -28,7 +28,7 @@ export default class TheaterJS {
     this.setCurrentActor(null)
   }
 
-  describe (actorName, props, callback) {
+  describe (actorName, props = {}, callback = null) {
     let actor = new Actor(actorName, props, callback)
     this.casting[actor.name] = actor
 

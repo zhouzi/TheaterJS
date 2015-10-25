@@ -6,6 +6,10 @@ import TheaterJS from '../src/TheaterJS'
 let theater
 
 describe('TheaterJS', function () {
+  beforeEach(function () {
+    spyOn(document, 'querySelector').and.returnValue({})
+  })
+
   describe('is instantiable', function () {
     it('without any configuration', function () {
       theater = new TheaterJS()

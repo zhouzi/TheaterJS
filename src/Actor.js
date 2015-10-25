@@ -1,53 +1,39 @@
 import type from './helpers/type'
 import utils from './helpers/utils'
 
-const DEFAULT_EXPERIENCE = 0.6
+const DEFAULTS = { speed: 0.6, accuracy: 0.6 }
 
 export default class Actor {
-  constructor (actorName, props, callback) {
-    if (!type.isString(actorName)) {
-      throw new Error('actor must have a name')
+  constructor (actorName, props = {}, callback = null) {
+    this.name = actorName
+
+    if (type.isNumber(props)) {
+      props = { speed: props, accuracy: props }
     }
 
-    if (props == null) {
-      props = {}
-    }
+    utils.merge(this, DEFAULTS, props)
 
-    if (callback == null && document) {
-      callback = `#${actorName}`
-    }
+    if (document != null) {
+      if (callback == null) {
+        callback = `#${actorName}`
+      }
 
-    if (type.isString(callback) && document != null) {
-      let $element = document.querySelector(callback)
+      if (type.isString(callback)) {
+        let selector = callback
+        let $element = document.querySelector(selector)
 
-      if ($element != null) {
-        this.$element = $element
-        callback = (newValue) => { this.$element.innerHTML = newValue }
-      } else {
-        console.debug(`selector for ${actorName} (#${actorName}) didn't match anything`)
+        if ($element != null) {
+          this.$element = $element
+          callback = (newValue) => { this.$element.innerHTML = newValue }
+        } else {
+          throw new Error(`no matches for ${this.name}'s selector: ${selector}`)
+        }
       }
     }
 
     if (!type.isFunction(callback)) {
       callback = console.log.bind(console)
     }
-
-    this.name = actorName
-
-    if (type.isNumber(props)) {
-      props = { experience: props }
-    }
-
-    if (!type.isNumber(props.experience)) {
-      props.experience = DEFAULT_EXPERIENCE
-    }
-
-    let defaults = {
-      speed: props.experience,
-      accuracy: props.experience
-    }
-
-    utils.merge(this, defaults, props)
 
     this.callback = callback
     this._displayValue = ''
@@ -84,7 +70,7 @@ export default class Actor {
 
     if (type.isNumber(previousMistakeCursor)) {
       let nbOfCharactersTyped = actual.length - previousMistakeCursor
-      let maxWrongCharactersAllowed = 10 - Math.max(accuracy, 6)
+      let maxWrongCharactersAllowed = accuracy >= 6 ? 10 - accuracy : 4
 
       if (nbOfCharactersTyped >= maxWrongCharactersAllowed) {
         return false
@@ -92,7 +78,10 @@ export default class Actor {
     }
 
     if (type.isNumber(previousFixCursor)) {
-      if (actual.length - previousFixCursor <= Math.max(accuracy, 2) * 2) {
+      let nbOfCharactersTyped = actual.length - previousFixCursor
+      let minCharactersBetweenMistakes = Math.max(accuracy, 2) * 2
+
+      if (nbOfCharactersTyped <= minCharactersBetweenMistakes) {
         return false
       }
     }
