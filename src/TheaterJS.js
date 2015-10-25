@@ -118,7 +118,16 @@ export default class TheaterJS {
     return this
   }
 
+  stop () {
+    this.status = 'ready'
+    return this
+  }
+
   playNextScene () {
+    if (this.status !== 'playing') {
+      return this
+    }
+
     let currentScene = this.scenario[this.currentScene]
 
     if (currentScene != null) {

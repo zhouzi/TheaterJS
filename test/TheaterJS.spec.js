@@ -195,6 +195,14 @@ describe('TheaterJS', function () {
     })
   })
 
+  describe('has a stop method that', function () {
+    it('sets the status to ready', function () {
+      theater.status = 'playing'
+      theater.stop()
+      expect(theater.status).toBe('ready')
+    })
+  })
+
   describe('has a replay method that', function () {
     beforeEach(function () {
       theater = new TheaterJS({ autoplay: false })
@@ -256,6 +264,16 @@ describe('TheaterJS', function () {
     beforeEach(function () {
       theater = new TheaterJS({ autoplay: false })
       theater.describe('vader')
+      theater.status = 'playing'
+    })
+
+    it('doesn\'t play the next scene if status is not playing', function () {
+      theater.addScene('vader:Hello world!')
+      theater.status = 'ready'
+
+      theater.playNextScene()
+      expect(theater.currentScene).toBe(-1)
+      expect(theater.status).toBe('ready')
     })
 
     it('doesn\'t increment currentScene if there are no next scene', function () {
@@ -270,13 +288,13 @@ describe('TheaterJS', function () {
     })
 
     it('update the status to ready if there are no next scene', function () {
-      theater.status = 'playing'
       theater.playNextScene()
       expect(theater.status).toBe('ready')
     })
 
     it('increments currentScene if there is a next scene', function () {
       theater.addScene({ name: 'test' })
+
       expect(theater.currentScene).toBe(-1)
       theater.playNextScene()
       expect(theater.currentScene).toBe(0)
@@ -286,6 +304,8 @@ describe('TheaterJS', function () {
       theater
         .describe('luke')
         .addScene({ name: 'test', actor: 'vader' }, { name: 'test' }, { name: 'test', actor: 'luke' })
+
+      theater.status = 'playing'
 
       expect(theater.currentScene).toBe(-1)
       expect(theater.getCurrentActor()).toBe(null)
@@ -324,6 +344,8 @@ describe('TheaterJS', function () {
         .subscribe('type:start', typeStartSpy)
         .subscribe('type:end', typeEndSpy)
         .addScene('vader:Hey there!')
+
+      theater.status = 'ready'
 
       expect(allSpy).not.toHaveBeenCalled()
       expect(eraseStartSpy).not.toHaveBeenCalled()
