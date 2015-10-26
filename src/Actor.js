@@ -3,89 +3,91 @@ import utils from './helpers/utils'
 
 const DEFAULTS = { speed: 0.6, accuracy: 0.6 }
 
-export default class Actor {
-  constructor (actorName, props = {}, callback = null) {
-    this.name = actorName
+export default function (actorName, props = {}, callback = null) {
+  let displayValue = ''
+  let $element
 
-    if (type.isNumber(props)) {
-      props = { speed: props, accuracy: props }
+  if (type.isNumber(props)) {
+    props = { speed: props, accuracy: props }
+  }
+
+  props = utils.merge({}, DEFAULTS, props)
+
+  if (document != null) {
+    if (callback == null) {
+      callback = `#${actorName}`
     }
 
-    utils.merge(this, DEFAULTS, props)
+    if (type.isString(callback)) {
+      let selector = callback
+      let $e = document.querySelector(selector)
 
-    if (document != null) {
-      if (callback == null) {
-        callback = `#${actorName}`
+      if ($e != null) {
+        $element = $e
+        callback = function (newValue) { $element.innerHTML = newValue }
+      } else {
+        throw new Error(`no matches for ${actorName}'s selector: ${selector}`)
+      }
+    }
+  }
+
+  if (!type.isFunction(callback)) {
+    callback = console.log.bind(console)
+  }
+
+  return {
+    get displayValue () {
+      return displayValue
+    },
+
+    set displayValue (value) {
+      displayValue = value
+      callback(value)
+    },
+
+    get name () {
+      return actorName
+    },
+
+    getTypingSpeed (fastest, slowest) {
+      let speed = utils.randomFloat(props.speed, 1)
+      return utils.getPercentageOf(slowest, fastest, speed)
+    },
+
+    shouldBeMistaken (actual, endValue, previousMistakeCursor = null, previousFixCursor = null) {
+      let accuracy = props.accuracy * 10
+
+      if (accuracy >= 8) {
+        return false
       }
 
-      if (type.isString(callback)) {
-        let selector = callback
-        let $element = document.querySelector(selector)
+      if (actual.length <= accuracy) {
+        return false
+      }
 
-        if ($element != null) {
-          this.$element = $element
-          callback = (newValue) => { this.$element.innerHTML = newValue }
-        } else {
-          throw new Error(`no matches for ${this.name}'s selector: ${selector}`)
+      if (actual.length === endValue.length) {
+        return false
+      }
+
+      if (type.isNumber(previousMistakeCursor)) {
+        let nbOfCharactersTyped = actual.length - previousMistakeCursor
+        let maxWrongCharactersAllowed = accuracy >= 6 ? 10 - accuracy : 4
+
+        if (nbOfCharactersTyped >= maxWrongCharactersAllowed) {
+          return false
         }
       }
-    }
 
-    if (!type.isFunction(callback)) {
-      callback = console.log.bind(console)
-    }
+      if (type.isNumber(previousFixCursor)) {
+        let nbOfCharactersTyped = actual.length - previousFixCursor
+        let minCharactersBetweenMistakes = Math.max(accuracy, 2) * 2
 
-    this.callback = callback
-    this._displayValue = ''
-  }
-
-  set displayValue (value) {
-    this._displayValue = value
-    this.callback(value)
-  }
-
-  get displayValue () {
-    return this._displayValue
-  }
-
-  getTypingSpeed (fastest, slowest) {
-    let speed = utils.randomFloat(this.speed, 1)
-    return utils.getPercentageOf(slowest, fastest, speed)
-  }
-
-  shouldBeMistaken (actual, endValue, previousMistakeCursor = null, previousFixCursor = null) {
-    let accuracy = this.accuracy * 10
-
-    if (accuracy >= 8) {
-      return false
-    }
-
-    if (actual.length <= accuracy) {
-      return false
-    }
-
-    if (actual.length === endValue.length) {
-      return false
-    }
-
-    if (type.isNumber(previousMistakeCursor)) {
-      let nbOfCharactersTyped = actual.length - previousMistakeCursor
-      let maxWrongCharactersAllowed = accuracy >= 6 ? 10 - accuracy : 4
-
-      if (nbOfCharactersTyped >= maxWrongCharactersAllowed) {
-        return false
+        if (nbOfCharactersTyped <= minCharactersBetweenMistakes) {
+          return false
+        }
       }
+
+      return utils.randomFloat(0, 0.8) > props.accuracy
     }
-
-    if (type.isNumber(previousFixCursor)) {
-      let nbOfCharactersTyped = actual.length - previousFixCursor
-      let minCharactersBetweenMistakes = Math.max(accuracy, 2) * 2
-
-      if (nbOfCharactersTyped <= minCharactersBetweenMistakes) {
-        return false
-      }
-    }
-
-    return utils.randomFloat(0, 0.8) > this.accuracy
   }
 }

@@ -1,4 +1,4 @@
-import Actor from './Actor'
+import actor from './actor'
 import utils from './helpers/utils'
 import type from './helpers/type'
 import keyboard from './helpers/keyboard'
@@ -29,8 +29,8 @@ export default class TheaterJS {
   }
 
   describe (actorName, props = {}, callback = null) {
-    let actor = new Actor(actorName, props, callback)
-    this.casting[actor.name] = actor
+    let a = actor(actorName, props, callback)
+    this.casting[a.name] = a
 
     return this
   }
