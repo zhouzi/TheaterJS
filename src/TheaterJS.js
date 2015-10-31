@@ -6,7 +6,7 @@ import html from './helpers/html'
 
 const DEFAULTS = { autoplay: true, erase: true, loop: true, minSpeed: 80, maxSpeed: 450, locale: 'detect' }
 
-export default function theaterJS (options = {}) {
+function theaterJS (options = {}) {
   /* ------------------------------------------------- *\
     init
   \* ------------------------------------------------- */
@@ -302,3 +302,11 @@ export default function theaterJS (options = {}) {
     publish
   })
 }
+
+theaterJS.init = function (actorName = 'actor') {
+  let theater = theaterJS()
+  theater.addActor(actorName, { accuracy: 1, speed: 0.8 })
+  return theater
+}
+
+export default theaterJS
