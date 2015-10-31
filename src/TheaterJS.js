@@ -4,47 +4,49 @@ import type from './helpers/type'
 import keyboard from './helpers/keyboard'
 import html from './helpers/html'
 
-export default class TheaterJS {
-  constructor (options) {
-    let defaults = { autoplay: true, erase: true, loop: true, minSpeed: 80, maxSpeed: 450, locale: 'detect' }
-    this.options = utils.merge({}, defaults, options || {})
+const DEFAULTS = { autoplay: true, erase: true, loop: true, minSpeed: 80, maxSpeed: 450, locale: 'detect' }
 
-    if (this.options.locale === 'detect' && window != null) {
-      if (window.navigator != null && type.isArray(window.navigator.languages) && type.isString(window.navigator.languages[0])) {
-        this.options.locale = window.navigator.languages[0].substr(0, 2)
-      }
+export default function theaterJS (options = {}) {
+  /* ------------------------------------------------- *\
+    init
+  \* ------------------------------------------------- */
+
+  options = utils.merge({}, DEFAULTS, options)
+
+  if (options.locale === 'detect' && window != null) {
+    if (window.navigator != null && type.isArray(window.navigator.languages) && type.isString(window.navigator.languages[0])) {
+      options.locale = window.navigator.languages[0].substr(0, 2)
     }
-
-    if (!keyboard.supports(this.options.locale)) {
-      this.options.locale = keyboard.defaultLocale
-    }
-
-    this.casting = {}
-    this.status = 'ready'
-    this.currentScene = -1
-    this.scenario = []
-    this.events = {}
-
-    this.setCurrentActor(null)
   }
 
-  describe (actorName, props = {}, callback = null) {
-    let a = actor(actorName, props, callback)
-    this.casting[a.name] = a
+  if (!keyboard.supports(options.locale)) {
+    options.locale = keyboard.defaultLocale
+  }
+
+  let props = { options, casting: {}, status: 'ready', onStage: null, currentScene: -1, scenario: [], events: {} }
+  setCurrentActor(null)
+
+  /* ------------------------------------------------- *\
+    methods
+  \* ------------------------------------------------- */
+
+  function describe (actorName, options = {}, callback = null) {
+    let a = actor(actorName, options, callback)
+    props.casting[a.name] = a
 
     return this
   }
 
-  setCurrentActor (actorName) {
-    this.onStage = actorName
+  function setCurrentActor (actorName) {
+    props.onStage = actorName
     return this
   }
 
-  getCurrentActor () {
-    return this.casting[this.onStage] || null
+  function getCurrentActor () {
+    return props.casting[props.onStage] || null
   }
 
-  addScene () {
+  function addScene () {
     let scenes = utils.toArray(arguments)
 
     scenes.forEach(scene => {
@@ -55,8 +57,8 @@ export default class TheaterJS {
         if (partials.length > 1 && partials[0].charAt(partials[0].length - 1) !== '\\') {
           actorName = partials.shift()
 
-          if (this.options.erase) {
-            this.addScene({ name: 'erase', actor: actorName })
+          if (props.options.erase) {
+            addScene({ name: 'erase', actor: actorName })
           }
         }
 
@@ -67,101 +69,92 @@ export default class TheaterJS {
           sceneObj.actor = actorName
         }
 
-        this.addScene(sceneObj)
+        addScene(sceneObj)
       } else if (type.isFunction(scene)) {
-        this.addScene({ name: 'callback', args: [scene] })
+        addScene({ name: 'callback', args: [scene] })
       } else if (type.isNumber(scene)) {
         if (scene > 0) {
-          this.addScene({ name: 'wait', args: [scene] })
+          addScene({ name: 'wait', args: [scene] })
         } else {
-          this.addScene({ name: 'erase', args: [scene] })
+          addScene({ name: 'erase', args: [scene] })
         }
       } else if (type.isArray(scene)) {
-        scene.forEach(s => { this.addScene(s) })
+        scene.forEach(function (s) { addScene(s) })
       } else if (type.isObject(scene)) {
         if (!type.isArray(scene.args)) {
           scene.args = []
         }
 
-        scene.args.unshift(this.playNextScene.bind(this))
-        this.scenario.push(scene)
+        scene.args.unshift(playNextScene.bind(this))
+        props.scenario.push(scene)
       }
     })
 
-    if (this.options.autoplay) {
-      this.play()
+    if (props.options.autoplay) play()
+
+    return this
+  }
+
+  function play () {
+    if (props.status === 'ready') {
+      props.status = 'playing'
+      playNextScene()
     }
 
     return this
   }
 
-  play () {
-    if (this.status === 'ready') {
-      this.status = 'playing'
-      this.playNextScene()
+  function replay (done) {
+    if (props.status === 'ready' || type.isFunction(done)) {
+      props.currentScene = -1
+
+      if (props.status === 'ready') play()
+      else done()
     }
 
     return this
   }
 
-  replay (done) {
-    if (this.status === 'ready' || type.isFunction(done)) {
-      this.currentScene = -1
-
-      if (this.status === 'ready') {
-        this.play()
-      } else {
-        done()
-      }
-    }
-
+  function stop () {
+    props.status = 'ready'
     return this
   }
 
-  stop () {
-    this.status = 'ready'
-    return this
-  }
+  function playNextScene () {
+    if (props.status !== 'playing') return this
 
-  playNextScene () {
-    if (this.status !== 'playing') {
+    let currentScene = props.scenario[props.currentScene]
+
+    if (currentScene != null) publish(`${currentScene.name}:end`, currentScene)
+
+    if (props.currentScene + 1 >= props.scenario.length) {
+      props.status = 'ready'
       return this
     }
 
-    let currentScene = this.scenario[this.currentScene]
-
-    if (currentScene != null) {
-      this.publish(`${currentScene.name}:end`, currentScene)
-    }
-
-    if (this.currentScene + 1 >= this.scenario.length) {
-      this.status = 'ready'
-      return this
-    }
-
-    let nextScene = this.scenario[++this.currentScene]
+    let nextScene = props.scenario[++props.currentScene]
 
     if (nextScene.actor) {
-      this.setCurrentActor(nextScene.actor)
+      setCurrentActor(nextScene.actor)
     }
 
-    this.publish(`${nextScene.name}:start`, nextScene)
+    publish(`${nextScene.name}:start`, nextScene)
 
     switch (nextScene.name) {
       case 'type':
-        this.typeAction.apply(this, nextScene.args)
+        typeAction(...nextScene.args)
         break
 
       case 'erase':
-        this.eraseAction.apply(this, nextScene.args)
+        eraseAction(...nextScene.args)
         break
 
       case 'callback':
-        this.callbackAction.apply(this, nextScene.args)
+        callbackAction(...nextScene.args)
         break
 
       case 'wait':
-        this.waitAction.apply(this, nextScene.args)
+        waitAction(...nextScene.args)
         break
 
       default:
@@ -172,12 +165,12 @@ export default class TheaterJS {
     return this
   }
 
-  typeAction (done, value) {
-    let actor = this.getCurrentActor()
+  function typeAction (done, value) {
+    let actor = getCurrentActor()
 
-    let locale = this.options.locale
-    let minSpeed = this.options.minSpeed
-    let maxSpeed = this.options.maxSpeed
+    let locale = props.options.locale
+    let minSpeed = props.options.minSpeed
+    let maxSpeed = props.options.maxSpeed
     let initialValue = actor.displayValue
     let cursor = -1
     let isFixing = false
@@ -190,9 +183,7 @@ export default class TheaterJS {
     ;(function type () {
       let actual = html.strip(actor.displayValue.substr(initialValue.length))
 
-      if (actual === value) {
-        return done()
-      }
+      if (actual === value) return done()
 
       let expected = value.substr(0, cursor + 1)
 
@@ -227,11 +218,11 @@ export default class TheaterJS {
     return this
   }
 
-  eraseAction (done, arg) {
-    let actor = this.getCurrentActor()
+  function eraseAction (done, arg) {
+    let actor = getCurrentActor()
 
-    let minSpeed = this.options.minSpeed
-    let maxSpeed = this.options.maxSpeed
+    let minSpeed = props.options.minSpeed
+    let maxSpeed = props.options.maxSpeed
 
     let value = actor.displayValue
     let htmlMap = html.map(value)
@@ -244,60 +235,70 @@ export default class TheaterJS {
     let nbCharactersToErase = 0
 
     if (type.isNumber(arg)) {
-      if (arg > 0) {
-        speed = arg
-      } else {
-        nbCharactersToErase = value.length + arg
-      }
+      if (arg > 0) speed = arg
+      else nbCharactersToErase = value.length + arg
     }
 
     (function erase () {
-      if (cursor === nbCharactersToErase) {
-        return done()
-      }
-
+      if (cursor === nbCharactersToErase) return done()
       actor.displayValue = html.inject(value.substr(0, --cursor), htmlMap)
+
       return setTimeout(erase, speed || actor.getTypingSpeed(minSpeed, maxSpeed))
     })()
 
     return this
   }
 
-  callbackAction (done, callback) {
+  function callbackAction (done, callback) {
     callback.call(this, done)
     return this
   }
 
-  waitAction (done, delay) {
+  function waitAction (done, delay) {
     setTimeout(done.bind(this), delay)
     return this
   }
 
-  subscribe (events, callback) {
+  function subscribe (events, callback) {
     events.split(',').forEach(eventName => {
       eventName = eventName.trim()
 
-      if (!type.isArray(this.events[eventName])) {
-        this.events[eventName] = []
+      if (!type.isArray(props.events[eventName])) {
+        props.events[eventName] = []
       }
 
-      this.events[eventName].push(callback)
+      props.events[eventName].push(callback)
     })
 
     return this
   }
 
-  publish (eventName) {
-    if (type.isArray(this.events[eventName])) {
+  function publish (eventName) {
+    if (type.isArray(props.events[eventName])) {
       let args = [].slice.call(arguments, 1)
       args.unshift(eventName)
 
-      let callbacks = (this.events[eventName] || []).concat(this.events['*'] || [])
-      callbacks.forEach(function (callback) {
-        callback.apply(this, args)
-      })
+      let callbacks = (props.events[eventName] || []).concat(props.events['*'] || [])
+      callbacks.forEach((callback) => { callback(...args) })
     }
 
     return this
   }
+
+  /* ------------------------------------------------- *\
+    public api
+  \* ------------------------------------------------- */
+
+  return Object.freeze({
+    get options () { return props.options },
+    get status () { return props.status },
+    describe,
+    getCurrentActor,
+    addScene,
+    play,
+    replay,
+    stop,
+    subscribe,
+    publish
+  })
 }
