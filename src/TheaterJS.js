@@ -30,7 +30,7 @@ export default function theaterJS (options = {}) {
     methods
   \* ------------------------------------------------- */
 
-  function describe (actorName, options = {}, callback = null) {
+  function addActor (actorName, options = {}, callback = null) {
     let a = actor(actorName, options, callback)
     props.casting[a.name] = a
 
@@ -292,7 +292,7 @@ export default function theaterJS (options = {}) {
   return Object.freeze({
     get options () { return props.options },
     get status () { return props.status },
-    describe,
+    addActor,
     getCurrentActor,
     addScene,
     play,

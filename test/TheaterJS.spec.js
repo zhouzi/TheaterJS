@@ -43,7 +43,7 @@ describe('theaterJS', function () {
     theater = theaterJS({ autoplay: false })
 
     theater
-      .describe('vader')
+      .addActor('vader')
       .addScene('vader:Luke...')
 
     expect(theater.status).toBe('ready')
@@ -66,7 +66,7 @@ describe('theaterJS', function () {
   describe('has a addScene method that', function () {
     beforeEach(function () {
       theater = theaterJS({ autoplay: false })
-      theater.describe('vader')
+      theater.addActor('vader')
       jasmine.clock().install()
     })
 
@@ -165,7 +165,7 @@ describe('theaterJS', function () {
 
       it('scenes and call play if autoplay option is enabled', function () {
         theater = theaterJS()
-        theater.describe('vader').addScene('vader:Hey!')
+        theater.addActor('vader').addScene('vader:Hey!')
 
         expect(theater.status).toBe('playing')
       })
@@ -175,7 +175,7 @@ describe('theaterJS', function () {
   describe('has a play method that', function () {
     beforeEach(function () {
       theater = theaterJS({ autoplay: false })
-      theater.describe('vader').addScene('vader:Hey!')
+      theater.addActor('vader').addScene('vader:Hey!')
       jasmine.clock().install()
     })
 
@@ -209,7 +209,7 @@ describe('theaterJS', function () {
     it('sets the status to ready', function () {
       theater = theaterJS({ autoplay: false })
 
-      theater.describe('vader').addScene('vader:Hello!').play()
+      theater.addActor('vader').addScene('vader:Hello!').play()
       expect(theater.status).toBe('playing')
 
       theater.stop()
@@ -222,7 +222,7 @@ describe('theaterJS', function () {
       jasmine.clock().install()
 
       theater = theaterJS()
-      theater.describe('vader').describe('luke').addScene('vader:Luke...').addScene('luke:What??')
+      theater.addActor('vader').addActor('luke').addScene('vader:Luke...').addScene('luke:What??')
 
       jasmine.clock().tick(LONG_TIME)
 
@@ -246,7 +246,7 @@ describe('theaterJS', function () {
 
     theater = theaterJS()
     theater.subscribe('type:start', startCallback).subscribe('type:end', endCallback)
-    theater.describe('vader').addScene('vader:Hello!')
+    theater.addActor('vader').addScene('vader:Hello!')
 
     expect(theater.status).toBe('playing')
     expect(startCallback.calls.count()).toBe(1)
@@ -264,7 +264,7 @@ describe('theaterJS', function () {
   describe('handle type scenes', function () {
     beforeEach(function () {
       theater = theaterJS({ autoplay: false })
-      theater.describe('vader').addScene('vader:Hey!')
+      theater.addActor('vader').addScene('vader:Hey!')
 
       jasmine.clock().install()
     })
@@ -286,7 +286,7 @@ describe('theaterJS', function () {
         theater = theaterJS()
 
         theater
-          .describe('vader', 0.4, function () {})
+          .addActor('vader', 0.4, function () {})
           .addScene('vader:' + candidate)
 
         while (theater.status === 'playing') {
@@ -305,7 +305,7 @@ describe('theaterJS', function () {
   describe('handle erase scenes that', function () {
     beforeEach(function () {
       theater = theaterJS({ autoplay: false })
-      theater.describe('vader').addScene('vader:Hey!', { name: 'erase' })
+      theater.addActor('vader').addScene('vader:Hey!', { name: 'erase' })
 
       jasmine.clock().install()
     })
@@ -322,7 +322,7 @@ describe('theaterJS', function () {
 
     it('can erase a given number of characters', function () {
       theater = theaterJS({ autoplay: false })
-      theater.describe('vader').addScene('vader:Hello there!')
+      theater.addActor('vader').addScene('vader:Hello there!')
 
       theater.play()
 
@@ -340,7 +340,7 @@ describe('theaterJS', function () {
 
     it('speed can be configured', function () {
       theater = theaterJS({ autoplay: false })
-      theater.describe('vader').addScene('vader:Hello!').play()
+      theater.addActor('vader').addScene('vader:Hello!').play()
 
       jasmine.clock().tick(LONG_TIME)
 
@@ -359,7 +359,7 @@ describe('theaterJS', function () {
       let candidate = '<h1 id="some-id" class="some-class">Hey<br/> <strong aria-attribute="some-attribute">there!</strong><img src="/whatever.png"></h1>'
 
       theater = theaterJS({ autoplay: false })
-      theater.describe('vader').addScene('vader:' + candidate).play()
+      theater.addActor('vader').addScene('vader:' + candidate).play()
 
       jasmine.clock().tick(LONG_TIME)
 
@@ -397,7 +397,7 @@ describe('theaterJS', function () {
   describe('handle wait scenes', function () {
     beforeEach(function () {
       theater = theaterJS({ autoplay: false })
-      theater.describe('vader')
+      theater.addActor('vader')
 
       jasmine.clock().install()
     })
