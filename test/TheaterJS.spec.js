@@ -18,12 +18,12 @@ describe('theaterJS', function () {
   describe('is instantiable', function () {
     it('without any configuration', function () {
       theater = theaterJS()
-      expect(theater.options).toEqual({ autoplay: true, erase: true, loop: true, minSpeed: 80, maxSpeed: 450, locale: 'en' })
+      expect(theater.options).toEqual({ autoplay: true, erase: true, minSpeed: 80, maxSpeed: 450, locale: 'en' })
     })
 
     it('with some configuration', function () {
       theater = theaterJS({ autoplay: false, maxSpeed: 250 })
-      expect(theater.options).toEqual({ autoplay: false, erase: true, loop: true, minSpeed: 80, maxSpeed: 250, locale: 'en' })
+      expect(theater.options).toEqual({ autoplay: false, erase: true, minSpeed: 80, maxSpeed: 250, locale: 'en' })
     })
 
     it('and have an initial status of ready', function () {
@@ -245,7 +245,7 @@ describe('theaterJS', function () {
     let endCallback = jasmine.createSpy('end callback')
 
     theater = theaterJS()
-    theater.subscribe('type:start', startCallback).subscribe('type:end', endCallback)
+    theater.on('type:start', startCallback).on('type:end', endCallback)
     theater.addActor('vader').addScene('vader:Hello!')
 
     expect(theater.status).toBe('playing')
@@ -419,30 +419,5 @@ describe('theaterJS', function () {
       jasmine.clock().tick(1)
       expect(theater.getCurrentActor().displayValue).toBe('Hello')
     })
-  })
-
-  it('implements a pub/sub mechanism', function () {
-    theater = theaterJS()
-    let spy = jasmine.createSpy('callback')
-
-    theater.subscribe('event', spy).subscribe('foo, bar', spy).subscribe('*', spy)
-
-    expect(spy.calls.count()).toBe(0)
-
-    theater.publish('event', 'some args')
-
-    expect(spy.calls.count()).toBe(2)
-    expect(spy.calls.argsFor(0)).toEqual(['event', 'some args'])
-    expect(spy.calls.argsFor(1)).toEqual(['event', 'some args'])
-
-    theater.publish('foo', false, 'arg')
-
-    expect(spy.calls.count()).toBe(4)
-    expect(spy.calls.argsFor(2)).toEqual(['foo', false, 'arg'])
-
-    theater.publish('bar', ['quz'], null)
-
-    expect(spy.calls.count()).toBe(6)
-    expect(spy.calls.argsFor(4)).toEqual(['bar', ['quz'], null])
   })
 })

@@ -4,7 +4,7 @@ import type from './helpers/type'
 import keyboard from './helpers/keyboard'
 import html from './helpers/html'
 
-const DEFAULTS = { autoplay: true, erase: true, loop: true, minSpeed: 80, maxSpeed: 450, locale: 'detect' }
+const DEFAULTS = { autoplay: true, erase: true, minSpeed: 80, maxSpeed: 450, locale: 'detect' }
 
 function theaterJS (options = {}) {
   /* ------------------------------------------------- *\
@@ -298,8 +298,7 @@ function theaterJS (options = {}) {
     play,
     replay,
     stop,
-    subscribe,
-    publish
+    on: subscribe
   })
 }
 
