@@ -1,0 +1,6 @@
+.idea
+.editorconfig
+bower.json
+karma.conf.js
+test
+webpack.config.js

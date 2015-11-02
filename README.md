@@ -323,7 +323,7 @@ Note: listen to all event by using the '*' shortcut: `theater.on('*', callback)`
 ### 2.0.1 - Unreleased
  
 * [x] publish to npm, fix for non-browser environment
-* [ ] cleanup the npm package
+* [x] add a `.npmignore` file
 * [ ] add source map
 
 ### 2.0.0 - 2015-11-02
