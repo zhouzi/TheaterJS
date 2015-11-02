@@ -320,11 +320,11 @@ Note: listen to all event by using the '*' shortcut: `theater.on('*', callback)`
 
 ## Change Log
 
-### 2.0.1 - Unreleased
+### 2.0.1 - 2015-11-02
  
-* [x] publish to npm, fix for non-browser environment
-* [x] add a `.npmignore` file
-* [ ] add source map
+* publish to npm, fix for non-browser environment
+* add a `.npmignore` file
+* add source map
 
 ### 2.0.0 - 2015-11-02
 
