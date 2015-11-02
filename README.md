@@ -5,13 +5,14 @@ Typing effect mimicking human behavior.
 * [CodePen Demo](http://codepen.io/Zhouzi/full/JoRazP/)
 * [Installation](https://github.com/Zhouzi/TheaterJS#installation)
 * [Documentation](https://github.com/Zhouzi/TheaterJS#documentation)
+* [Change Log](https://github.com/Zhouzi/TheaterJS#change-log)
 * *Path from v1.x to v2 (coming soon)*
 * *Contribute (coming back soon)*
 
 ## Installation
 
 * via bower: `bower install theaterjs`
-* *via npm: (coming soon)*
+* via npm: `npm install theaterjs`
 * via a cdn: `//cdn.jsdelivr.net/theaterjs/latest/theater.min.js`
 * [direct download](https://github.com/Zhouzi/TheaterJS/releases)
 
@@ -316,3 +317,15 @@ callback||Function to call when the event got published.
 The callback function receives the event's name as first argument.
 
 Note: listen to all event by using the '*' shortcut: `theater.on('*', callback)`.
+
+## Change Log
+
+### 2.0.1 - Unreleased
+ 
+* [x] publish to npm, fix for non-browser environment
+* [ ] cleanup the npm package
+* [ ] add source map
+
+### 2.0.0 - 2015-11-02
+
+* Brand new version
