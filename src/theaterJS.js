@@ -6,6 +6,8 @@ import html from './helpers/html'
 
 const DEFAULTS = { autoplay: true, erase: true, minSpeed: 80, maxSpeed: 450, locale: 'detect' }
 
+let global = (1, eval)('this')
+
 function theaterJS (options = {}) {
   /* ------------------------------------------------- *\
     init
@@ -13,9 +15,9 @@ function theaterJS (options = {}) {
 
   options = utils.merge({}, DEFAULTS, options)
 
-  if (options.locale === 'detect' && window != null) {
-    if (window.navigator != null && type.isArray(window.navigator.languages) && type.isString(window.navigator.languages[0])) {
-      options.locale = window.navigator.languages[0].substr(0, 2)
+  if (options.locale === 'detect' && global != null && global.navigator != null) {
+    if (type.isArray(global.navigator.languages) && type.isString(global.navigator.languages[0])) {
+      options.locale = global.navigator.languages[0].substr(0, 2)
     }
   }
 

@@ -2,6 +2,7 @@ import type from './helpers/type'
 import utils from './helpers/utils'
 
 const DEFAULTS = { speed: 0.6, accuracy: 0.6 }
+let global = (1, eval)('this')
 
 export default function (actorName, props = {}, callback = null) {
   let displayValue = ''
@@ -13,14 +14,14 @@ export default function (actorName, props = {}, callback = null) {
 
   props = utils.merge({}, DEFAULTS, props)
 
-  if (document != null) {
+  if (global != null && global.document != null) {
     if (callback == null) {
       callback = `#${actorName}`
     }
 
     if (type.isString(callback)) {
       let selector = callback
-      let $e = document.querySelector(selector)
+      let $e = global.document.querySelector(selector)
 
       if ($e != null) {
         $element = $e
