@@ -36,6 +36,8 @@ export default function (actorName, props = {}, callback = null) {
   }
 
   return {
+    $element,
+
     get displayValue () {
       return displayValue
     },

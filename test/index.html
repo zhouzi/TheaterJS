@@ -13,6 +13,8 @@
       var theater = theaterJS({ locale: 'ru' })
 
       theater
+        .on('type:start, erase:start', function () { theater.getCurrentActor().$element.style.backgroundColor = 'yellow' })
+        .on('type:end, erase:end', function () { theater.getCurrentActor().$element.style.backgroundColor = 'transparent' })
         .addActor('vader', 0)
         .addActor('luke', 1)
         .addScene('vader:<strong>Luke</strong>...', '<br/>Please...', 500)
