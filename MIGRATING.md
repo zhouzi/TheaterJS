@@ -14,7 +14,7 @@ Feel free to [submit an issue](https://github.com/Zhouzi/TheaterJS/issues), I'll
 
 ### v1
 
-[jsFiddle](http://jsfiddle.net/vtf5ueg1/)
+[jsFiddle](http://jsfiddle.net/vtf5ueg1/2/)
 
 ```html
 <div id="vader"></div>
@@ -51,7 +51,7 @@ theater
 
 ### v2
 
-[jsFiddle](http://jsfiddle.net/vtf5ueg1/1/)
+[jsFiddle](http://jsfiddle.net/vtf5ueg1/3/)
 
 ```html
 <div id="vader"></div>
