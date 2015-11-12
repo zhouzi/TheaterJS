@@ -1,15 +1,31 @@
 # Setup
 
-1. `git clone https://github.com/Zhouzi/TheaterJS.git`
-2. `cd TheaterJS`
-3. `npm install`
+Fork the repository, clone it then:
+
+1. `cd TheaterJS`
+2. `npm install`
 
 # Tasks
 
-* `npm run build` - build the `/dist` files.
-* `npm run watch` - build the `/dist` files anytime the `src/` files change.
-* `npm run test` - launch the test suite.
+TheaterJS' build workflow is based on npm scripts and webpack:
 
-# Rules
+* `npm run build` - build the dist version of TheaterJS.
+* `npm run dev` - watch for changes and build the dist version when needed.
+* `npm run lint` - lint js files using [standard](http://standardjs.com/).
+* `npm run test` - run the tests.
 
-This repository uses [standard](http://standardjs.com/) to lint javascript code.
+Note: there's a git pre-commit hook that's going to run the tests when using `git commit`.
+
+# Adding a keyboard
+
+The keyboards are implemented in `src/keyboards.json`.
+A mapped keyboard is just a list of characters, ordered after their "physical" equivalent.
+So for example, the english keyboard (aka `qwerty`) looks like this:
+
+```javascript
+[
+  "qwertyuiop",
+  "asdfghjkl",
+  "zxcvbnm"
+]
+```

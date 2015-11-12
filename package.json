@@ -3,12 +3,13 @@
   "version": "2.0.1",
   "description": "Typing effect mimicking human behavior.",
   "scripts": {
-    "test": "./node_modules/.bin/standard && ./node_modules/.bin/karma start --single-run",
+    "lint": "./node_modules/.bin/standard",
+    "test": "npm run lint && ./node_modules/.bin/karma start --single-run",
     "dev": "./node_modules/.bin/webpack --progress --colors --watch",
     "build": "./node_modules/.bin/webpack"
   },
   "pre-commit": [
-    "build"
+    "test"
   ],
   "standard": {
     "ignore": [

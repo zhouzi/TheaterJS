@@ -5,9 +5,10 @@ Typing effect mimicking human behavior.
 * [CodePen Demo](http://codepen.io/Zhouzi/full/JoRazP/)
 * [Installation](https://github.com/Zhouzi/TheaterJS#installation)
 * [Documentation](https://github.com/Zhouzi/TheaterJS#documentation)
+* [Localized Keyboards](https://github.com/Zhouzi/TheaterJS#localized-keyboards)
 * [Change Log](https://github.com/Zhouzi/TheaterJS#change-log)
-* *Path from v1.x to v2 (coming soon)*
-* *Contribute (coming back soon)*
+* [Path from v1.x to v2](https://github.com/Zhouzi/TheaterJS/blob/master/MIGRATING.md)
+* [Contribute](https://github.com/Zhouzi/TheaterJS/blob/master/CONTRIBUTING.md)
 
 ## Installation
 
@@ -24,6 +25,7 @@ Link the `theater.min.js` file and you're done: `<script src="path/to/theater.mi
 <div id="vader"></div>
 <div id="luke"></div>
 
+<script src="path/to/theater.min.js"></script>
 <script>
   let theater = theaterJS()
   
@@ -76,15 +78,15 @@ Breakdown of the available options:
 
 Option|Default|Description
 ----|-------|-----------
-autoplay|`true`|If true, automatically play the scenario as it's constructed.
-locale|`detect`|Used to determine which keyboard to use when typing random characters (for mistakes). Note: `"detect"` is an option to detect the user's locale and use if it's supported.
+autoplay|`true`|If true, automatically play the scenario (when calling `addScene`).
+locale|`detect`|Determine which keyboard to use when typing random characters (mistakes). Note: `"detect"` is an option to detect the user's locale and use if it's supported.
 minSpeed|`80`|Minimum delay between each typed characters (the lower, the faster).
-maxSpeed|`450`|The maximum delay between typed characters (the greater, the slower).
+maxSpeed|`450`|The maximum delay between each typed characters (the greater, the slower).
 
 TheaterJS objects have two public (read only) properties:
 
 * `theater.options`: object's options.
-* `theater.status`: object's status ("playing" or "ready").
+* `theater.status`: object's status (whether "playing" or "ready").
 
 ### addActor
 
@@ -132,7 +134,7 @@ theater.addActor('vader')
 ```
 
 In this situation, TheaterJS will look for an element that matches the selector `#vader`.
-Also note that the actor will have an additional `$element` property referring to the DOM element when using one of those approaches.
+Also note that the actor will have an additional `$element` property referring to the DOM element when using a selector string.
 
 ### getCurrentActor
 
@@ -195,7 +197,7 @@ theater
   }) // 5
 ```
 
-1. `.addScene('vader:Luke... ')` erase actor's display value and set it with the new value.
+1. `.addScene('vader:Luke... ')` erase actor's current display value, then type the new value.
 2. `.addScene(800)` make a break of `800` milliseconds before playing the next scene.
 3. `.addScene('I am your father!')` append value to the current actor's display value.
 4. `.addScene(-7)` erase `7` characters.
@@ -281,7 +283,7 @@ theater.stop()
 
 ### on
 
-Add a callback to execute when an event is emitted (when a scene start/end).
+Add a callback to execute when an event is emitted (e.g when a scene starts/ends).
 
 **Example**
 
@@ -318,7 +320,27 @@ The callback function receives the event's name as first argument.
 
 Note: listen to all event by using the '*' shortcut: `theater.on('*', callback)`.
 
+## Localized Keyboards
+
+When making a mistake, an actor's gonna type a random character near the one he intended to.
+Those characters are taken from a "mapped" keyboard that you can configure on TheaterJS' instantiation: `theaterJS({locale: 'en'})`.
+Currently, the supported ones are:
+
+* English
+* French
+* Danish
+* German
+* Polish
+* Portuguese
+* Russian
+
+Wanna add a keyboard? Have a look at the [contributing guide](https://github.com/Zhouzi/TheaterJS/blob/master/CONTRIBUTING.md#adding-a-keyboard).
+
 ## Change Log
+
+### 2.0.2 - Unreleased
+
+* [ ] add support for special chars (e.g `\n`)
 
 ### 2.0.1 - 2015-11-02
  
