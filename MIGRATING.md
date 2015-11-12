@@ -28,13 +28,13 @@ theater
     var currentActor = theater.current
     var currentActorElement = currentActor.voice
         
-    currentActorElement.classList.add('blinking-caret');
+    currentActorElement.classList.add('blinking-caret')
   })
   .on('say:end, erase:end', function () {
     var currentActor = theater.current
     var currentActorElement = currentActor.voice
         
-    currentActorElement.classList.remove('blinking-caret');
+    currentActorElement.classList.remove('blinking-caret')
   })
 
 theater
@@ -45,7 +45,7 @@ theater
     this.next()
   }, true]})
   .write('vader:I am your father...')
-  .write(function () { this.play(true); })
+  .write(function () { this.play(true) })
 </script>
 ```
 
@@ -65,13 +65,13 @@ theater
     var currentActor = theater.getCurrentActor()
     var currentActorElement = currentActor.$element
     
-    currentActorElement.classList.add('blinking-caret');
+    currentActorElement.classList.add('blinking-caret')
   })
   .on('type:end, erase:end', function () {
     var currentActor = theater.getCurrentActor()
     var currentActorElement = currentActor.$element
     
-    currentActorElement.classList.remove('blinking-caret');
+    currentActorElement.classList.remove('blinking-caret')
   })
 
 theater
