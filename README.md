@@ -295,7 +295,7 @@ theater
     let actor = theater.getCurrentActor()
     actor.$element.classList.add('blinking-caret')
   })
-  .on('type:start, erase:end', function () {
+  .on('type:end, erase:end', function () {
     let actor = theater.getCurrentActor()
     actor.$element.classList.remove('blinking-caret')
   })
