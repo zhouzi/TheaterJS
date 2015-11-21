@@ -1,6 +1,6 @@
 {
   "name": "TheaterJS",
-  "main": "build/theater.js",
+  "main": "dist/theater.min.js",
   "license": "MIT",
   "ignore": [
     ".gitignore"
