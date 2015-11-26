@@ -1,6 +1,7 @@
 {
   "name": "TheaterJS",
-  "main": "dist/theater.min.js",
+  "description": "Typing effect mimicking human behavior.",
+  "main": "dist/theater.js",
   "license": "MIT",
   "ignore": [
     ".gitignore"
