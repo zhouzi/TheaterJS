@@ -342,6 +342,9 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 
 ### 2.0.2 - Unreleased
 
+* [x] compile a non-minified version along with the minified one
+* [x] fix `window` detection
+* [x] fix bower.json configuration
 * [ ] add support for special chars (e.g `\n`)
 
 ### 2.0.1 - 2015-11-02
