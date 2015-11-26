@@ -1,8 +1,8 @@
 import type from './helpers/type'
 import utils from './helpers/utils'
 
+const DOCUMENT = typeof window !== 'undefined' && window.document
 const DEFAULTS = { speed: 0.6, accuracy: 0.6 }
-let global = (1, eval)('this')
 
 export default function (actorName, props = {}, callback = null) {
   let displayValue = ''
@@ -14,14 +14,14 @@ export default function (actorName, props = {}, callback = null) {
 
   props = utils.merge({}, DEFAULTS, props)
 
-  if (global != null && global.document != null) {
+  if (DOCUMENT) {
     if (callback == null) {
       callback = `#${actorName}`
     }
 
     if (type.isString(callback)) {
       let selector = callback
-      let $e = global.document.querySelector(selector)
+      let $e = DOCUMENT.querySelector(selector)
 
       if ($e != null) {
         $element = $e
