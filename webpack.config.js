@@ -1,12 +1,12 @@
-var webpack = require('webpack')
 var path = require('path')
+var argv = require('yargs').argv
 
 module.exports = {
   entry: './src/theaterJS.js',
 
   output: {
     path: path.join(__dirname, '/dist'),
-    filename: 'theater.min.js',
+    filename: 'theater' + (argv.p ? '.min' : '') + '.js',
     library: 'theaterJS',
     libraryTarget: 'umd'
   },
@@ -23,9 +23,5 @@ module.exports = {
         loaders: ['json-loader']
       }
     ]
-  },
-
-  devtool: '#source-map',
-
-  plugins: [new webpack.optimize.UglifyJsPlugin()]
+  }
 }

@@ -6,14 +6,15 @@
     "lint": "./node_modules/.bin/standard",
     "test": "npm run lint && ./node_modules/.bin/karma start --single-run",
     "dev": "./node_modules/.bin/webpack --progress --colors --watch",
-    "build": "./node_modules/.bin/webpack"
+    "build": "./node_modules/.bin/webpack && ./node_modules/.bin/webpack -d -p"
   },
   "pre-commit": [
     "test"
   ],
   "standard": {
     "ignore": [
-      "test/phantomjs-polyfills.js"
+      "test/phantomjs-polyfills.js",
+      "dist"
     ]
   },
   "repository": {
@@ -46,6 +47,7 @@
     "phantomjs": "^1.9.18",
     "pre-commit": "^1.1.1",
     "standard": "^5.3.1",
-    "webpack": "^1.12.2"
+    "webpack": "^1.12.2",
+    "yargs": "3.30.0"
   }
 }
