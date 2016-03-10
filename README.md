@@ -29,17 +29,17 @@ Link the `theater.min.js` file and you're done: `<script src="path/to/theater.mi
 
 <script src="path/to/theater.min.js"></script>
 <script>
-  let theater = theaterJS()
+  var theater = theaterJS()
   
   theater
     .on('type:start, erase:start', function () {
       // add a class to actor's dom element when he starts typing/erasing
-      let actor = theater.getCurrentActor()
+      var actor = theater.getCurrentActor()
       actor.$element.classList.add('is-typing')
     })
     .on('type:end, erase:end', function () {
       // and then remove it when he's done
-      let actor = theater.getCurrentActor()
+      var actor = theater.getCurrentActor()
       actor.$element.classList.remove('is-typing')
     })
   
@@ -63,7 +63,7 @@ To get started, you'll first need to create a new TheaterJS object by eventually
 **Example**
 
 ```javascript
-let theater = theaterJS({ locale: 'fr' })
+var theater = theaterJS({ locale: 'fr' })
 ```
 
 **Usage**
@@ -97,7 +97,7 @@ Add an actor to the casting.
 **Example**
 
 ```javascript
-let theater = theaterJS()
+var theater = theaterJS()
 
 theater
   .addActor('vader')
@@ -145,13 +145,13 @@ Return the actor that is currently playing.
 **Example**
 
 ```javascript
-let theater = theaterJS()
+var theater = theaterJS()
 
 theater
   .addActor('vader')
   .addScene('vader:Luke...')
   .addScene(function (done) {
-    let vader = theater.getCurrentActor()
+    var vader = theater.getCurrentActor()
     vader.$element.classList.add('dying')
     done()
   })
@@ -170,7 +170,7 @@ Add scenes to the scenario and play it if `options.autoplay` is true.
 **Example**
 
 ```javascript
-let theater = theaterJS()
+var theater = theaterJS()
 
 theater
   .addActor('vader')
@@ -221,7 +221,7 @@ Play the scenario.
 **Example**
 
 ```javascript
-let theater = theaterJS({ autoplay: false })
+var theater = theaterJS({ autoplay: false })
 
 theater
   .addActor('vader')
@@ -245,7 +245,7 @@ Replay the scenario from scratch (can be used as a callback to create a loop).
 **Example**
 
 ```javascript
-let theater = theaterJS()
+var theater = theaterJS()
 
 theater
   .addActor('vader')
@@ -266,7 +266,7 @@ Stop the scenario after the current playing scene ends.
 **Example**
 
 ```javascript
-let theater = theaterJS()
+var theater = theaterJS()
 
 theater
   .addActor('vader')
@@ -290,15 +290,15 @@ Add a callback to execute when an event is emitted (e.g when a scene starts/ends
 **Example**
 
 ```javascript
-let theater = theaterJS()
+var theater = theaterJS()
 
 theater
   .on('type:start, erase:start', function () {
-    let actor = theater.getCurrentActor()
+    var actor = theater.getCurrentActor()
     actor.$element.classList.add('blinking-caret')
   })
   .on('type:end, erase:end', function () {
-    let actor = theater.getCurrentActor()
+    var actor = theater.getCurrentActor()
     actor.$element.classList.remove('blinking-caret')
   })
 
