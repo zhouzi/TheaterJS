@@ -11,8 +11,8 @@ describe('actor', function () {
 
   it('has a read-only name', function () {
     vader = actor('vader')
-    expect(vader.name).toBe('vader')
 
+    expect(vader.name).toBe('vader')
     expect(function () { vader.name = 'luke' }).toThrow()
   })
 
@@ -105,6 +105,7 @@ describe('actor', function () {
   describe('has a getTypingSpeed method that', function () {
     it('return a random value depending on its characteristics', function () {
       vader = actor('vader', { speed: 1 })
+
       expect(vader.getTypingSpeed(50, 200)).toBe(50)
 
       vader = actor('vader', { speed: 0.5 })
