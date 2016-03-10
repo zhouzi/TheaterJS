@@ -1,3 +1,10 @@
+import voidElements from '../void-elements.json'
+
+function isVoidElement (tag) {
+  const tagName = tag.match(/<([^\s>]+)/)
+  return Boolean(tagName) && voidElements.indexOf(tagName[1].toLowerCase()) > -1
+}
+
 export default {
   strip (str) {
     return str.replace(/(<([^>]+)>)/gi, '')
@@ -16,8 +23,11 @@ export default {
         position: result.index
       }
 
-      if (tag.tagName.charAt(1) === '/') tag.opener = openers.pop()
-      else if (tag.tagName.charAt(tag.tagName.length - 2) !== '/') openers.push(tag)
+      if (tag.tagName.charAt(1) === '/') {
+        tag.opener = openers.pop()
+      } else if (tag.tagName.charAt(tag.tagName.length - 2) !== '/' && !isVoidElement(tag.tagName)) {
+        openers.push(tag)
+      }
 
       tags.push(tag)
     }

@@ -1,6 +1,7 @@
 /* global describe, beforeEach, it, expect */
 
 import html from '../src/helpers/html'
+import voidElements from '../src/void-elements.json'
 
 let candidateHTML
 let candidateMap
@@ -60,6 +61,17 @@ describe('html utils', function () {
   describe('has a map method that', function () {
     it('should return a map of a string\'s html', function () {
       expect(html.map(candidateHTML)).toEqual(candidateMap)
+    })
+
+    it('should be able to map autoclosing tag that are missing the slash', function () {
+      voidElements.forEach(function (voidElement) {
+        const str = `<h1>Hey<${voidElement}>there!</h1>`
+        expect(html.map(str)).toEqual([
+          { tagName: '<h1>', position: 0 },
+          { tagName: `<${voidElement}>`, position: 7 },
+          { tagName: '</h1>', position: str.length - '</h1>'.length, opener: { tagName: '<h1>', position: 0 } }
+        ])
+      })
     })
   })
 

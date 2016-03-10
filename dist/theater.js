@@ -771,13 +771,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 6 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _voidElementsJson = __webpack_require__(7);
+
+	var _voidElementsJson2 = _interopRequireDefault(_voidElementsJson);
+
+	function isVoidElement(tag) {
+	  var tagName = tag.match(/<([^\s>]+)/);
+	  return Boolean(tagName) && _voidElementsJson2['default'].indexOf(tagName[1].toLowerCase()) > -1;
+	}
+
 	exports['default'] = {
 	  strip: function strip(str) {
 	    return str.replace(/(<([^>]+)>)/gi, '');
@@ -796,7 +808,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        position: result.index
 	      };
 
-	      if (tag.tagName.charAt(1) === '/') tag.opener = openers.pop();else if (tag.tagName.charAt(tag.tagName.length - 2) !== '/') openers.push(tag);
+	      if (tag.tagName.charAt(1) === '/') {
+	        tag.opener = openers.pop();
+	      } else if (tag.tagName.charAt(tag.tagName.length - 2) !== '/' && !isVoidElement(tag.tagName)) {
+	        openers.push(tag);
+	      }
 
 	      tags.push(tag);
 	    }
@@ -819,6 +835,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 	module.exports = exports['default'];
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = [
+		"area",
+		"base",
+		"br",
+		"col",
+		"embed",
+		"hr",
+		"img",
+		"input",
+		"keygen",
+		"link",
+		"menuitem",
+		"meta",
+		"param",
+		"source",
+		"track",
+		"wbr"
+	];
 
 /***/ }
 /******/ ])
