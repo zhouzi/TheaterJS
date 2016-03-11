@@ -187,6 +187,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  function play() {
+	    if (props.status === 'stopping') {
+	      props.status = 'playing';
+	    }
+
 	    if (props.status === 'ready') {
 	      props.status = 'playing';
 	      playNextScene();
@@ -206,11 +210,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  function stop() {
-	    props.status = 'ready';
+	    props.status = 'stopping';
 	    return this;
 	  }
 
 	  function playNextScene() {
+	    if (props.status === 'stopping') {
+	      props.status = 'ready';
+	      return this;
+	    }
+
 	    if (props.status !== 'playing') return this;
 
 	    var currentScene = props.scenario[props.currentScene];

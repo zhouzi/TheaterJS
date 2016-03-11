@@ -206,14 +206,55 @@ describe('theaterJS', function () {
   })
 
   describe('has a stop method that', function () {
-    it('sets the status to ready', function () {
-      theater = theaterJS({ autoplay: false })
+    beforeEach(function () {
+      jasmine.clock().install()
 
-      theater.addActor('vader').addScene('vader:Hello!').play()
+      theater = theaterJS()
+      theater.addActor('vader').addScene('vader:Hello!', 'vader:How u doing?')
+    })
+
+    afterEach(function () {
+      jasmine.clock().uninstall()
+    })
+
+    it('should stop the scenario', function () {
       expect(theater.status).toBe('playing')
 
       theater.stop()
-      expect(theater.status).toBe('ready')
+
+      expect(theater.status).toBe('stopping')
+
+      jasmine.clock().tick(LONG_TIME)
+      expect(theater.getCurrentActor().displayValue).toBe('Hello!')
+    })
+
+    it('should be resume-able', function () {
+      theater.stop()
+
+      jasmine.clock().tick(LONG_TIME)
+      expect(theater.getCurrentActor().displayValue).toBe('Hello!')
+
+      theater.play()
+
+      jasmine.clock().tick(LONG_TIME)
+      expect(theater.getCurrentActor().displayValue).toBe('How u doing?')
+    })
+
+    it('shouldn\'t be conflicting if called several times alternatively', function () {
+      theater.stop()
+      jasmine.clock().tick(200)
+      theater.play()
+      jasmine.clock().tick(200)
+      theater.stop()
+      jasmine.clock().tick(200)
+      theater.play()
+      jasmine.clock().tick(200)
+      theater.stop()
+      jasmine.clock().tick(200)
+      theater.play()
+
+      jasmine.clock().tick(LONG_TIME)
+      expect(theater.getCurrentActor().displayValue).toBe('How u doing?')
     })
   })
 

@@ -98,6 +98,10 @@ function theaterJS (options = {}) {
   }
 
   function play () {
+    if (props.status === 'stopping') {
+      props.status = 'playing'
+    }
+
     if (props.status === 'ready') {
       props.status = 'playing'
       playNextScene()
@@ -118,11 +122,16 @@ function theaterJS (options = {}) {
   }
 
   function stop () {
-    props.status = 'ready'
+    props.status = 'stopping'
     return this
   }
 
   function playNextScene () {
+    if (props.status === 'stopping') {
+      props.status = 'ready'
+      return this
+    }
+
     if (props.status !== 'playing') return this
 
     let currentScene = props.scenario[props.currentScene]
