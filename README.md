@@ -82,13 +82,39 @@ Option|Default|Description
 ----|-------|-----------
 autoplay|`true`|If true, automatically play the scenario (when calling `addScene`).
 locale|`detect`|Determine which keyboard to use when typing random characters (mistakes). Note: `"detect"` is an option to detect the user's locale and use if it's supported.
-minSpeed|`80`|Minimum delay between each typed characters (the lower, the faster).
-maxSpeed|`450`|The maximum delay between each typed characters (the greater, the slower).
+minSpeed|`{ erase: 80, type: 80 }`|Minimum delay between each typed characters (the lower, the faster).
+maxSpeed|`{ erase: 450, type: 450 }`|The maximum delay between each typed characters (the greater, the slower).
+
+Regarding minSpeed and maxSpeed, you can also just pass a number instead of an object.
+If you do so, this value will be used for both the erase and type speed, e.g:
+
+```json
+{
+  "minSpeed": {
+    "erase": 80,
+    "type": 80
+  },
+  
+  "maxSpeed": {
+    "erase": 450,
+    "type": 450
+  }
+}
+```
+
+Is equivalent to:
+
+```json
+{
+  "minSpeed": 80,
+  "maxSpeed": 80
+}
+```
 
 TheaterJS objects have two public (read only) properties:
 
 * `theater.options`: object's options.
-* `theater.status`: object's status (whether "playing" or "ready").
+* `theater.status`: object's status (whether "playing", "stopping" or "ready").
 
 ### addActor
 
@@ -345,7 +371,9 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 * [x] compile a non-minified version along with the minified one
 * [x] fix `window` detection
 * [x] fix bower.json configuration
-* [ ] add support for special chars (e.g `\n`)
+* [x] add support for slash-less void elements (e.g `<br>` instead of `<br/>`)
+* [x] fix play/stop issue [#49](https://github.com/Zhouzi/TheaterJS/issues/49)
+* [x] add option to configure erase's min/max speed independently
 
 ### 2.0.1 - 2015-11-02
  
