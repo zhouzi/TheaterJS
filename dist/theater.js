@@ -85,7 +85,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _helpersHtml2 = _interopRequireDefault(_helpersHtml);
 
 	var NAVIGATOR = typeof window !== 'undefined' && window.navigator;
-	var DEFAULTS = { autoplay: true, erase: true, minSpeed: 80, maxSpeed: 450, locale: 'detect' };
+	var DEFAULTS = {
+	  autoplay: true,
+	  erase: true,
+	  minSpeed: { erase: 80, type: 80 },
+	  maxSpeed: { erase: 450, type: 450 },
+	  locale: 'detect'
+	};
 
 	function theaterJS() {
 	  var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -95,6 +101,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  \* ------------------------------------------------- */
 
 	  options = _helpersUtils2['default'].merge({}, DEFAULTS, options);
+
+	  if (_helpersType2['default'].isNumber(options.minSpeed)) {
+	    var _options = options;
+	    var minSpeed = _options.minSpeed;
+
+	    options.minSpeed = { erase: minSpeed, type: minSpeed };
+	  }
+
+	  if (_helpersType2['default'].isNumber(options.maxSpeed)) {
+	    var _options2 = options;
+	    var maxSpeed = _options2.maxSpeed;
+
+	    options.maxSpeed = { erase: maxSpeed, type: maxSpeed };
+	  }
 
 	  if (options.locale === 'detect' && NAVIGATOR) {
 	    var languages = NAVIGATOR.languages;
@@ -268,8 +288,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var actor = getCurrentActor();
 
 	    var locale = props.options.locale;
-	    var minSpeed = props.options.minSpeed;
-	    var maxSpeed = props.options.maxSpeed;
+	    var minSpeed = props.options.minSpeed.type;
+	    var maxSpeed = props.options.maxSpeed.type;
 	    var initialValue = actor.displayValue;
 	    var cursor = -1;
 	    var isFixing = false;
@@ -318,8 +338,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function eraseAction(done, arg) {
 	    var actor = getCurrentActor();
 
-	    var minSpeed = props.options.minSpeed;
-	    var maxSpeed = props.options.maxSpeed;
+	    var minSpeed = props.options.minSpeed.erase;
+	    var maxSpeed = props.options.maxSpeed.erase;
 
 	    var value = actor.displayValue;
 	    var htmlMap = _helpersHtml2['default'].map(value);

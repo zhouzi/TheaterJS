@@ -5,7 +5,13 @@ import keyboard from './helpers/keyboard'
 import html from './helpers/html'
 
 const NAVIGATOR = typeof window !== 'undefined' && window.navigator
-const DEFAULTS = { autoplay: true, erase: true, minSpeed: 80, maxSpeed: 450, locale: 'detect' }
+const DEFAULTS = {
+  autoplay: true,
+  erase: true,
+  minSpeed: { erase: 80, type: 80 },
+  maxSpeed: { erase: 450, type: 450 },
+  locale: 'detect'
+}
 
 function theaterJS (options = {}) {
   /* ------------------------------------------------- *\
@@ -13,6 +19,16 @@ function theaterJS (options = {}) {
   \* ------------------------------------------------- */
 
   options = utils.merge({}, DEFAULTS, options)
+
+  if (type.isNumber(options.minSpeed)) {
+    const { minSpeed } = options
+    options.minSpeed = { erase: minSpeed, type: minSpeed }
+  }
+
+  if (type.isNumber(options.maxSpeed)) {
+    const { maxSpeed } = options
+    options.maxSpeed = { erase: maxSpeed, type: maxSpeed }
+  }
 
   if (options.locale === 'detect' && NAVIGATOR) {
     let languages = NAVIGATOR.languages
@@ -180,8 +196,8 @@ function theaterJS (options = {}) {
     let actor = getCurrentActor()
 
     let locale = props.options.locale
-    let minSpeed = props.options.minSpeed
-    let maxSpeed = props.options.maxSpeed
+    let minSpeed = props.options.minSpeed.type
+    let maxSpeed = props.options.maxSpeed.type
     let initialValue = actor.displayValue
     let cursor = -1
     let isFixing = false
@@ -232,8 +248,8 @@ function theaterJS (options = {}) {
   function eraseAction (done, arg) {
     let actor = getCurrentActor()
 
-    let minSpeed = props.options.minSpeed
-    let maxSpeed = props.options.maxSpeed
+    let minSpeed = props.options.minSpeed.erase
+    let maxSpeed = props.options.maxSpeed.erase
 
     let value = actor.displayValue
     let htmlMap = html.map(value)

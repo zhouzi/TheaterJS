@@ -18,12 +18,12 @@ describe('theaterJS', function () {
   describe('is instantiable', function () {
     it('without any configuration', function () {
       theater = theaterJS()
-      expect(theater.options).toEqual({ autoplay: true, erase: true, minSpeed: 80, maxSpeed: 450, locale: 'en' })
+      expect(theater.options).toEqual({ autoplay: true, erase: true, minSpeed: { erase: 80, type: 80 }, maxSpeed: { erase: 450, type: 450 }, locale: 'en' })
     })
 
     it('with some configuration', function () {
       theater = theaterJS({ autoplay: false, maxSpeed: 250 })
-      expect(theater.options).toEqual({ autoplay: false, erase: true, minSpeed: 80, maxSpeed: 250, locale: 'en' })
+      expect(theater.options).toEqual({ autoplay: false, erase: true, minSpeed: { erase: 80, type: 80 }, maxSpeed: { erase: 250, type: 250 }, locale: 'en' })
     })
 
     it('and have an initial status of ready', function () {
@@ -416,6 +416,26 @@ describe('theaterJS', function () {
         expect(lessThanSymbols && lessThanSymbols.length).toBe(greaterThanSymbols && greaterThanSymbols.length)
       }
 
+      expect(theater.getCurrentActor().displayValue).toBe('')
+    })
+
+    it('speed can be configured globally and independently from typing speed', function () {
+      const speech = 'Hey there!'
+      const typeSpeed = 100
+      const eraseSpeed = 20
+
+      theater = theaterJS({ minSpeed: { erase: eraseSpeed, type: typeSpeed }, maxSpeed: { erase: eraseSpeed, type: typeSpeed } })
+      theater.addActor('vader', 1).addScene(`vader:${speech}`).addScene({ name: 'erase' })
+
+      jasmine.clock().tick((speech.length - 1) * typeSpeed)
+      expect(theater.getCurrentActor().displayValue).toBe(speech)
+
+      // that last tick is required for the typeAction
+      // to call itself, figure out that it's done typing
+      // and it needs to call the done callback
+      jasmine.clock().tick(typeSpeed)
+
+      jasmine.clock().tick((speech.length - 1) * eraseSpeed)
       expect(theater.getCurrentActor().displayValue).toBe('')
     })
   })
