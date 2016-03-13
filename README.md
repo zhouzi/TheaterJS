@@ -109,7 +109,7 @@ Is equivalent to:
 ```json
 {
   "minSpeed": 80,
-  "maxSpeed": 80
+  "maxSpeed": 450
 }
 ```
 
