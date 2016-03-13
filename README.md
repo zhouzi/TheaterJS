@@ -366,14 +366,14 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 
 ## Change Log
 
-### 2.0.2 - Unreleased
+### 2.0.2 - 2016-03-13
 
-* [x] compile a non-minified version along with the minified one
-* [x] fix `window` detection
-* [x] fix bower.json configuration
-* [x] add support for slash-less void elements (e.g `<br>` instead of `<br/>`)
-* [x] fix play/stop issue [#49](https://github.com/Zhouzi/TheaterJS/issues/49)
-* [x] add option to configure erase's min/max speed independently
+* compile a non-minified version along with the minified one
+* fix `window` detection
+* fix bower.json configuration
+* add support for slash-less void elements (e.g `<br>` instead of `<br/>`)
+* fix play/stop issue [#49](https://github.com/Zhouzi/TheaterJS/issues/49)
+* add option to configure erase's min/max speed independently
 
 ### 2.0.1 - 2015-11-02
  

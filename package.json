@@ -1,6 +1,6 @@
 {
   "name": "theaterjs",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Typing effect mimicking human behavior.",
   "scripts": {
     "lint": "standard",

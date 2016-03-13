@@ -1,1 +1,1 @@
-module.exports = require('./dist/theater.min.js')
+module.exports = require('./dist/theater.js')
