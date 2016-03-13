@@ -12,6 +12,8 @@ Typing effect mimicking human behavior.
 * [Path from v1.x to v2](https://github.com/Zhouzi/TheaterJS/blob/master/MIGRATING.md)
 * [Contribute](https://github.com/Zhouzi/TheaterJS/blob/master/CONTRIBUTING.md)
 
+*If you're not particularly interested in managing multiple actors and the several features TheaterJS has to offer (e.g mistakes, variable speed, callbacks, html support, and so on), have a look at this [fiddle](https://jsfiddle.net/p1e9La6w/). It's a minimalist version that supports play/stop, it has a lot of comments so you understand what's going on under the hood. It might well be enough for you usage :)*
+
 ## Installation
 
 * via bower: `bower install theaterjs`
