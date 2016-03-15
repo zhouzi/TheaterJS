@@ -481,4 +481,45 @@ describe('theaterJS', function () {
       expect(theater.getCurrentActor().displayValue).toBe('Hello')
     })
   })
+
+  describe('handle sequence scenes', function () {
+    let startSpy
+    let endSpy
+
+    beforeEach(function () {
+      startSpy = jasmine.createSpy('sequence start')
+      endSpy = jasmine.createSpy('sequence end')
+      theater = theaterJS({ autoplay: false })
+
+      theater
+        .on('sequence:start', startSpy)
+        .on('sequence:end', endSpy)
+        .addActor('vader')
+        .addScene('vader:Luke.', 'vader:I am your father.')
+
+      jasmine.clock().install()
+    })
+
+    afterEach(function () {
+      jasmine.clock().uninstall()
+    })
+
+    it('should emit an event when a sequence starts and ends', function () {
+      expect(startSpy.calls.count()).toBe(0)
+      expect(endSpy.calls.count()).toBe(0)
+
+      theater.play()
+      theater.stop()
+
+      jasmine.clock().tick(LONG_TIME)
+      expect(startSpy.calls.count()).toBe(1)
+      expect(endSpy.calls.count()).toBe(0)
+
+      theater.play()
+
+      jasmine.clock().tick(LONG_TIME)
+      expect(startSpy.calls.count()).toBe(1)
+      expect(endSpy.calls.count()).toBe(1)
+    })
+  })
 })

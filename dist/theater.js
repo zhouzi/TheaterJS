@@ -64,6 +64,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
+	function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+
 	var _actor = __webpack_require__(1);
 
 	var _actor2 = _interopRequireDefault(_actor);
@@ -154,11 +156,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  function addScene() {
-	    var _this = this;
+	    var sequence = [];
 
-	    var scenes = _helpersUtils2['default'].toArray(arguments);
+	    function addSceneToSequence(scene) {
+	      if (_helpersType2['default'].isArray(scene)) {
+	        scene.forEach(function (s) {
+	          addSceneToSequence(s);
+	        });
+	      }
 
-	    scenes.forEach(function (scene) {
 	      if (_helpersType2['default'].isString(scene)) {
 	        var partials = scene.split(':');
 
@@ -167,7 +173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          actorName = partials.shift();
 
 	          if (props.options.erase) {
-	            addScene({ name: 'erase', actor: actorName });
+	            addSceneToSequence({ name: 'erase', actor: actorName });
 	          }
 	        }
 
@@ -178,30 +184,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	          sceneObj.actor = actorName;
 	        }
 
-	        addScene(sceneObj);
-	      } else if (_helpersType2['default'].isFunction(scene)) {
-	        addScene({ name: 'callback', args: [scene] });
-	      } else if (_helpersType2['default'].isNumber(scene)) {
+	        addSceneToSequence(sceneObj);
+	      }
+
+	      if (_helpersType2['default'].isFunction(scene)) {
+	        addSceneToSequence({ name: 'callback', args: [scene] });
+	      }
+
+	      if (_helpersType2['default'].isNumber(scene)) {
 	        if (scene > 0) {
-	          addScene({ name: 'wait', args: [scene] });
+	          addSceneToSequence({ name: 'wait', args: [scene] });
 	        } else {
-	          addScene({ name: 'erase', args: [scene] });
+	          addSceneToSequence({ name: 'erase', args: [scene] });
 	        }
-	      } else if (_helpersType2['default'].isArray(scene)) {
-	        scene.forEach(function (s) {
-	          addScene(s);
-	        });
-	      } else if (_helpersType2['default'].isObject(scene)) {
+	      }
+
+	      if (_helpersType2['default'].isObject(scene)) {
 	        if (!_helpersType2['default'].isArray(scene.args)) {
 	          scene.args = [];
 	        }
 
-	        scene.args.unshift(playNextScene.bind(_this));
-	        props.scenario.push(scene);
+	        scene.args.unshift(playNextScene.bind(this));
+	        sequence.push(scene);
 	      }
-	    });
+	    }
 
-	    if (props.options.autoplay) play();
+	    for (var _len = arguments.length, scenes = Array(_len), _key = 0; _key < _len; _key++) {
+	      scenes[_key] = arguments[_key];
+	    }
+
+	    addSceneToSequence([{ name: 'publisher', args: ['sequence:start'] }].concat(scenes).concat({ name: 'publisher', args: ['sequence:end'] }));
+	    Array.prototype.push.apply(props.scenario, sequence);
+
+	    if (props.options.autoplay) {
+	      play();
+	    }
 
 	    return this;
 	  }
@@ -252,6 +269,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var nextScene = props.scenario[++props.currentScene];
+
+	    if (nextScene.name === 'publisher') {
+	      var _nextScene$args = _toArray(nextScene.args);
+
+	      var done = _nextScene$args[0];
+
+	      var args = _nextScene$args.slice(1);
+
+	      publish.apply(undefined, _toConsumableArray(args));
+
+	      return done();
+	    }
 
 	    if (nextScene.actor) {
 	      setCurrentActor(nextScene.actor);
@@ -624,10 +653,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	exports["default"] = {
-	  toArray: function toArray(ar) {
-	    return [].slice.call(ar);
-	  },
-
 	  merge: function merge(dst) {
 	    var objs = [].slice.call(arguments, 1);
 

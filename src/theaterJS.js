@@ -64,10 +64,14 @@ function theaterJS (options = {}) {
     return props.casting[props.onStage] || null
   }
 
-  function addScene () {
-    let scenes = utils.toArray(arguments)
+  function addScene (...scenes) {
+    const sequence = []
 
-    scenes.forEach(scene => {
+    function addSceneToSequence (scene) {
+      if (type.isArray(scene)) {
+        scene.forEach(function (s) { addSceneToSequence(s) })
+      }
+
       if (type.isString(scene)) {
         let partials = scene.split(':')
 
@@ -76,7 +80,7 @@ function theaterJS (options = {}) {
           actorName = partials.shift()
 
           if (props.options.erase) {
-            addScene({ name: 'erase', actor: actorName })
+            addSceneToSequence({ name: 'erase', actor: actorName })
           }
         }
 
@@ -87,28 +91,37 @@ function theaterJS (options = {}) {
           sceneObj.actor = actorName
         }
 
-        addScene(sceneObj)
-      } else if (type.isFunction(scene)) {
-        addScene({ name: 'callback', args: [scene] })
-      } else if (type.isNumber(scene)) {
+        addSceneToSequence(sceneObj)
+      }
+
+      if (type.isFunction(scene)) {
+        addSceneToSequence({ name: 'callback', args: [scene] })
+      }
+
+      if (type.isNumber(scene)) {
         if (scene > 0) {
-          addScene({ name: 'wait', args: [scene] })
+          addSceneToSequence({ name: 'wait', args: [scene] })
         } else {
-          addScene({ name: 'erase', args: [scene] })
+          addSceneToSequence({ name: 'erase', args: [scene] })
         }
-      } else if (type.isArray(scene)) {
-        scene.forEach(function (s) { addScene(s) })
-      } else if (type.isObject(scene)) {
+      }
+
+      if (type.isObject(scene)) {
         if (!type.isArray(scene.args)) {
           scene.args = []
         }
 
         scene.args.unshift(playNextScene.bind(this))
-        props.scenario.push(scene)
+        sequence.push(scene)
       }
-    })
+    }
 
-    if (props.options.autoplay) play()
+    addSceneToSequence([{ name: 'publisher', args: ['sequence:start'] }].concat(scenes).concat({ name: 'publisher', args: ['sequence:end'] }))
+    Array.prototype.push.apply(props.scenario, sequence)
+
+    if (props.options.autoplay) {
+      play()
+    }
 
     return this
   }
@@ -160,6 +173,13 @@ function theaterJS (options = {}) {
     }
 
     let nextScene = props.scenario[++props.currentScene]
+
+    if (nextScene.name === 'publisher') {
+      const [done, ...args] = nextScene.args
+      publish(...args)
+
+      return done()
+    }
 
     if (nextScene.actor) {
       setCurrentActor(nextScene.actor)

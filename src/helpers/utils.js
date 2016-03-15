@@ -1,8 +1,4 @@
 export default {
-  toArray (ar) {
-    return [].slice.call(ar)
-  },
-
   merge (dst) {
     let objs = [].slice.call(arguments, 1)
 
