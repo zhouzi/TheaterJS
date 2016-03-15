@@ -348,7 +348,10 @@ callback||Function to call when the event got published.
 
 The callback function receives the event's name as first argument.
 
-Note: listen to all event by using the '*' shortcut: `theater.on('*', callback)`.
+A couple of things to note:
+
+* Listen to all event by using the '*' shortcut: `theater.on('*', callback)`.
+* An event is emitted when a sequence starts (`sequence:start`) and ends (`sequence:end`), e.g `theater.addScene('vader:Luke.', 'vader:I am your father.')` is one sequence.
 
 ## Localized Keyboards
 
@@ -367,6 +370,10 @@ Currently, the supported ones are:
 Wanna add a keyboard? Have a look at the [contributing guide](https://github.com/Zhouzi/TheaterJS/blob/master/CONTRIBUTING.md#adding-a-keyboard).
 
 ## Change Log
+
+### 2.1.0 - 2016-03-15
+
+* emit an event when a sequence starts and ends
 
 ### 2.0.2 - 2016-03-13
 
