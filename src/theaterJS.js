@@ -325,13 +325,14 @@ function theaterJS (options = {}) {
     return this
   }
 
-  function publish (eventName) {
-    if (type.isArray(props.events[eventName])) {
-      let args = [].slice.call(arguments, 1)
-      args.unshift(eventName)
+  function publish (...args) {
+    const eventName = args[0]
+    const callbacks = props.events[eventName] || []
 
-      let callbacks = (props.events[eventName] || []).concat(props.events['*'] || [])
-      callbacks.forEach((callback) => { callback(...args) })
+    if (callbacks.length > 0) {
+      callbacks
+        .concat(props.events['*'] || [])
+        .forEach(callback => callback(...args))
     }
 
     return this

@@ -423,19 +423,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this;
 	  }
 
-	  function publish(eventName) {
-	    var _arguments = arguments;
+	  function publish() {
+	    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	      args[_key2] = arguments[_key2];
+	    }
 
-	    if (_helpersType2['default'].isArray(props.events[eventName])) {
-	      (function () {
-	        var args = [].slice.call(_arguments, 1);
-	        args.unshift(eventName);
+	    var eventName = args[0];
+	    var callbacks = props.events[eventName] || [];
 
-	        var callbacks = (props.events[eventName] || []).concat(props.events['*'] || []);
-	        callbacks.forEach(function (callback) {
-	          callback.apply(undefined, _toConsumableArray(args));
-	        });
-	      })();
+	    if (callbacks.length > 0) {
+	      callbacks.concat(props.events['*'] || []).forEach(function (callback) {
+	        return callback.apply(undefined, args);
+	      });
 	    }
 
 	    return this;
