@@ -5,6 +5,7 @@
 Typing effect mimicking human behavior.
 
 * [CodePen Demo](http://codepen.io/Zhouzi/full/JoRazP/)
+* [Showcase](https://github.com/Zhouzi/TheaterJS#showcase)
 * [Installation](https://github.com/Zhouzi/TheaterJS#installation)
 * [Documentation](https://github.com/Zhouzi/TheaterJS#documentation)
 * [Localized Keyboards](https://github.com/Zhouzi/TheaterJS#localized-keyboards)
@@ -13,6 +14,12 @@ Typing effect mimicking human behavior.
 * [Contribute](https://github.com/Zhouzi/TheaterJS/blob/master/CONTRIBUTING.md)
 
 *If you're not particularly interested in managing multiple actors and the several features TheaterJS has to offer (e.g mistakes, variable speed, callbacks, html support, and so on), have a look at this [fiddle](https://jsfiddle.net/p1e9La6w/). It's a minimalist version that supports play/stop, it has a lot of comments so you understand what's going on under the hood. It might well be enough for you usage :)*
+
+## Showcase
+
+* [Demo Page](http://codepen.io/Zhouzi/full/JoRazP/)
+
+Let me know if you're using TheaterJS, I'd be glad to add it to this list.
 
 ## Installation
 
@@ -370,6 +377,12 @@ Currently, the supported ones are:
 Wanna add a keyboard? Have a look at the [contributing guide](https://github.com/Zhouzi/TheaterJS/blob/master/CONTRIBUTING.md#adding-a-keyboard).
 
 ## Change Log
+
+### 2.2.0 - Unreleased
+
+* [ ] publish an event when the scenario replays
+* [ ] disabling the erase option should still clear display value
+* [ ] callbacks listening for events should be able to delay the next scene
 
 ### 2.1.0 - 2016-03-15
 
