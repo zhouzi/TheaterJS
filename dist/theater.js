@@ -265,10 +265,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (props.currentScene + 1 >= props.scenario.length) {
 	      props.status = 'ready';
+	      publish('scenario:end');
 	      return this;
 	    }
 
 	    var nextScene = props.scenario[++props.currentScene];
+
+	    if (props.currentScene === 0) {
+	      publish('scenario:start');
+	    }
 
 	    if (nextScene.name === 'publisher') {
 	      var _nextScene$args = _toArray(nextScene.args);

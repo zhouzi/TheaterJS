@@ -522,4 +522,44 @@ describe('theaterJS', function () {
       expect(endSpy.calls.count()).toBe(1)
     })
   })
+
+  describe('emit events when the scenario', function () {
+    let startSpy
+    let endSpy
+
+    beforeEach(function () {
+      startSpy = jasmine.createSpy('scenario starts')
+      endSpy = jasmine.createSpy('scenario ends')
+
+      theater = theaterJS({ autoplay: false })
+      theater
+        .on('scenario:start', startSpy)
+        .on('scenario:end', endSpy)
+        .addActor('vader')
+        .addScene('vader:Luke.', 'vader:I am your father.')
+
+      jasmine.clock().install()
+    })
+
+    afterEach(function () {
+      jasmine.clock().uninstall()
+    })
+
+    it('starts', function () {
+      expect(startSpy).not.toHaveBeenCalled()
+
+      theater.play()
+
+      expect(startSpy.calls.count()).toBe(1)
+    })
+
+    it('ends', function () {
+      expect(endSpy).not.toHaveBeenCalled()
+
+      theater.play()
+      jasmine.clock().tick(LONG_TIME)
+
+      expect(endSpy.calls.count()).toBe(1)
+    })
+  })
 })

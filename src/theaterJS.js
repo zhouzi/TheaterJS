@@ -169,10 +169,15 @@ function theaterJS (options = {}) {
 
     if (props.currentScene + 1 >= props.scenario.length) {
       props.status = 'ready'
+      publish('scenario:end')
       return this
     }
 
     let nextScene = props.scenario[++props.currentScene]
+
+    if (props.currentScene === 0) {
+      publish('scenario:start')
+    }
 
     if (nextScene.name === 'publisher') {
       const [done, ...args] = nextScene.args
