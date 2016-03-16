@@ -378,10 +378,13 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 
 ## Change Log
 
+### 3.0.0 - Unreleased
+
+* [ ] disabling the erase option should still clear display value
+
 ### 2.2.0 - Unreleased
 
 * [x] publish an event when the scenario starts and ends
-* [ ] disabling the erase option should still clear display value
 * [ ] callbacks listening for events should be able to delay the next scene
 
 ### 2.1.0 - 2016-03-15
