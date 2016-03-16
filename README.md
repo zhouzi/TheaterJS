@@ -357,8 +357,9 @@ The callback function receives the event's name as first argument.
 
 A couple of things to note:
 
-* Listen to all event by using the '*' shortcut: `theater.on('*', callback)`.
+* Listen to all event by using the shortcut: `theater.on('*', callback)`.
 * An event is emitted when a sequence starts (`sequence:start`) and ends (`sequence:end`), e.g `theater.addScene('vader:Luke.', 'vader:I am your father.')` is one sequence.
+* An event is emitted when the scenario starts and ends, respectively `scenario:start` and `scenario:end`.
 
 ## Localized Keyboards
 
