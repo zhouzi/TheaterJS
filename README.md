@@ -17,6 +17,9 @@ Typing effect mimicking human behavior.
 
 ## Showcase
 
+* [IOMED](http://www.iomed.es/)
+* [Lift](http://www.lift1428.com/)
+* [Mātthīas' CodePen](http://codepen.io/mfritsch/full/Jdpewq/)
 * [Demo Page](http://codepen.io/Zhouzi/full/JoRazP/)
 
 Let me know if you're using TheaterJS, I'd be glad to add it to this list.
