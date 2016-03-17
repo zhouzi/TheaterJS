@@ -17,6 +17,7 @@ Typing effect mimicking human behavior.
 
 ## Showcase
 
+* [Alec Lomas' Website](http://lowmess.com/)
 * [IOMED](http://www.iomed.es/)
 * [Lift](http://www.lift1428.com/)
 * [Mātthīas' CodePen](http://codepen.io/mfritsch/full/Jdpewq/)
