@@ -387,10 +387,10 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 
 * [ ] disabling the erase option should still clear display value
 
-### 2.2.0 - Unreleased
+### 2.2.0 - 2016-03-17
 
-* [x] publish an event when the scenario starts and ends
-* [x] scenario should be stoppable in `:end` events callbacks
+* publish an event when the scenario starts and ends
+* scenario should be stoppable in `:end` events callbacks
 
 ### 2.1.0 - 2016-03-15
 
