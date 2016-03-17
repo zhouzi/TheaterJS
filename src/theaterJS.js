@@ -111,7 +111,12 @@ function theaterJS (options = {}) {
           scene.args = []
         }
 
-        scene.args.unshift(playNextScene.bind(this))
+        scene.args.unshift(() => {
+          const currentScene = props.scenario[props.currentScene]
+          publish(`${currentScene.name}:end`, currentScene)
+          playNextScene()
+        })
+
         sequence.push(scene)
       }
     }
@@ -162,10 +167,6 @@ function theaterJS (options = {}) {
     }
 
     if (props.status !== 'playing') return this
-
-    let currentScene = props.scenario[props.currentScene]
-
-    if (currentScene != null) publish(`${currentScene.name}:end`, currentScene)
 
     if (props.currentScene + 1 >= props.scenario.length) {
       props.status = 'ready'

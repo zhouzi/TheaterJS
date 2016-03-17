@@ -204,7 +204,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          scene.args = [];
 	        }
 
-	        scene.args.unshift(playNextScene.bind(this));
+	        scene.args.unshift(function () {
+	          var currentScene = props.scenario[props.currentScene];
+	          publish(currentScene.name + ':end', currentScene);
+	          playNextScene();
+	        });
+
 	        sequence.push(scene);
 	      }
 	    }
@@ -258,10 +263,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    if (props.status !== 'playing') return this;
-
-	    var currentScene = props.scenario[props.currentScene];
-
-	    if (currentScene != null) publish(currentScene.name + ':end', currentScene);
 
 	    if (props.currentScene + 1 >= props.scenario.length) {
 	      props.status = 'ready';

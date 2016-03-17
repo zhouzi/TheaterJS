@@ -360,6 +360,7 @@ A couple of things to note:
 * Listen to all event by using the shortcut: `theater.on('*', callback)`.
 * An event is emitted when a sequence starts (`sequence:start`) and ends (`sequence:end`), e.g `theater.addScene('vader:Luke.', 'vader:I am your father.')` is one sequence.
 * An event is emitted when the scenario starts and ends, respectively `scenario:start` and `scenario:end`.
+* The scenario is stoppable within `:end` event listeners. It means that calling `theater.stop()` within a callback that listen for the `:end` of a scene will stop the scenario. This is useful for asynchronous callbacks (e.g animations).
 
 ## Localized Keyboards
 
@@ -386,7 +387,7 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 ### 2.2.0 - Unreleased
 
 * [x] publish an event when the scenario starts and ends
-* [ ] callbacks listening for events should be able to delay the next scene
+* [x] scenario should be stoppable in `:end` events callbacks
 
 ### 2.1.0 - 2016-03-15
 

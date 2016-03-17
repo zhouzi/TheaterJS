@@ -562,4 +562,33 @@ describe('theaterJS', function () {
       expect(endSpy.calls.count()).toBe(1)
     })
   })
+
+  it('should prevent execution of next scene when calling stop in listener', function () {
+    jasmine.clock().install()
+
+    const typeEndCallback = jasmine.createSpy('type end callback').and.callFake(function () {
+      theater.stop()
+    })
+
+    theater = theaterJS()
+    theater
+      .on('type:end', typeEndCallback)
+      .addActor('vader')
+      .addScene('vader:Hey there!', 'vader:How u doing?')
+
+    jasmine.clock().tick(LONG_TIME)
+
+    expect(theater.status).toBe('ready')
+    expect(theater.getCurrentActor().displayValue).toBe('Hey there!')
+    expect(typeEndCallback.calls.count()).toBe(1)
+
+    theater.play()
+    jasmine.clock().tick(LONG_TIME)
+
+    expect(theater.status).toBe('ready')
+    expect(theater.getCurrentActor().displayValue).toBe('How u doing?')
+    expect(typeEndCallback.calls.count()).toBe(2)
+
+    jasmine.clock().uninstall()
+  })
 })
