@@ -438,6 +438,20 @@ describe('theaterJS', function () {
       jasmine.clock().tick((speech.length - 1) * eraseSpeed)
       expect(theater.getCurrentActor().displayValue).toBe('')
     })
+
+    it('should clear displayValue without animation if erase option is false', function () {
+      theater = theaterJS({ erase: false })
+      theater.addActor('vader').addScene('vader:Luke.', 'vader:I am your father.')
+
+      theater.stop()
+      jasmine.clock().tick(LONG_TIME)
+
+      expect(theater.getCurrentActor().displayValue).toBe('Luke.')
+
+      theater.play()
+
+      expect(theater.getCurrentActor().displayValue).toBe('I')
+    })
   })
 
   describe('handle callback scenes', function () {

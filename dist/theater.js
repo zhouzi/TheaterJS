@@ -172,9 +172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (partials.length > 1 && partials[0].charAt(partials[0].length - 1) !== '\\') {
 	          actorName = partials.shift();
 
-	          if (props.options.erase) {
-	            addSceneToSequence({ name: 'erase', actor: actorName });
-	          }
+	          addSceneToSequence({ name: 'erase', actor: actorName });
 	        }
 
 	        var speech = partials.join(':').replace(/\\:/g, ':');
@@ -372,6 +370,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  function eraseAction(done, arg) {
 	    var actor = getCurrentActor();
+
+	    // erase scenes are added before a type scene
+	    // so for the first scene, there's no actor yet
+	    if (actor == null) {
+	      return done();
+	    }
+
+	    if (options.erase !== true) {
+	      actor.displayValue = '';
+	      return done();
+	    }
 
 	    var minSpeed = props.options.minSpeed.erase;
 	    var maxSpeed = props.options.maxSpeed.erase;
