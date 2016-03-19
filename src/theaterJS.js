@@ -109,9 +109,8 @@ function theaterJS (options = {}) {
           scene.args = []
         }
 
-        scene.args.unshift(() => {
-          const currentScene = props.scenario[props.currentScene]
-          publish(`${currentScene.name}:end`, currentScene)
+        scene.args.unshift(function () {
+          publish(`${scene.name}:end`, scene)
           playNextScene()
         })
 

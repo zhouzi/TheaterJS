@@ -203,8 +203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        scene.args.unshift(function () {
-	          var currentScene = props.scenario[props.currentScene];
-	          publish(currentScene.name + ':end', currentScene);
+	          publish(scene.name + ':end', scene);
 	          playNextScene();
 	        });
 
