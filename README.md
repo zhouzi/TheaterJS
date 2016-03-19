@@ -388,6 +388,10 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 
 * [ ] disabling the erase option should still clear display value
 
+### 2.2.1 - 2016-03-19
+
+* fix end scenes event that throwed an error due to how `.replay()` works
+
 ### 2.2.0 - 2016-03-17
 
 * publish an event when the scenario starts and ends
