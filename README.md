@@ -384,9 +384,9 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 
 ## Change Log
 
-### 3.0.0 - Unreleased
+### 3.0.0 - 2016-03-20
 
-* [ ] disabling the erase option should still clear display value
+* disabling the erase option should still clear display value
 
 ### 2.2.1 - 2016-03-19
 
