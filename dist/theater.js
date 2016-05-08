@@ -833,6 +833,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			"йцукенгшщзх",
 			"фывапролджэ",
 			"ячсмитьбюъ"
+		],
+		"es": [
+			"qwertyuiop",
+			"asdfghjklñ",
+			"zxcvbnm"
 		]
 	};
 
