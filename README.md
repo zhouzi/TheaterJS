@@ -384,6 +384,11 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 
 ## Change Log
 
+### 3.1.0 - 2016-11-14
+
+* add "main" property to the package.json
+* remove irrelevant files from the npm package
+
 ### 3.0.0 - 2016-03-20
 
 * disabling the erase option should still clear display value

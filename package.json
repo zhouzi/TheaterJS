@@ -1,6 +1,6 @@
 {
   "name": "theaterjs",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Typing effect mimicking human behavior.",
   "scripts": {
     "lint": "standard",
@@ -9,15 +9,11 @@
     "dev": "webpack --progress --colors --watch",
     "build": "webpack && webpack -d -p"
   },
+  "main": "index.js",
   "files": [
     "dist",
-    "src",
-    "CONTRIBUTING.md",
     "index.js",
-    "LICENSE",
-    "MIGRATING.md",
-    "package.json",
-    "README.md"
+    "package.json"
   ],
   "pre-commit": [
     "test"
