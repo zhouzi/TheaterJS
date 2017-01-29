@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/Zhouzi/TheaterJS](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Zhouzi/TheaterJS?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Typing effect mimicking human behavior.
+Typing animation mimicking human behavior.
 
 * [CodePen Demo](http://codepen.io/Zhouzi/full/JoRazP/)
 * [Showcase](https://github.com/Zhouzi/TheaterJS#showcase)
