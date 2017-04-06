@@ -17,6 +17,7 @@ Typing animation mimicking human behavior.
 
 ## Showcase
 
+* [harshini raji](http://harshiniraji.in/)
 * [Felix Heck](http://whotheheck.de/)
 * [Alec Lomas](http://lowmess.com/)
 * [IOMED](http://www.iomed.es/)
