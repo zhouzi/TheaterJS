@@ -10,6 +10,7 @@
     "build": "webpack && webpack -d -p"
   },
   "main": "index.js",
+  "jsdelivr": "dist/theater.min.js",
   "files": [
     "dist",
     "index.js",

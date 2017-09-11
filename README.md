@@ -31,7 +31,7 @@ Let me know if you're using TheaterJS, I'd be glad to add it to this list.
 
 * via bower: `bower install theaterjs`
 * via npm: `npm install theaterjs`
-* via CDN: `//cdn.jsdelivr.net/gh/zhouzi/theaterjs@latest/dist/theater.min.js`
+* via CDN: `//cdn.jsdelivr.net/npm/theaterjs@latest/dist/theater.min.js`
 * [direct download](https://github.com/Zhouzi/TheaterJS/releases)
 
 Link the `theater.min.js` file and you're done: `<script src="path/to/theater.min.js"></script>`
