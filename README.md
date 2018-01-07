@@ -1,7 +1,5 @@
 # TheaterJS
 
-[![Join the chat at https://gitter.im/Zhouzi/TheaterJS](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Zhouzi/TheaterJS?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 Typing animation mimicking human behavior.
 
 * [CodePen Demo](http://codepen.io/Zhouzi/full/JoRazP/)
@@ -23,6 +21,7 @@ Typing animation mimicking human behavior.
 * [IOMED](http://www.iomed.es/)
 * [Lift](http://www.lift1428.com/)
 * [Mātthīas' CodePen](http://codepen.io/mfritsch/full/Jdpewq/)
+* [Dries Janse](https://driesjanse.be/about.html)
 * [Demo Page](http://codepen.io/Zhouzi/full/JoRazP/)
 
 Let me know if you're using TheaterJS, I'd be glad to add it to this list.
