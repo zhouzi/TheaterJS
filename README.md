@@ -254,6 +254,29 @@ theater
   .addScene(fn)
 ```
 
+### getCurrentSpeech
+
+Return the speech that is currently playing.
+
+**Example**
+
+```javascript
+var theater = theaterJS()
+
+theater
+  .addActor('vader')
+  .addScene('vader:Luke...')
+  .on('type:start', function () {
+    console.log(theater.getCurrentSpeech()) // outputs 'Luke...'
+  })
+```
+
+**Usage**
+
+```javascript
+theater.getCurrentSpeech()
+```
+
 ### play
 
 Play the scenario.
