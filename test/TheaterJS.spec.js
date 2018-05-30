@@ -172,6 +172,46 @@ describe('theaterJS', function () {
     })
   })
 
+  describe('has a getCurrentSpeech method that', function () {
+    beforeEach(function () {
+      theater = theaterJS({ autoplay: false })
+      theater.addActor('vader')
+      jasmine.clock().install()
+    })
+
+    afterEach(function () {
+      jasmine.clock().uninstall()
+    })
+
+    it('returns the current speech for each type:start event', function () {
+      const expectedSpeeches = ['Hey! ', 'How u doing ', 'guys?']
+      const gatheredSpeeches = []
+
+      theater.on('type:start', function () {
+        gatheredSpeeches.push(theater.getCurrentSpeech())
+      })
+
+      theater.addScene('vader:Hey! ', 'How u doing ', 'guys?').play()
+
+      jasmine.clock().tick(LONG_TIME)
+      expect(gatheredSpeeches).toEqual(expectedSpeeches)
+    })
+
+    it('also works when arrays of arguments are passed to addScene', function () {
+      const expectedSpeeches = ['Hey! ', 'How u doing? ', 'Time to cut some stuff! ', 'Go on!']
+      const gatheredSpeeches = []
+
+      theater.on('type:start', function () {
+        gatheredSpeeches.push(theater.getCurrentSpeech())
+      })
+
+      theater.addScene(['vader:Hey! ', 'How u doing? ', ['Time to cut some stuff! ', ['Go on!']]]).play()
+
+      jasmine.clock().tick(LONG_TIME)
+      expect(gatheredSpeeches).toEqual(expectedSpeeches)
+    })
+  })
+
   describe('has a play method that', function () {
     beforeEach(function () {
       theater = theaterJS({ autoplay: false })

@@ -128,6 +128,15 @@ function theaterJS (options = {}) {
     return this
   }
 
+  function getCurrentSpeech () {
+    const currentScene = props.scenario[props.currentScene] || null
+    if (currentScene) {
+      const [, speech] = currentScene.args
+      return speech
+    }
+    return null
+  }
+
   function play () {
     if (props.status === 'stopping') {
       props.status = 'playing'
@@ -357,6 +366,7 @@ function theaterJS (options = {}) {
     addActor,
     getCurrentActor,
     addScene,
+    getCurrentSpeech,
     play,
     replay,
     stop,
