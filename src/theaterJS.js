@@ -129,12 +129,10 @@ function theaterJS (options = {}) {
   }
 
   function getCurrentSpeech () {
-    const currentScene = props.scenario[props.currentScene] || null
-    if (currentScene) {
-      const [, speech] = currentScene.args
-      return speech
-    }
-    return null
+    const currentScene = props.scenario[props.currentScene]
+    if (!currentScene || !type.isArray(currentScene.args)) return null
+    const [, speech] = currentScene.args
+    return speech || null
   }
 
   function play () {
