@@ -210,6 +210,18 @@ describe('theaterJS', function () {
       jasmine.clock().tick(LONG_TIME)
       expect(gatheredSpeeches).toEqual(expectedSpeeches)
     })
+
+    it('returns null when no speech is going on', function () {
+      let gatheredSpeech
+      theater.on('erase:start', function () {
+        gatheredSpeech = theater.getCurrentSpeech()
+      })
+
+      theater.addScene('vader:Luke...').play()
+
+      jasmine.clock().tick(LONG_TIME)
+      expect(gatheredSpeech).toEqual(null)
+    })
   })
 
   describe('has a play method that', function () {
