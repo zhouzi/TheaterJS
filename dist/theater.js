@@ -52,13 +52,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -223,6 +225,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    return this;
+	  }
+
+	  function getCurrentSpeech() {
+	    var currentScene = props.scenario[props.currentScene];
+	    if (!currentScene || !_helpersType2['default'].isArray(currentScene.args)) return null;
+
+	    var _currentScene$args = _slicedToArray(currentScene.args, 2);
+
+	    var speech = _currentScene$args[1];
+
+	    return speech || null;
 	  }
 
 	  function play() {
@@ -457,6 +470,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    addActor: addActor,
 	    getCurrentActor: getCurrentActor,
 	    addScene: addScene,
+	    getCurrentSpeech: getCurrentSpeech,
 	    play: play,
 	    replay: replay,
 	    stop: stop,
@@ -490,9 +504,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = theaterJS;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -620,9 +634,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 
@@ -656,9 +670,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	"use strict";
 
@@ -695,9 +709,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	module.exports = exports["default"];
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -794,56 +808,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
-	module.exports = {
-		"en": [
-			"qwertyuiop",
-			"asdfghjkl",
-			"zxcvbnm"
-		],
-		"fr": [
-			"azertyuiop",
-			"qsdfghjklm",
-			"wxcvbn"
-		],
-		"da": [
-			"qwertyuiopå",
-			"asdfghjklæø",
-			"zxcvbnm"
-		],
-		"de": [
-			"qwertzuiopü",
-			"asdfghjklöä",
-			"yxcvbnm"
-		],
-		"pl": [
-			"qwertyuiopęó",
-			"asdfghjkląśł",
-			"zxcvbnmżźćń"
-		],
-		"pt": [
-			"qwertyuiop",
-			"asdfghjklç",
-			"zxcvbnm"
-		],
-		"ru": [
-			"йцукенгшщзх",
-			"фывапролджэ",
-			"ячсмитьбюъ"
-		],
-		"es": [
-			"qwertyuiop",
-			"asdfghjklñ",
-			"zxcvbnm"
-		]
-	};
+	module.exports = {"en":["qwertyuiop","asdfghjkl","zxcvbnm"],"fr":["azertyuiop","qsdfghjklm","wxcvbn"],"da":["qwertyuiopå","asdfghjklæø","zxcvbnm"],"de":["qwertzuiopü","asdfghjklöä","yxcvbnm"],"pl":["qwertyuiopęó","asdfghjkląśł","zxcvbnmżźćń"],"pt":["qwertyuiop","asdfghjklç","zxcvbnm"],"ru":["йцукенгшщзх","фывапролджэ","ячсмитьбюъ"],"es":["qwertyuiop","asdfghjklñ","zxcvbnm"],"el":[";ςερτυθιοπ","ασδφγηξκλ","ζχψωβνμ"]}
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -908,30 +881,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
-	module.exports = [
-		"area",
-		"base",
-		"br",
-		"col",
-		"embed",
-		"hr",
-		"img",
-		"input",
-		"keygen",
-		"link",
-		"menuitem",
-		"meta",
-		"param",
-		"source",
-		"track",
-		"wbr"
-	];
+	module.exports = ["area","base","br","col","embed","hr","img","input","keygen","link","menuitem","meta","param","source","track","wbr"]
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;
