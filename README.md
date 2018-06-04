@@ -408,6 +408,10 @@ Wanna add a keyboard? Have a look at the [contributing guide](https://github.com
 
 ## Change Log
 
+### 3.2.0 - 2018-06-04
+
+* add "getCurrentSpeech()"
+
 ### 3.1.0 - 2016-11-14
 
 * add "main" property to the package.json
