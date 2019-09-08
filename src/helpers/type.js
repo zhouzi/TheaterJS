@@ -3,23 +3,23 @@ function toString(o) {
 }
 
 export default {
-  isNumber: function(o) {
+  isNumber(o) {
     return typeof o === "number";
   },
 
-  isString: function(o) {
+  isString(o) {
     return toString(o) === "[object String]";
   },
 
-  isObject: function(o) {
+  isObject(o) {
     return toString(o) === "[object Object]";
   },
 
-  isArray: function(o) {
+  isArray(o) {
     return toString(o) === "[object Array]";
   },
 
-  isFunction: function(o) {
+  isFunction(o) {
     return typeof o === "function";
   }
 };

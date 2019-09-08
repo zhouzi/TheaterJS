@@ -1,21 +1,21 @@
+/* global window */
 import theaterJS from "../theaterJS";
 
 jest.useFakeTimers();
 
-const LONG_TIME = 60000;
 let theater;
 
-describe("theaterJS", function() {
-  beforeEach(function() {
-    jest.spyOn(document, "querySelector").mockReturnValue({});
+describe("theaterJS", () => {
+  beforeEach(() => {
+    jest.spyOn(window.document, "querySelector").mockReturnValue({});
   });
 
-  afterEach(function() {
+  afterEach(() => {
     theater = null;
   });
 
-  describe("is instantiable", function() {
-    it("without any configuration", function() {
+  describe("is instantiable", () => {
+    it("without any configuration", () => {
       theater = theaterJS();
       expect(theater.options).toEqual({
         autoplay: true,
@@ -26,7 +26,7 @@ describe("theaterJS", function() {
       });
     });
 
-    it("with some configuration", function() {
+    it("with some configuration", () => {
       theater = theaterJS({ autoplay: false, maxSpeed: 250 });
       expect(theater.options).toEqual({
         autoplay: false,
@@ -37,18 +37,18 @@ describe("theaterJS", function() {
       });
     });
 
-    it("and have an initial status of ready", function() {
+    it("and have an initial status of ready", () => {
       theater = theaterJS();
       expect(theater.status).toBe("ready");
     });
 
-    it("and able to fallback to en if the given locale is not supported", function() {
+    it("and able to fallback to en if the given locale is not supported", () => {
       theater = theaterJS({ locale: "whatever" });
       expect(theater.options.locale).toBe("en");
     });
   });
 
-  it("can describe an actor, create scenes and play them", function() {
+  it("can describe an actor, create scenes and play them", () => {
     theater = theaterJS({ autoplay: false });
 
     theater.addActor("vader").addScene("vader:Luke...");
@@ -68,13 +68,13 @@ describe("theaterJS", function() {
     expect(theater.getCurrentActor().displayValue).toBe("Luke...");
   });
 
-  describe("has a addScene method that", function() {
-    beforeEach(function() {
+  describe("has a addScene method that", () => {
+    beforeEach(() => {
       theater = theaterJS({ autoplay: false });
       theater.addActor("vader");
     });
 
-    it("accepts an indefinite number of arguments", function() {
+    it("accepts an indefinite number of arguments", () => {
       theater.addScene("vader:Hey! ", "How u doing ", "guys?").play();
       jest.runAllTimers();
       expect(theater.getCurrentActor().displayValue).toBe(
@@ -82,7 +82,7 @@ describe("theaterJS", function() {
       );
     });
 
-    it("also works with arrays of arguments", function() {
+    it("also works with arrays of arguments", () => {
       theater
         .addScene([
           "vader:Hey! ",
@@ -96,16 +96,16 @@ describe("theaterJS", function() {
       );
     });
 
-    it('add a scene from an object and prepend a "done" callback in the arguments', function() {
-      let fn = jest.fn();
+    it('add a scene from an object and prepend a "done" callback in the arguments', () => {
+      const fn = jest.fn();
       theater.addScene(fn).play();
 
       expect(fn).toHaveBeenCalled();
       expect(fn).toHaveBeenCalledWith(expect.any(Function));
     });
 
-    describe("parses arguments to create", function() {
-      it("a erase and type scene when given a string prefixed by an actor's name", function() {
+    describe("parses arguments to create", () => {
+      it("a erase and type scene when given a string prefixed by an actor's name", () => {
         theater.addScene("vader:Hey!").play();
         jest.runAllTimers();
 
@@ -119,7 +119,7 @@ describe("theaterJS", function() {
         expect(theater.getCurrentActor().displayValue).toBe("How u doing?");
       });
 
-      it("a type scene when given a string not prefixed by an actor's name", function() {
+      it("a type scene when given a string not prefixed by an actor's name", () => {
         theater.addScene("vader:Hey! ").play();
         jest.runAllTimers();
 
@@ -132,15 +132,15 @@ describe("theaterJS", function() {
         );
       });
 
-      it("a callback scene when given a function", function() {
-        let callback = jest.fn();
+      it("a callback scene when given a function", () => {
+        const callback = jest.fn();
         theater.addScene(callback).play();
 
         expect(callback).toHaveBeenCalled();
       });
 
-      it("a wait scene when given a positive number", function() {
-        let callback = jest.fn();
+      it("a wait scene when given a positive number", () => {
+        const callback = jest.fn();
         theater.addScene(1000, callback).play();
 
         expect(theater.status).toBe("playing");
@@ -156,7 +156,7 @@ describe("theaterJS", function() {
         expect(callback).toHaveBeenCalled();
       });
 
-      it("a erase scene when given a negative number", function() {
+      it("a erase scene when given a negative number", () => {
         theater.addScene("vader:Hello!").play();
 
         jest.runAllTimers();
@@ -170,12 +170,12 @@ describe("theaterJS", function() {
         expect(theater.getCurrentActor().displayValue).toBe("H");
       });
 
-      it("scenes and without calling play if autoplay option is disabled", function() {
+      it("scenes and without calling play if autoplay option is disabled", () => {
         theater.addScene("vader:Hey!");
         expect(theater.status).toBe("ready");
       });
 
-      it("scenes and call play if autoplay option is enabled", function() {
+      it("scenes and call play if autoplay option is enabled", () => {
         theater = theaterJS();
         theater.addActor("vader").addScene("vader:Hey!");
 
@@ -184,17 +184,17 @@ describe("theaterJS", function() {
     });
   });
 
-  describe("has a getCurrentSpeech method that", function() {
-    beforeEach(function() {
+  describe("has a getCurrentSpeech method that", () => {
+    beforeEach(() => {
       theater = theaterJS({ autoplay: false });
       theater.addActor("vader");
     });
 
-    it("returns the current speech for each type:start event", function() {
+    it("returns the current speech for each type:start event", () => {
       const expectedSpeeches = ["Hey! ", "How u doing ", "guys?"];
       const gatheredSpeeches = [];
 
-      theater.on("type:start", function() {
+      theater.on("type:start", () => {
         gatheredSpeeches.push(theater.getCurrentSpeech());
       });
 
@@ -204,7 +204,7 @@ describe("theaterJS", function() {
       expect(gatheredSpeeches).toEqual(expectedSpeeches);
     });
 
-    it("also works when arrays of arguments are passed to addScene", function() {
+    it("also works when arrays of arguments are passed to addScene", () => {
       const expectedSpeeches = [
         "Hey! ",
         "How u doing? ",
@@ -213,7 +213,7 @@ describe("theaterJS", function() {
       ];
       const gatheredSpeeches = [];
 
-      theater.on("type:start", function() {
+      theater.on("type:start", () => {
         gatheredSpeeches.push(theater.getCurrentSpeech());
       });
 
@@ -229,9 +229,9 @@ describe("theaterJS", function() {
       expect(gatheredSpeeches).toEqual(expectedSpeeches);
     });
 
-    it("returns null when no speech is going on", function() {
+    it("returns null when no speech is going on", () => {
       let gatheredSpeech;
-      theater.on("erase:start", function() {
+      theater.on("erase:start", () => {
         gatheredSpeech = theater.getCurrentSpeech();
       });
 
@@ -242,19 +242,19 @@ describe("theaterJS", function() {
     });
   });
 
-  describe("has a play method that", function() {
-    beforeEach(function() {
+  describe("has a play method that", () => {
+    beforeEach(() => {
       theater = theaterJS({ autoplay: false });
       theater.addActor("vader").addScene("vader:Hey!");
     });
 
-    it("sets the current status to playing", function() {
+    it("sets the current status to playing", () => {
       expect(theater.status).toBe("ready");
       theater.play();
       expect(theater.status).toBe("playing");
     });
 
-    it("plays the next scene in the scenario", function() {
+    it("plays the next scene in the scenario", () => {
       expect(theater.status).toBe("ready");
       expect(theater.getCurrentActor()).toEqual(null);
 
@@ -270,13 +270,13 @@ describe("theaterJS", function() {
     });
   });
 
-  describe("has a stop method that", function() {
-    beforeEach(function() {
+  describe("has a stop method that", () => {
+    beforeEach(() => {
       theater = theaterJS();
       theater.addActor("vader").addScene("vader:Hello!", "vader:How u doing?");
     });
 
-    it("should stop the scenario", function() {
+    it("should stop the scenario", () => {
       expect(theater.status).toBe("playing");
 
       theater.stop();
@@ -287,7 +287,7 @@ describe("theaterJS", function() {
       expect(theater.getCurrentActor().displayValue).toBe("Hello!");
     });
 
-    it("should be resume-able", function() {
+    it("should be resume-able", () => {
       theater.stop();
 
       jest.runAllTimers();
@@ -299,7 +299,7 @@ describe("theaterJS", function() {
       expect(theater.getCurrentActor().displayValue).toBe("How u doing?");
     });
 
-    it("shouldn't be conflicting if called several times alternatively", function() {
+    it("shouldn't be conflicting if called several times alternatively", () => {
       theater.stop();
       jest.advanceTimersByTime(200);
       theater.play();
@@ -317,8 +317,8 @@ describe("theaterJS", function() {
     });
   });
 
-  describe("has a replay method that", function() {
-    it("replays the scenario from scratch", function() {
+  describe("has a replay method that", () => {
+    it("replays the scenario from scratch", () => {
       theater = theaterJS();
       theater
         .addActor("vader")
@@ -338,9 +338,9 @@ describe("theaterJS", function() {
     });
   });
 
-  it("emit an event when a scene starts/ends", function() {
-    let startCallback = jest.fn();
-    let endCallback = jest.fn();
+  it("emit an event when a scene starts/ends", () => {
+    const startCallback = jest.fn();
+    const endCallback = jest.fn();
 
     theater = theaterJS();
     theater.on("type:start", startCallback).on("type:end", endCallback);
@@ -357,36 +357,34 @@ describe("theaterJS", function() {
     expect(endCallback.mock.calls.length).toBe(1);
   });
 
-  describe("handle type scenes", function() {
-    beforeEach(function() {
+  describe("handle type scenes", () => {
+    beforeEach(() => {
       theater = theaterJS({ autoplay: false });
       theater.addActor("vader").addScene("vader:Hey!");
     });
 
-    it("can type twice the same stuff", function() {
+    it("can type twice the same stuff", () => {
       theater.addScene("Hey!").play();
       jest.runAllTimers();
       expect(theater.getCurrentActor().displayValue).toBe("Hey!Hey!");
     });
 
-    it("has support for html", function() {
-      let candidate =
+    it("has support for html", () => {
+      const candidate =
         '<h1 id="some-id" class="some-class">Hey<br/> <strong aria-attribute="some-attribute">there!</strong><img src="/whatever.png"></h1>';
 
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i += 1) {
         theater = theaterJS();
 
-        theater
-          .addActor("vader", 0.4, function() {})
-          .addScene("vader:" + candidate);
+        theater.addActor("vader", 0.4, () => {}).addScene(`vader:${candidate}`);
 
         while (theater.status === "playing") {
           jest.advanceTimersByTime(300);
 
-          let lessThanSymbols = theater
+          const lessThanSymbols = theater
             .getCurrentActor()
             .displayValue.match(/</g);
-          let greaterThanSymbols = theater
+          const greaterThanSymbols = theater
             .getCurrentActor()
             .displayValue.match(/>/g);
           expect(lessThanSymbols && lessThanSymbols.length).toBe(
@@ -399,19 +397,19 @@ describe("theaterJS", function() {
     });
   });
 
-  describe("handle erase scenes that", function() {
-    beforeEach(function() {
+  describe("handle erase scenes that", () => {
+    beforeEach(() => {
       theater = theaterJS({ autoplay: false });
       theater.addActor("vader").addScene("vader:Hey!", { name: "erase" });
     });
 
-    it("erase an actor's displayValue", function() {
+    it("erase an actor's displayValue", () => {
       theater.play();
       jest.runAllTimers();
       expect(theater.getCurrentActor().displayValue).toBe("");
     });
 
-    it("can erase a given number of characters", function() {
+    it("can erase a given number of characters", () => {
       theater = theaterJS({ autoplay: false });
       theater.addActor("vader").addScene("vader:Hello there!");
 
@@ -429,7 +427,7 @@ describe("theaterJS", function() {
       expect(theater.getCurrentActor().displayValue).toBe("Hello the");
     });
 
-    it("speed can be configured", function() {
+    it("speed can be configured", () => {
       theater = theaterJS({ autoplay: false });
       theater
         .addActor("vader")
@@ -449,14 +447,14 @@ describe("theaterJS", function() {
       expect(theater.getCurrentActor().displayValue).toBe("Hell");
     });
 
-    it("has support for html", function() {
-      let candidate =
+    it("has support for html", () => {
+      const candidate =
         '<h1 id="some-id" class="some-class">Hey<br/> <strong aria-attribute="some-attribute">there!</strong><img src="/whatever.png"></h1>';
 
       theater = theaterJS({ autoplay: false });
       theater
         .addActor("vader")
-        .addScene("vader:" + candidate)
+        .addScene(`vader:${candidate}`)
         .play();
 
       jest.runAllTimers();
@@ -466,10 +464,10 @@ describe("theaterJS", function() {
       while (theater.status === "playing") {
         jest.advanceTimersByTime(300);
 
-        let lessThanSymbols = theater
+        const lessThanSymbols = theater
           .getCurrentActor()
           .displayValue.match(/</g);
-        let greaterThanSymbols = theater
+        const greaterThanSymbols = theater
           .getCurrentActor()
           .displayValue.match(/>/g);
         expect(lessThanSymbols && lessThanSymbols.length).toBe(
@@ -480,7 +478,7 @@ describe("theaterJS", function() {
       expect(theater.getCurrentActor().displayValue).toBe("");
     });
 
-    it("speed can be configured globally and independently from typing speed", function() {
+    it("speed can be configured globally and independently from typing speed", () => {
       const speech = "Hey there!";
       const typeSpeed = 100;
       const eraseSpeed = 20;
@@ -506,7 +504,7 @@ describe("theaterJS", function() {
       expect(theater.getCurrentActor().displayValue).toBe("");
     });
 
-    it("should clear displayValue without animation if erase option is false", function() {
+    it("should clear displayValue without animation if erase option is false", () => {
       theater = theaterJS({ erase: false });
       theater
         .addActor("vader")
@@ -523,28 +521,28 @@ describe("theaterJS", function() {
     });
   });
 
-  describe("handle callback scenes", function() {
+  describe("handle callback scenes", () => {
     let spy;
 
-    beforeEach(function() {
+    beforeEach(() => {
       theater = theaterJS({ autoplay: false });
       spy = jest.fn();
       theater.addScene(spy);
     });
 
-    it("that calls a function", function() {
+    it("that calls a function", () => {
       theater.play();
       expect(spy).toHaveBeenCalled();
     });
   });
 
-  describe("handle wait scenes", function() {
-    beforeEach(function() {
+  describe("handle wait scenes", () => {
+    beforeEach(() => {
       theater = theaterJS({ autoplay: false });
       theater.addActor("vader");
     });
 
-    it("that wait a given amount of time before playing next scene", function() {
+    it("that wait a given amount of time before playing next scene", () => {
       theater.addScene("vader:Hello!").play();
 
       jest.runAllTimers();
@@ -559,11 +557,11 @@ describe("theaterJS", function() {
     });
   });
 
-  describe("handle sequence scenes", function() {
+  describe("handle sequence scenes", () => {
     let startSpy;
     let endSpy;
 
-    beforeEach(function() {
+    beforeEach(() => {
       startSpy = jest.fn();
       endSpy = jest.fn();
       theater = theaterJS({ autoplay: false });
@@ -575,7 +573,7 @@ describe("theaterJS", function() {
         .addScene("vader:Luke.", "vader:I am your father.");
     });
 
-    it("should emit an event when a sequence starts and ends", function() {
+    it("should emit an event when a sequence starts and ends", () => {
       expect(startSpy.mock.calls.length).toBe(0);
       expect(endSpy.mock.calls.length).toBe(0);
 
@@ -594,11 +592,11 @@ describe("theaterJS", function() {
     });
   });
 
-  describe("emit events when the scenario", function() {
+  describe("emit events when the scenario", () => {
     let startSpy;
     let endSpy;
 
-    beforeEach(function() {
+    beforeEach(() => {
       startSpy = jest.fn();
       endSpy = jest.fn();
 
@@ -610,7 +608,7 @@ describe("theaterJS", function() {
         .addScene("vader:Luke.", "vader:I am your father.");
     });
 
-    it("starts", function() {
+    it("starts", () => {
       expect(startSpy).not.toHaveBeenCalled();
 
       theater.play();
@@ -618,7 +616,7 @@ describe("theaterJS", function() {
       expect(startSpy.mock.calls.length).toBe(1);
     });
 
-    it("ends", function() {
+    it("ends", () => {
       expect(endSpy).not.toHaveBeenCalled();
 
       theater.play();
@@ -628,8 +626,8 @@ describe("theaterJS", function() {
     });
   });
 
-  it("should prevent execution of next scene when calling stop in listener", function() {
-    const typeEndCallback = jest.fn(function() {
+  it("should prevent execution of next scene when calling stop in listener", () => {
+    const typeEndCallback = jest.fn(() => {
       theater.stop();
     });
 

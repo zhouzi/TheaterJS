@@ -1,3 +1,5 @@
+/* global window */
+/* eslint-disable no-param-reassign */
 import type from "./helpers/type";
 import utils from "./helpers/utils";
 
@@ -20,12 +22,12 @@ export default function(actorName, props = {}, callback = null) {
     }
 
     if (type.isString(callback)) {
-      let selector = callback;
-      let $e = DOCUMENT.querySelector(selector);
+      const selector = callback;
+      const $e = DOCUMENT.querySelector(selector);
 
       if ($e != null) {
         $element = $e;
-        callback = function(newValue) {
+        callback = newValue => {
           $element.innerHTML = newValue;
         };
       } else {
@@ -55,7 +57,7 @@ export default function(actorName, props = {}, callback = null) {
     },
 
     getTypingSpeed(fastest, slowest) {
-      let speed = utils.randomFloat(props.speed, 1);
+      const speed = utils.randomFloat(props.speed, 1);
       return utils.getPercentageOf(slowest, fastest, speed);
     },
 
@@ -65,7 +67,7 @@ export default function(actorName, props = {}, callback = null) {
       previousMistakeCursor = null,
       previousFixCursor = null
     ) {
-      let accuracy = props.accuracy * 10;
+      const accuracy = props.accuracy * 10;
 
       if (accuracy >= 8) {
         return false;
@@ -80,8 +82,8 @@ export default function(actorName, props = {}, callback = null) {
       }
 
       if (type.isNumber(previousMistakeCursor)) {
-        let nbOfCharactersTyped = actual.length - previousMistakeCursor;
-        let maxWrongCharactersAllowed = accuracy >= 6 ? 10 - accuracy : 4;
+        const nbOfCharactersTyped = actual.length - previousMistakeCursor;
+        const maxWrongCharactersAllowed = accuracy >= 6 ? 10 - accuracy : 4;
 
         if (nbOfCharactersTyped >= maxWrongCharactersAllowed) {
           return false;
@@ -89,8 +91,8 @@ export default function(actorName, props = {}, callback = null) {
       }
 
       if (type.isNumber(previousFixCursor)) {
-        let nbOfCharactersTyped = actual.length - previousFixCursor;
-        let minCharactersBetweenMistakes = Math.max(accuracy, 2) * 2;
+        const nbOfCharactersTyped = actual.length - previousFixCursor;
+        const minCharactersBetweenMistakes = Math.max(accuracy, 2) * 2;
 
         if (nbOfCharactersTyped <= minCharactersBetweenMistakes) {
           return false;

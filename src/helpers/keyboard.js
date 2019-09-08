@@ -1,23 +1,25 @@
+/* eslint-disable no-restricted-syntax, no-prototype-builtins, no-continue, no-use-before-define, no-param-reassign */
 import type from "./type";
 import utils from "./utils";
 import keyboards from "../keyboards.json";
+
 const DEFAULT_LOCALE = "en";
 
-for (let locale in keyboards) {
+for (const locale in keyboards) {
   if (!keyboards.hasOwnProperty(locale)) continue;
 
-  let keyboard = keyboards[locale];
+  const keyboard = keyboards[locale];
   keyboards[locale] = { list: keyboard, mapped: mapKeyboard(keyboard) };
 }
 
 function mapKeyboard(alphabet) {
-  let keyboard = {};
+  const keyboard = {};
 
-  for (let y = 0, lines = alphabet.length, chars; y < lines; y++) {
+  for (let y = 0, lines = alphabet.length, chars; y < lines; y += 1) {
     chars = alphabet[y];
 
-    for (let x = 0, charsLength = chars.length; x < charsLength; x++) {
-      keyboard[chars[x]] = { x: x, y: y };
+    for (let x = 0, charsLength = chars.length; x < charsLength; x += 1) {
+      keyboard[chars[x]] = { x, y };
     }
   }
 
@@ -36,17 +38,17 @@ export default {
       throw new Error(`locale "${locale}" is not supported`);
     }
 
-    let keyboard = keyboards[locale].mapped;
-    let threshold = 1;
-    let nearbyChars = [];
-    let uppercase = /[A-Z]/.test(ch);
+    const keyboard = keyboards[locale].mapped;
+    const threshold = 1;
+    const nearbyChars = [];
+    const uppercase = /[A-Z]/.test(ch);
 
     ch = ch.toLowerCase();
 
-    let charPosition = keyboard[ch] || [];
+    const charPosition = keyboard[ch] || [];
     let p;
 
-    for (let c in keyboard) {
+    for (const c in keyboard) {
       if (!keyboard.hasOwnProperty(c) || c === ch) continue;
 
       p = keyboard[c];
@@ -71,12 +73,12 @@ export default {
     return randomChar;
   },
 
-  randomChar: function(locale) {
+  randomChar(locale) {
     if (!this.supports(locale)) {
       throw new Error(`locale "${locale}" is not supported`);
     }
 
-    let chars = keyboards[locale].list.join("");
+    const chars = keyboards[locale].list.join("");
     return chars.charAt(utils.random(0, chars.length - 1));
   }
 };

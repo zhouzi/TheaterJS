@@ -1,3 +1,4 @@
+/* eslint-disable no-cond-assign, no-param-reassign */
 import voidElements from "../void-elements.json";
 
 function isVoidElement(tag) {
@@ -13,9 +14,9 @@ export default {
   },
 
   map(str) {
-    let regexp = /<[^>]+>/gi;
-    let tags = [];
-    let openers = [];
+    const regexp = /<[^>]+>/gi;
+    const tags = [];
+    const openers = [];
     let result;
     let tag;
 
@@ -41,7 +42,7 @@ export default {
   },
 
   inject(str, map) {
-    for (let i = 0, tag; i < map.length; i++) {
+    for (let i = 0, tag; i < map.length; i += 1) {
       tag = map[i];
 
       if (str.length > 0 && tag.position <= str.length) {

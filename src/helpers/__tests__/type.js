@@ -2,63 +2,63 @@ import type from "../type";
 
 let candidates;
 
-describe("type utils", function() {
-  it("has a method that checks if value is a number", function() {
+describe("type utils", () => {
+  it("has a method that checks if value is a number", () => {
     candidates = [0, -1, 0.8, 123.23, 4, Infinity, -Infinity];
-    candidates.forEach(function(n) {
+    candidates.forEach(n => {
       expect(type.isNumber(n)).toBe(true);
     });
 
-    candidates = [null, "", "0", "-1", "1", "azerty", function() {}, {}, []];
-    candidates.forEach(function(n) {
+    candidates = [null, "", "0", "-1", "1", "azerty", () => {}, {}, []];
+    candidates.forEach(n => {
       expect(type.isNumber(n)).toBe(false);
     });
   });
 
-  it("has a method that checks if value is a string", function() {
+  it("has a method that checks if value is a string", () => {
     candidates = ["", "azerty", "2"];
-    candidates.forEach(function(s) {
+    candidates.forEach(s => {
       expect(type.isString(s)).toBe(true);
     });
 
-    candidates = [0, 2, -1, null, [], {}, function() {}];
-    candidates.forEach(function(s) {
+    candidates = [0, 2, -1, null, [], {}, () => {}];
+    candidates.forEach(s => {
       expect(type.isString(s)).toBe(false);
     });
   });
 
-  it("has a method that checks if value is an object", function() {
+  it("has a method that checks if value is an object", () => {
     candidates = [{}, { foo: "bar" }];
-    candidates.forEach(function(o) {
+    candidates.forEach(o => {
       expect(type.isObject(o)).toBe(true);
     });
 
-    candidates = [null, [], 0, 3, -1, "", "foo", function() {}];
-    candidates.forEach(function(o) {
+    candidates = [null, [], 0, 3, -1, "", "foo", () => {}];
+    candidates.forEach(o => {
       expect(type.isObject(o)).toBe(false);
     });
   });
 
-  it("has a method that checks if value is an array", function() {
+  it("has a method that checks if value is an array", () => {
     candidates = [[], ["foo"], [{ foo: "bar" }]];
-    candidates.forEach(function(a) {
+    candidates.forEach(a => {
       expect(type.isArray(a)).toBe(true);
     });
 
-    candidates = [null, 0, -2, 9, "", "bar", function() {}];
-    candidates.forEach(function(a) {
+    candidates = [null, 0, -2, 9, "", "bar", () => {}];
+    candidates.forEach(a => {
       expect(type.isArray(a)).toBe(false);
     });
   });
 
-  it("has a method that checks if value is a function", function() {
-    candidates = [function() {}];
-    candidates.forEach(function(f) {
+  it("has a method that checks if value is a function", () => {
+    candidates = [() => {}];
+    candidates.forEach(f => {
       expect(type.isFunction(f)).toBe(true);
     });
 
     candidates = [null, "", [], {}, 0, -3, 9, "bar"];
-    candidates.forEach(function(f) {
+    candidates.forEach(f => {
       expect(type.isFunction(f)).toBe(false);
     });
   });

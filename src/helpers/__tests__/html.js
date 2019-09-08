@@ -5,8 +5,8 @@ let candidateHTML;
 let candidateMap;
 let candidateStr;
 
-describe("html utils", function() {
-  beforeEach(function() {
+describe("html utils", () => {
+  beforeEach(() => {
     candidateHTML =
       '<h1 id="some-id" class="some-class">Hey<br/> <strong aria-attribute="some-attribute">there!</strong><img src="/whatever.png"/></h1>';
     candidateMap = [
@@ -51,19 +51,19 @@ describe("html utils", function() {
     candidateStr = "Hey there!";
   });
 
-  describe("has a strip method that", function() {
-    it("should remove html from a string", function() {
+  describe("has a strip method that", () => {
+    it("should remove html from a string", () => {
       expect(html.strip(candidateHTML)).toBe(candidateStr);
     });
   });
 
-  describe("has a map method that", function() {
-    it("should return a map of a string's html", function() {
+  describe("has a map method that", () => {
+    it("should return a map of a string's html", () => {
       expect(html.map(candidateHTML)).toEqual(candidateMap);
     });
 
-    it("should be able to map autoclosing tag that are missing the slash", function() {
-      voidElements.forEach(function(voidElement) {
+    it("should be able to map autoclosing tag that are missing the slash", () => {
+      voidElements.forEach(voidElement => {
         const str = `<h1>Hey<${voidElement}>there!</h1>`;
         expect(html.map(str)).toEqual([
           { tagName: "<h1>", position: 0 },
@@ -78,12 +78,12 @@ describe("html utils", function() {
     });
   });
 
-  describe("has an inject method that", function() {
-    it("should inject html based on a map", function() {
+  describe("has an inject method that", () => {
+    it("should inject html based on a map", () => {
       expect(html.inject(candidateStr, candidateMap)).toBe(candidateHTML);
     });
 
-    it("should close opened tags even if string is shorter", function() {
+    it("should close opened tags even if string is shorter", () => {
       expect(html.inject("H", candidateMap)).toBe(
         '<h1 id="some-id" class="some-class">H</h1>'
       );

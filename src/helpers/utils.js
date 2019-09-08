@@ -1,11 +1,13 @@
+/* eslint-disable prefer-rest-params, no-restricted-syntax, no-prototype-builtins, no-continue, no-param-reassign */
+
 export default {
   merge(dst) {
-    let objs = [].slice.call(arguments, 1);
+    const objs = [].slice.call(arguments, 1);
 
-    for (let i = 0, len = objs.length; i < len; i++) {
-      let obj = objs[i];
+    for (let i = 0, len = objs.length; i < len; i += 1) {
+      const obj = objs[i];
 
-      for (let key in obj) {
+      for (const key in obj) {
         if (!obj.hasOwnProperty(key)) continue;
         dst[key] = obj[key];
       }

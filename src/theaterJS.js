@@ -1,3 +1,5 @@
+/* global window */
+/* eslint-disable no-param-reassign, no-use-before-define, no-shadow */
 import actor from "./Actor";
 import utils from "./helpers/utils";
 import type from "./helpers/type";
@@ -31,7 +33,7 @@ function theaterJS(options = {}) {
   }
 
   if (options.locale === "detect" && NAVIGATOR) {
-    let languages = NAVIGATOR.languages;
+    const { languages } = NAVIGATOR;
     if (type.isArray(languages) && type.isString(languages[0])) {
       options.locale = languages[0].substr(0, 2);
     }
@@ -41,7 +43,7 @@ function theaterJS(options = {}) {
     options.locale = keyboard.defaultLocale;
   }
 
-  let props = {
+  const props = {
     options,
     casting: {},
     status: "ready",
@@ -57,7 +59,7 @@ function theaterJS(options = {}) {
   \* ------------------------------------------------- */
 
   function addActor(actorName, options = {}, callback = null) {
-    let a = actor(actorName, options, callback);
+    const a = actor(actorName, options, callback);
     props.casting[a.name] = a;
 
     return this;
@@ -77,13 +79,13 @@ function theaterJS(options = {}) {
 
     function addSceneToSequence(scene) {
       if (type.isArray(scene)) {
-        scene.forEach(function(s) {
+        scene.forEach(s => {
           addSceneToSequence(s);
         });
       }
 
       if (type.isString(scene)) {
-        let partials = scene.split(":");
+        const partials = scene.split(":");
 
         let actorName;
         if (
@@ -95,8 +97,8 @@ function theaterJS(options = {}) {
           addSceneToSequence({ name: "erase", actor: actorName });
         }
 
-        let speech = partials.join(":").replace(/\\:/g, ":");
-        let sceneObj = { name: "type", args: [speech] };
+        const speech = partials.join(":").replace(/\\:/g, ":");
+        const sceneObj = { name: "type", args: [speech] };
 
         if (actorName != null) {
           sceneObj.actor = actorName;
@@ -122,7 +124,7 @@ function theaterJS(options = {}) {
           scene.args = [];
         }
 
-        scene.args.unshift(function() {
+        scene.args.unshift(() => {
           publish(`${scene.name}:end`, scene);
           playNextScene();
         });
@@ -195,7 +197,8 @@ function theaterJS(options = {}) {
       return this;
     }
 
-    let nextScene = props.scenario[++props.currentScene];
+    props.currentScene += 1;
+    const nextScene = props.scenario[props.currentScene];
 
     if (props.currentScene === 0) {
       publish("scenario:start");
@@ -240,34 +243,34 @@ function theaterJS(options = {}) {
   }
 
   function typeAction(done, value) {
-    let actor = getCurrentActor();
+    const actor = getCurrentActor();
 
-    let locale = props.options.locale;
-    let minSpeed = props.options.minSpeed.type;
-    let maxSpeed = props.options.maxSpeed.type;
-    let initialValue = actor.displayValue;
+    const { locale } = props.options;
+    const minSpeed = props.options.minSpeed.type;
+    const maxSpeed = props.options.maxSpeed.type;
+    const initialValue = actor.displayValue;
     let cursor = -1;
     let isFixing = false;
     let previousMistakeCursor = null;
     let previousFixCursor = null;
 
-    let htmlMap = html.map(value);
+    const htmlMap = html.map(value);
     value = html.strip(value);
     (function type() {
-      let actual = html.strip(actor.displayValue.substr(initialValue.length));
+      const actual = html.strip(actor.displayValue.substr(initialValue.length));
 
       if (actual === value) return done();
 
-      let expected = value.substr(0, cursor + 1);
+      const expected = value.substr(0, cursor + 1);
 
-      let isMistaking = actual !== expected;
-      let shouldBeMistaken = actor.shouldBeMistaken(
+      const isMistaking = actual !== expected;
+      const shouldBeMistaken = actor.shouldBeMistaken(
         actual,
         value,
         previousMistakeCursor,
         previousFixCursor
       );
-      let shouldFix = isFixing || !shouldBeMistaken;
+      const shouldFix = isFixing || !shouldBeMistaken;
 
       if (isMistaking && shouldFix) {
         isFixing = true;
@@ -275,11 +278,12 @@ function theaterJS(options = {}) {
         actor.displayValue =
           initialValue +
           html.inject(actual.substr(0, actual.length - 1), htmlMap);
-        cursor--;
+        cursor -= 1;
         previousFixCursor = cursor;
       } else {
         isFixing = false;
-        let nextChar = value.charAt(++cursor);
+        cursor += 1;
+        let nextChar = value.charAt(cursor);
 
         if (shouldBeMistaken) {
           nextChar = keyboard.randomCharNear(nextChar, locale);
@@ -300,7 +304,7 @@ function theaterJS(options = {}) {
   }
 
   function eraseAction(done, arg) {
-    let actor = getCurrentActor();
+    const actor = getCurrentActor();
 
     // erase scenes are added before a type scene
     // so for the first scene, there's no actor yet
@@ -313,11 +317,11 @@ function theaterJS(options = {}) {
       return done();
     }
 
-    let minSpeed = props.options.minSpeed.erase;
-    let maxSpeed = props.options.maxSpeed.erase;
+    const minSpeed = props.options.minSpeed.erase;
+    const maxSpeed = props.options.maxSpeed.erase;
 
     let value = actor.displayValue;
-    let htmlMap = html.map(value);
+    const htmlMap = html.map(value);
 
     value = html.strip(value);
 
@@ -333,7 +337,8 @@ function theaterJS(options = {}) {
 
     (function erase() {
       if (cursor === nbCharactersToErase) return done();
-      actor.displayValue = html.inject(value.substr(0, --cursor), htmlMap);
+      cursor -= 1;
+      actor.displayValue = html.inject(value.substr(0, cursor), htmlMap);
 
       return setTimeout(
         erase,
@@ -403,8 +408,8 @@ function theaterJS(options = {}) {
   });
 }
 
-theaterJS.init = function(actorName = "actor") {
-  let theater = theaterJS();
+theaterJS.init = (actorName = "actor") => {
+  const theater = theaterJS();
   theater.addActor(actorName, { accuracy: 1, speed: 0.8 });
   return theater;
 };
