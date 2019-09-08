@@ -6,11 +6,9 @@
     "test": "karma start --single-run",
     "build": "webpack && webpack -d -p"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "files": [
-    "dist",
-    "index.js",
-    "package.json"
+    "dist"
   ],
   "repository": {
     "type": "git",
