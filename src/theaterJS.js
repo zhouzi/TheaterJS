@@ -1,4 +1,4 @@
-import actor from "./actor";
+import actor from "./Actor";
 import utils from "./helpers/utils";
 import type from "./helpers/type";
 import keyboard from "./helpers/keyboard";
