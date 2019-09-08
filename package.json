@@ -4,7 +4,6 @@
   "description": "Typing effect mimicking human behavior.",
   "scripts": {
     "test": "karma start --single-run",
-    "dev": "webpack --progress --colors --watch",
     "build": "webpack && webpack -d -p"
   },
   "main": "index.js",
