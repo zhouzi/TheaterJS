@@ -1,6 +1,5 @@
 /* global window */
 /* eslint-disable no-param-reassign */
-import type from "./helpers/type";
 import utils from "./helpers/utils";
 
 const DOCUMENT = typeof window !== "undefined" && window.document;
@@ -10,7 +9,7 @@ export default function(actorName, props = {}, callback = null) {
   let displayValue = "";
   let $element;
 
-  if (type.isNumber(props)) {
+  if (typeof props === "number") {
     props = { speed: props, accuracy: props };
   }
 
@@ -21,7 +20,7 @@ export default function(actorName, props = {}, callback = null) {
       callback = `#${actorName}`;
     }
 
-    if (type.isString(callback)) {
+    if (typeof callback === "string") {
       const selector = callback;
       const $e = DOCUMENT.querySelector(selector);
 
@@ -36,7 +35,7 @@ export default function(actorName, props = {}, callback = null) {
     }
   }
 
-  if (!type.isFunction(callback)) {
+  if (typeof callback !== "function") {
     callback = console.log.bind(console);
   }
 
@@ -81,7 +80,7 @@ export default function(actorName, props = {}, callback = null) {
         return false;
       }
 
-      if (type.isNumber(previousMistakeCursor)) {
+      if (typeof previousMistakeCursor === "number") {
         const nbOfCharactersTyped = actual.length - previousMistakeCursor;
         const maxWrongCharactersAllowed = accuracy >= 6 ? 10 - accuracy : 4;
 
@@ -90,7 +89,7 @@ export default function(actorName, props = {}, callback = null) {
         }
       }
 
-      if (type.isNumber(previousFixCursor)) {
+      if (typeof previousFixCursor === "number") {
         const nbOfCharactersTyped = actual.length - previousFixCursor;
         const minCharactersBetweenMistakes = Math.max(accuracy, 2) * 2;
 

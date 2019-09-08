@@ -2,7 +2,6 @@
 /* eslint-disable no-param-reassign, no-use-before-define, no-shadow */
 import actor from "./Actor";
 import utils from "./helpers/utils";
-import type from "./helpers/type";
 import keyboard from "./helpers/keyboard";
 import html from "./helpers/html";
 
@@ -22,19 +21,19 @@ function theaterJS(options = {}) {
 
   options = utils.merge({}, DEFAULTS, options);
 
-  if (type.isNumber(options.minSpeed)) {
+  if (typeof options.minSpeed === "number") {
     const { minSpeed } = options;
     options.minSpeed = { erase: minSpeed, type: minSpeed };
   }
 
-  if (type.isNumber(options.maxSpeed)) {
+  if (typeof options.maxSpeed === "number") {
     const { maxSpeed } = options;
     options.maxSpeed = { erase: maxSpeed, type: maxSpeed };
   }
 
   if (options.locale === "detect" && NAVIGATOR) {
     const { languages } = NAVIGATOR;
-    if (type.isArray(languages) && type.isString(languages[0])) {
+    if (Array.isArray(languages) && typeof languages[0] === "string") {
       options.locale = languages[0].substr(0, 2);
     }
   }
@@ -78,13 +77,14 @@ function theaterJS(options = {}) {
     const sequence = [];
 
     function addSceneToSequence(scene) {
-      if (type.isArray(scene)) {
+      if (Array.isArray(scene)) {
         scene.forEach(s => {
           addSceneToSequence(s);
         });
+        return;
       }
 
-      if (type.isString(scene)) {
+      if (typeof scene === "string") {
         const partials = scene.split(":");
 
         let actorName;
@@ -105,32 +105,34 @@ function theaterJS(options = {}) {
         }
 
         addSceneToSequence(sceneObj);
+        return;
       }
 
-      if (type.isFunction(scene)) {
+      if (typeof scene === "function") {
         addSceneToSequence({ name: "callback", args: [scene] });
+        return;
       }
 
-      if (type.isNumber(scene)) {
+      if (typeof scene === "number") {
         if (scene > 0) {
           addSceneToSequence({ name: "wait", args: [scene] });
         } else {
           addSceneToSequence({ name: "erase", args: [scene] });
         }
+        return;
       }
 
-      if (type.isObject(scene)) {
-        if (!type.isArray(scene.args)) {
-          scene.args = [];
-        }
-
-        scene.args.unshift(() => {
-          publish(`${scene.name}:end`, scene);
-          playNextScene();
-        });
-
-        sequence.push(scene);
+      // scene is considered an object at this point
+      if (!Array.isArray(scene.args)) {
+        scene.args = [];
       }
+
+      scene.args.unshift(() => {
+        publish(`${scene.name}:end`, scene);
+        playNextScene();
+      });
+
+      sequence.push(scene);
     }
 
     addSceneToSequence(
@@ -149,7 +151,7 @@ function theaterJS(options = {}) {
 
   function getCurrentSpeech() {
     const currentScene = props.scenario[props.currentScene];
-    if (!currentScene || !type.isArray(currentScene.args)) return null;
+    if (!currentScene || !Array.isArray(currentScene.args)) return null;
     const [, speech] = currentScene.args;
     return speech || null;
   }
@@ -168,7 +170,7 @@ function theaterJS(options = {}) {
   }
 
   function replay(done) {
-    if (props.status === "ready" || type.isFunction(done)) {
+    if (props.status === "ready" || typeof done === "function") {
       props.currentScene = -1;
 
       if (props.status === "ready") play();
@@ -330,7 +332,7 @@ function theaterJS(options = {}) {
     let speed;
     let nbCharactersToErase = 0;
 
-    if (type.isNumber(arg)) {
+    if (typeof arg === "number") {
       if (arg > 0) speed = arg;
       else nbCharactersToErase = value.length + arg;
     }
@@ -363,7 +365,7 @@ function theaterJS(options = {}) {
     events.split(",").forEach(eventName => {
       eventName = eventName.trim();
 
-      if (!type.isArray(props.events[eventName])) {
+      if (!Array.isArray(props.events[eventName])) {
         props.events[eventName] = [];
       }
 

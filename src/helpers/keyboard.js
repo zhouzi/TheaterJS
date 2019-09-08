@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-syntax, no-prototype-builtins, no-continue, no-use-before-define, no-param-reassign */
-import type from "./type";
 import utils from "./utils";
 import keyboards from "../keyboards.json";
 
@@ -30,7 +29,7 @@ export default {
   defaultLocale: DEFAULT_LOCALE,
 
   supports(locale) {
-    return type.isObject(keyboards[locale]);
+    return keyboards[locale] != null;
   },
 
   randomCharNear(ch, locale) {
