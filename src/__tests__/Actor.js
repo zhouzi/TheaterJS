@@ -4,7 +4,7 @@ let vader;
 
 describe("actor", function() {
   beforeEach(function() {
-    spyOn(document, "querySelector").and.returnValue({});
+    jest.spyOn(document, "querySelector").mockReturnValue({});
   });
 
   it("has a read-only name", function() {
@@ -18,7 +18,7 @@ describe("actor", function() {
 
   describe("has a displayValue property", function() {
     it("that calls a callback when it's changed", function() {
-      let spy = jasmine.createSpy("displayValue callback");
+      let spy = jest.fn();
       vader = actor("vader", 0.8, spy);
 
       vader.displayValue = "Hey!";

@@ -7,7 +7,7 @@ let theater;
 
 describe("theaterJS", function() {
   beforeEach(function() {
-    spyOn(document, "querySelector").and.returnValue({});
+    jest.spyOn(document, "querySelector").mockReturnValue({});
   });
 
   afterEach(function() {

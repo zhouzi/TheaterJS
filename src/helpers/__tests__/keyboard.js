@@ -36,7 +36,7 @@ describe("keyboard utils", function() {
     });
 
     it("returns a random character when given an unknown one", function() {
-      spyOn(keyboard, "randomChar");
+      jest.spyOn(keyboard, "randomChar").mockImplementation(() => {});
       keyboard.randomCharNear("%", "fr");
       expect(keyboard.randomChar).toHaveBeenCalled();
     });
