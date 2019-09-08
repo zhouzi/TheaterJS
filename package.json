@@ -3,6 +3,8 @@
   "version": "3.2.0",
   "description": "Typing effect mimicking human behavior.",
   "scripts": {
+    "prettier:format": "prettier --write ./src/**/*.js",
+    "prettier:check": "prettier --check ./src/**/*.js",
     "test": "jest --testPathIgnorePatterns dist",
     "prebuild": "rm -rf ./dist",
     "build": "babel src --out-dir dist --copy-files --ignore **/__tests__/**"
@@ -32,6 +34,7 @@
     "@babel/core": "7.6.0",
     "@babel/preset-env": "7.6.0",
     "babel-jest": "24.9.0",
-    "jest": "24.9.0"
+    "jest": "24.9.0",
+    "prettier": "1.18.2"
   }
 }
