@@ -14,9 +14,5 @@ export default {
     }
 
     return dst;
-  },
-
-  getPercentageOf(min, max, percentage) {
-    return min - min * percentage + max * percentage;
   }
 };

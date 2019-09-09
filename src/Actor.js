@@ -58,7 +58,7 @@ export default function(actorName, props = {}, callback = null) {
 
     getTypingSpeed(fastest, slowest) {
       const speed = randomFloat(props.speed, 1);
-      return utils.getPercentageOf(slowest, fastest, speed);
+      return slowest - slowest * speed + fastest * speed;
     },
 
     shouldBeMistaken(
