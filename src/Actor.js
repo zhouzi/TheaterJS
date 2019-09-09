@@ -1,5 +1,6 @@
 /* global window */
 /* eslint-disable no-param-reassign */
+import randomFloat from "random-float";
 import utils from "./helpers/utils";
 
 const DOCUMENT = typeof window !== "undefined" && window.document;
@@ -56,7 +57,7 @@ export default function(actorName, props = {}, callback = null) {
     },
 
     getTypingSpeed(fastest, slowest) {
-      const speed = utils.randomFloat(props.speed, 1);
+      const speed = randomFloat(props.speed, 1);
       return utils.getPercentageOf(slowest, fastest, speed);
     },
 
@@ -98,7 +99,7 @@ export default function(actorName, props = {}, callback = null) {
         }
       }
 
-      return utils.randomFloat(0, 0.8) > props.accuracy;
+      return randomFloat(0, 0.8) > props.accuracy;
     }
   };
 }

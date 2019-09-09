@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax, no-prototype-builtins, no-continue, no-use-before-define, no-param-reassign */
-import utils from "./utils";
+import randomInt from "random-int";
 import keyboards from "../keyboards.json";
 
 const DEFAULT_LOCALE = "en";
@@ -62,7 +62,7 @@ export default {
 
     let randomChar =
       nearbyChars.length > 0
-        ? nearbyChars[utils.random(0, nearbyChars.length - 1)]
+        ? nearbyChars[randomInt(0, nearbyChars.length - 1)]
         : this.randomChar(locale);
 
     if (uppercase) {
@@ -78,6 +78,6 @@ export default {
     }
 
     const chars = keyboards[locale].list.join("");
-    return chars.charAt(utils.random(0, chars.length - 1));
+    return chars.charAt(randomInt(0, chars.length - 1));
   }
 };
