@@ -9,7 +9,6 @@ Typing animation mimicking human behavior.
 - [Localized Keyboards](https://github.com/Zhouzi/TheaterJS#localized-keyboards)
 - [Change Log](https://github.com/Zhouzi/TheaterJS#change-log)
 - [Path from v1.x to v2](https://github.com/Zhouzi/TheaterJS/blob/master/MIGRATING.md)
-- [Contribute](https://github.com/Zhouzi/TheaterJS/blob/master/CONTRIBUTING.md)
 
 _If you're not particularly interested in managing multiple actors and the several features TheaterJS has to offer (e.g mistakes, variable speed, callbacks, html support, and so on), have a look at this [fiddle](https://jsfiddle.net/p1e9La6w/). It's a minimalist version that supports play/stop, it has a lot of comments so you understand what's going on under the hood. It might well be enough for you usage :)_
 
@@ -386,17 +385,6 @@ A couple of things to note:
 
 When making a mistake, an actor's gonna type a random character near the one he intended to.
 Those characters are taken from a "mapped" keyboard that you can configure on TheaterJS' instantiation: `theaterJS({locale: 'en'})`.
-Currently, the supported ones are:
-
-- English
-- French
-- Danish
-- German
-- Polish
-- Portuguese
-- Russian
-
-Wanna add a keyboard? Have a look at the [contributing guide](https://github.com/Zhouzi/TheaterJS/blob/master/CONTRIBUTING.md#adding-a-keyboard).
 
 ## Change Log
 
