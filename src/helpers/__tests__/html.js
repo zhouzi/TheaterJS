@@ -1,5 +1,5 @@
-import html from "../html";
 import voidElements from "void-elements";
+import html from "../html";
 
 let candidateHTML;
 let candidateMap;
