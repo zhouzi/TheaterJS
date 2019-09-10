@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "random-float": "2.0.0",
-    "random-int": "2.0.0"
+    "random-int": "2.0.0",
+    "void-elements": "3.1.0"
   }
 }

@@ -1,11 +1,9 @@
 /* eslint-disable no-cond-assign, no-param-reassign */
-import voidElements from "../void-elements.json";
+import voidElements from "void-elements";
 
 function isVoidElement(tag) {
   const tagName = tag.match(/<([^\s>]+)/);
-  return (
-    Boolean(tagName) && voidElements.indexOf(tagName[1].toLowerCase()) > -1
-  );
+  return Boolean(tagName) && voidElements[tagName[1].toLowerCase()] === true;
 }
 
 export default {
