@@ -1,8 +1,8 @@
 /* global window */
 /* eslint-disable no-param-reassign, no-use-before-define, no-shadow */
 import actor from "./Actor";
-import keyboard from "./helpers/keyboard";
-import html from "./helpers/html";
+import keyboard from "./keyboard";
+import html from "./html";
 
 const NAVIGATOR = typeof window !== "undefined" && window.navigator;
 const DEFAULTS = {
