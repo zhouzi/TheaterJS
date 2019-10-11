@@ -8,7 +8,10 @@ for (const locale in keyboards) {
   if (!keyboards.hasOwnProperty(locale)) continue;
 
   const keyboard = keyboards[locale];
-  keyboards[locale] = { list: keyboard, mapped: mapKeyboard(keyboard) };
+  keyboards[locale] = {
+    list: keyboard,
+    mapped: mapKeyboard(keyboard)
+  };
 }
 
 function mapKeyboard(alphabet) {

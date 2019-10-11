@@ -1,7 +1,6 @@
 /* global window */
 /* eslint-disable no-param-reassign, no-use-before-define, no-shadow */
 import actor from "./Actor";
-import utils from "./helpers/utils";
 import keyboard from "./helpers/keyboard";
 import html from "./helpers/html";
 
@@ -19,7 +18,10 @@ function theaterJS(options = {}) {
     init
   \* ------------------------------------------------- */
 
-  options = utils.merge({}, DEFAULTS, options);
+  options = {
+    ...DEFAULTS,
+    ...options
+  };
 
   if (typeof options.minSpeed === "number") {
     const { minSpeed } = options;

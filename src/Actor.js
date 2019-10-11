@@ -1,7 +1,6 @@
 /* global window */
 /* eslint-disable no-param-reassign */
 import randomFloat from "random-float";
-import utils from "./helpers/utils";
 
 const DOCUMENT = typeof window !== "undefined" && window.document;
 const DEFAULTS = { speed: 0.6, accuracy: 0.6 };
@@ -14,7 +13,10 @@ export default function(actorName, props = {}, callback = null) {
     props = { speed: props, accuracy: props };
   }
 
-  props = utils.merge({}, DEFAULTS, props);
+  props = {
+    ...DEFAULTS,
+    ...props
+  };
 
   if (DOCUMENT) {
     if (callback == null) {
