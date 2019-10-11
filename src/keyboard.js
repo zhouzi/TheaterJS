@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax, no-prototype-builtins, no-continue, no-use-before-define, no-param-reassign */
 import randomInt from "random-int";
-import keyboards from "../keyboards.json";
+import keyboards from "./keyboards.json";
 
 const DEFAULT_LOCALE = "en";
 
