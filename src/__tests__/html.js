@@ -1,5 +1,5 @@
+import voidElements from "void-elements";
 import html from "../html";
-import voidElements from "../../void-elements.json";
 
 let candidateHTML;
 let candidateMap;
@@ -63,7 +63,7 @@ describe("html utils", () => {
     });
 
     it("should be able to map autoclosing tag that are missing the slash", () => {
-      voidElements.forEach(voidElement => {
+      Object.keys(voidElements).forEach(voidElement => {
         const str = `<h1>Hey<${voidElement}>there!</h1>`;
         expect(html.map(str)).toEqual([
           { tagName: "<h1>", position: 0 },

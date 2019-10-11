@@ -41,5 +41,10 @@
     "eslint-plugin-prettier": "3.1.0",
     "jest": "24.9.0",
     "prettier": "1.18.2"
+  },
+  "dependencies": {
+    "random-float": "2.0.0",
+    "random-int": "2.0.0",
+    "void-elements": "3.1.0"
   }
 }

@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax, no-prototype-builtins, no-continue, no-use-before-define, no-param-reassign */
-import type from "./type";
-import utils from "./utils";
-import keyboards from "../keyboards.json";
+import randomInt from "random-int";
+import keyboards from "./keyboards.json";
 
 const DEFAULT_LOCALE = "en";
 
@@ -9,7 +8,10 @@ for (const locale in keyboards) {
   if (!keyboards.hasOwnProperty(locale)) continue;
 
   const keyboard = keyboards[locale];
-  keyboards[locale] = { list: keyboard, mapped: mapKeyboard(keyboard) };
+  keyboards[locale] = {
+    list: keyboard,
+    mapped: mapKeyboard(keyboard)
+  };
 }
 
 function mapKeyboard(alphabet) {
@@ -30,7 +32,7 @@ export default {
   defaultLocale: DEFAULT_LOCALE,
 
   supports(locale) {
-    return type.isObject(keyboards[locale]);
+    return keyboards[locale] != null;
   },
 
   randomCharNear(ch, locale) {
@@ -63,7 +65,7 @@ export default {
 
     let randomChar =
       nearbyChars.length > 0
-        ? nearbyChars[utils.random(0, nearbyChars.length - 1)]
+        ? nearbyChars[randomInt(0, nearbyChars.length - 1)]
         : this.randomChar(locale);
 
     if (uppercase) {
@@ -79,6 +81,6 @@ export default {
     }
 
     const chars = keyboards[locale].list.join("");
-    return chars.charAt(utils.random(0, chars.length - 1));
+    return chars.charAt(randomInt(0, chars.length - 1));
   }
 };
